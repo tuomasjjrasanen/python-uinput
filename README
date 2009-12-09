@@ -1,0 +1,38 @@
+suinput - Simple C-API to the Linux uinput-system.
+
+http://codegrove.org/suinput/
+
+Author: Tuomas Räsänen <tuos@codegrove.org>
+
+Requirements
+============
+
+- Linux kernel 2.6.x
+- uinput-module
+
+Recommendations (tweak-uinput.sh does these)
+============================================
+
+- Add uinput to the modules automatically loaded on boot if it's not already
+  there:
+
+    sudo sh -c "echo uinput >> /etc/modules"
+
+- If uinput is desired to be used without root-privileges, create udev-rules
+  for it:
+
+    sudo sh -c "echo KERNEL==\"uinput\", MODE=\"0666\" > /etc/udev/rules.d/50-suinput.rules"
+
+- Change uinput access rights for the current session:
+
+    # udevadm info --query=env --name=input/uinput | grep DEVNAME | sed s'/DEVNAME=//' | xargs sudo chmod 0666
+    find /dev -regex .*/uinput$ | xargs sudo chmod 0666
+
+Install
+=======
+
+./configure
+make
+make install
+
+Feel free to contact me!
