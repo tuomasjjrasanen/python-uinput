@@ -19,19 +19,21 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <errno.h>
 #include <string.h>
-#include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
-
 #include <linux/uinput.h>
 
 #include "suinput.h"
 
-char* UINPUT_FILEPATHV[] = {"/dev/uinput", "/dev/input/uinput"};
-#define UINPUT_FILEPATHC (sizeof(UINPUT_FILEPATHV) / sizeof(char*))
+char* UINPUT_FILEPATHS[] = {
+  "/dev/uinput",
+  "/dev/input/uinput",
+  "/dev/misc/uinput",
+};
+#define UINPUT_FILEPATHS_COUNT (sizeof(UINPUT_FILEPATHS) / sizeof(char*))
 
 static int suinput_write(int uinput_fd,
-                             uint16_t type, uint16_t code, int32_t value)
+                         uint16_t type, uint16_t code, int32_t value)
 {
   struct input_event event;
   memset(&event, 0, sizeof(event));
@@ -45,7 +47,7 @@ static int suinput_write(int uinput_fd,
 }
 
 static int suinput_write_syn(int uinput_fd,
-                                 uint16_t type, uint16_t code, int32_t value)
+                             uint16_t type, uint16_t code, int32_t value)
 {
   if (suinput_write(uinput_fd, type, code, value))
     return -1;
@@ -54,12 +56,13 @@ static int suinput_write_syn(int uinput_fd,
 
 int suinput_open(const char* device_name, const struct input_id* id)
 {
-  int original_errno;
+  int original_errno = 0;
+  int uinput_fd = -1;
+  struct uinput_user_dev user_dev;
   int i;
-  int uinput_fd;
 
-  for (i = 0; i < UINPUT_FILEPATHC; ++i) {
-    uinput_fd = open(UINPUT_FILEPATHV[i], O_WRONLY | O_NONBLOCK);
+  for (i = 0; i < UINPUT_FILEPATHS_COUNT; ++i) {
+    uinput_fd = open(UINPUT_FILEPATHS[i], O_WRONLY | O_NONBLOCK);
     if (uinput_fd != -1)
       break;
   }
@@ -85,77 +88,77 @@ int suinput_open(const char* device_name, const struct input_id* id)
   if (ioctl(uinput_fd, UI_SET_EVBIT, EV_SYN) == -1)
     goto err;
 
-
   /* Configure device to handle relative x and y axis. */
   if (ioctl(uinput_fd, UI_SET_RELBIT, REL_X) == -1)
     goto err;
-
   if (ioctl(uinput_fd, UI_SET_RELBIT, REL_Y) == -1)
     goto err;
 
-
-  /* Configure device to handle all more or less standard keys,
-     see linux/input.h. */
+  /* Configure device to handle all keys, see linux/input.h. */
   for (i = 0; i < KEY_MAX; i++) {
     if (ioctl(uinput_fd, UI_SET_KEYBIT, i) == -1)
       goto err;
   }
 
-  /* Configure device to handle left and right mouse button events. */
-  if (ioctl(uinput_fd, UI_SET_KEYBIT, BTN_LEFT) == -1)
-    goto err;
-
-  if (ioctl(uinput_fd, UI_SET_KEYBIT, BTN_RIGHT) == -1)
-    goto err;
-
-
   /* Set device-specific information. */
-  struct uinput_user_dev user_dev;
   memset(&user_dev, 0, sizeof(user_dev));
-
   strncpy(user_dev.name, device_name, UINPUT_MAX_NAME_SIZE);
-  user_dev.id.bustype = id->bustype;  
+  user_dev.id.bustype = id->bustype;
   user_dev.id.vendor = id->vendor;
   user_dev.id.product = id->product;
-  user_dev.id.version = id->version;  
+  user_dev.id.version = id->version;
 
   if (write(uinput_fd, &user_dev, sizeof(user_dev)) != sizeof(user_dev))
     goto err;
 
-
-  /* If all configurations above has been succesful, create the event device. */
   if (ioctl(uinput_fd, UI_DEV_CREATE) == -1)
     goto err;
+
+  /*
+  The reason for generating a small delay is that creating succesfully
+  an uinput device does not guarantee that the device is ready to process
+  input events. It's probably due the asynchronous nature of the udev.
+  However, my experiments show that the device is not ready to process input
+  events even after a device creation event is received from udev.
+  */
+  sleep(2);
 
   return uinput_fd;
 
  err:
-  /* At this point, errno is set. close() can also fail and reset errno,
-     so we store the original one and restore it if necessary. */     
+
+  /*
+    At this point, errno is set for some reason. However, cleanup-actions
+    can also fail and reset errno, therefore we store the original one
+    and reset it before returning.
+  */
   original_errno = errno;
-  if (!close(uinput_fd))
-    uinput_fd = -1; /* close() succeeded, fd is not needed anymore. */
-  else
-    errno = original_errno; /* Failed to close, reset original errno. */
+
+  /* Cleanup. */
+  close(uinput_fd); /* Might fail, but we don't care anymore at this point. */
+
+  errno = original_errno;
   return -1;
 }
 
 int suinput_close(int uinput_fd)
 {
+  /*
+    Sleep before destroying the device because there still can be some
+    unprocessed events. This is not the right way, but I am still
+    looking for better ways. The question is: how to know whether there
+    are any unprocessed uinput events?
+   */
+  sleep(2);
+
   if (ioctl(uinput_fd, UI_DEV_DESTROY) == -1) {
-    if (!close(uinput_fd)) {
-      /* Succesful fd-closing despite the previous error:
-         fd is not needed anymore. */
-      uinput_fd = -1;
-    }
+    close(uinput_fd);
     return -1;
   }
 
   if (close(uinput_fd) == -1)
     return -1;
 
-  /* Succesful closing, fd is not needed anymore. */
-  uinput_fd = -1;
   return 0;
 }
 
