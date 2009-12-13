@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <linux/input.h>
 
 /*
-  Creates and opens a connection to the event device. Returns uinput file
+  Creates and opens a connection to the event device. Returns an uinput file
   descriptor on success. On error, -1 is returned, and errno is set
   appropriately.
 */
@@ -83,6 +83,9 @@ int suinput_release(int uinput_fd, uint16_t code);
 
   All possible values of `code` are defined in linux/input.h prefixed
   by KEY_ or BTN_.
+
+  This function is provided as a convenience and has effectively the
+  same result as calling suinput_press() and suinput_release() sequentially.
 */
 int suinput_click(int uinput_fd, uint16_t code);
 
