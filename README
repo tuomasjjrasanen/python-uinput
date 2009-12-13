@@ -1,38 +1,94 @@
-suinput - Simple C-API to the Linux uinput-system.
+======================================================
+ libsuinput - Simple C-API to the Linux uinput-system
+======================================================
 
-http://codegrove.org/suinput/
+:date: 2009-12-13
 
-Author: Tuomas Räsänen <tuos@codegrove.org>
+.. contents::
+
+Description
+===========
+
+Uinput allows attaching user-space device drivers into the Linux kernel. As
+magnificient as the uinput-system is, it is pretty low level from the
+application developers perspective. Libsuinput provides a higher level API
+and hides many devilish details.
+
+General information
+===================
+
+- **Author**: `Tuomas Räsänen <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
+- **Homepage**: http://codegrove.org/libsuinput/
+- **License**: LGPLv3+ (see COPYING for details)
+- **Version**: 0.1
 
 Requirements
 ============
 
 - Linux kernel 2.6.x
-- uinput-module
+- uinput module installed::
 
-Recommendations (tweak-uinput.sh does these)
-============================================
+    sudo modprobe -i uinput
+
+Recommendations
+===============
 
 - Add uinput to the modules automatically loaded on boot if it's not already
-  there:
+  there::
 
     sudo sh -c "echo uinput >> /etc/modules"
 
 - If uinput is desired to be used without root-privileges, create udev-rules
-  for it:
+  for it::
 
     sudo sh -c "echo KERNEL==\"uinput\", MODE=\"0666\" > /etc/udev/rules.d/50-suinput.rules"
 
-- Change uinput access rights for the current session:
+- Change uinput access rights for the current session::
 
     # udevadm info --query=env --name=input/uinput | grep DEVNAME | sed s'/DEVNAME=//' | xargs sudo chmod 0666
     find /dev -regex .*/uinput$ | xargs sudo chmod 0666
 
+Example usage
+=============
+
+Move pointer and then generate a left mouse button click::
+
+  #include <suinput.h>
+
+  int main(void)
+  {
+    struct input_id id = {
+      BUS_BLUETOOTH, /* Bus type. */
+      13,            /* Vendor id. */
+      3,             /* Product id. */
+      7              /* Version id. */
+    };
+    int uinput_fd = suinput_open("HelloInput", &id);
+    suinput_move_pointer(uinput_fd, 100, 100);
+    suinput_click(uinput_fd, BTN_LEFT);
+    suinput_close(uinput_fd);
+    return 0;
+  }
+
+Downloading
+===========
+
+- Tarball is available at: http://codegrove.org/libsuinput/libsuinput-0.1.tar.gz
+- Public git-repository: http://github.com/tuos/libsuinput/ ::
+
+    git clone git://github.com/tuos/libsuinput.git
+
 Install
 =======
 
-./configure
-make
-make install
+The install-procedure adheres the "standard"::
 
-Feel free to contact me!
+  ./configure --prefix=/usr/local
+  make && sudo make install
+
+Issues
+======
+
+- ``suinput_open()`` and ``suinput_close()`` both introduce a small delay to
+  ensure that every event after initialization and before finalization is
+  processed by the input system.
