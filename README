@@ -1,0 +1,51 @@
+==============================================================
+ python-uinput - Simple Python API to the Linux uinput-system
+==============================================================
+
+:date: 2009-12-13
+
+.. contents::
+
+Description
+===========
+
+Uinput allows attaching user-space device drivers into the Linux kernel.
+Python-uinput provides a simple and easy to use API to the Linux uinput-system.
+
+General information
+===================
+
+- **Author**: `Tuomas Räsänen <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
+- **Homepage**: http://codegrove.org/python-uinput/
+- **License**: LGPLv3+ (see COPYING for details)
+- **Version**: 0.1
+
+Requirements
+============
+
+- `libsuinput <http://codegrove.org/libsuinput/>`_
+
+Example usage
+=============
+
+To create and use an uinput driver::
+
+  import uinput
+  driver = uinput.Driver()
+  driver.move_pointer(100, 100)
+  driver.click(uinput.codes.BTN_LEFT)
+
+Downloading
+===========
+
+- Tarball is available at: http://codegrove.org/python-uinput/python-uinput-0.1.tar.gz
+- Public git-repository: http://github.com/tuos/python-uinput/ ::
+
+    git clone git://github.com/tuos/python-uinput.git
+
+Install
+=======
+
+The install-procedure adheres the "standard"::
+
+  python setup build && sudo python setup install

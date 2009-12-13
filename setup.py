@@ -3,10 +3,13 @@
 import os
 from distutils.core import setup, Extension
 
-cUinput_module = Extension('cUinput',
-                           sources=['src/lib/cUinput.c'],
-                           libraries=['suinput'],
-                           )
+pysuinput_module = Extension('uinput._suinput',
+                             sources=['src/pysuinput.c'],
+                             libraries=['suinput'],
+                             )
+
+codes_module = Extension('uinput.codes',
+                         sources=['src/codes.c'])
 
 setup(name='python-uinput',
       version='0.1',
@@ -15,7 +18,9 @@ setup(name='python-uinput',
       author='Tuomas Räsänen',
       author_email='tuos@codegrove.org',
       url='http://codegrove.org/python-uinput/',
-      package_dir={'': 'src/lib'},
-      py_modules=['uinput'],
-      ext_modules=[cUinput_module],
+      package_dir={'uinput': 'src'},
+      packages=['uinput'],
+      ext_modules=[pysuinput_module, codes_module],
+      license='LGPLv3+',
+      platforms=['Linux'],
       )
