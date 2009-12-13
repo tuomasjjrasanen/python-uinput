@@ -1,4 +1,4 @@
-#include <unistd.h>
+#include <time.h>
 #include <suinput.h>
 
 int
@@ -10,15 +10,16 @@ main(void)
     3,             /* Product id. */
     7              /* Version id. */
   };
+  int i;
+  struct timespec pointer_motion_delay = {
+    0,       /* Seconds. */
+    25000000 /* Nanoseconds. */
+  };
+  int uinput_fd = suinput_open("HelloInput", &id);
 
-  int uinput_fd = suinput_open("Hello world input device", &id);
-
-  /* Need to wait until the input device is created. This is going to
-     be removed as soon as I figure out the best way to listen to the input
-     device creation events.*/
-  sleep(1);
-
+  suinput_press(uinput_fd, KEY_LEFTSHIFT);
   suinput_click(uinput_fd, KEY_H);
+  suinput_release(uinput_fd, KEY_LEFTSHIFT);
   suinput_click(uinput_fd, KEY_E);
   suinput_click(uinput_fd, KEY_L);
   suinput_click(uinput_fd, KEY_L);
@@ -35,7 +36,15 @@ main(void)
   suinput_click(uinput_fd, KEY_1);
   suinput_release(uinput_fd, KEY_LEFTSHIFT);
   
-  suinput_move_pointer(uinput_fd, 100, 100);
+  for (i = 0; i < 50; ++i) {
+    suinput_move_pointer(uinput_fd, i, 10);
+    nanosleep(&pointer_motion_delay, NULL);
+  }
+
+  for (i = 0; i < 50; ++i) {
+    suinput_move_pointer(uinput_fd, -10, -i);
+    nanosleep(&pointer_motion_delay, NULL);
+  }
 
   suinput_close(uinput_fd);
 
