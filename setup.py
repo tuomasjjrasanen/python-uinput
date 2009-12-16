@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
+reload(sys).setdefaultencoding('utf-8')
 from distutils.core import setup, Extension
 
 pysuinput_module = Extension('uinput._suinput',
