@@ -2,7 +2,7 @@
  python-uinput - Simple Python API to the Linux uinput-system
 ==============================================================
 
-:date: 2009-12-13
+:date: 2009-12-16
 
 .. contents::
 
@@ -23,7 +23,13 @@ General information
 Requirements
 ============
 
-- `libsuinput <http://codegrove.org/libsuinput/>`_
+- Python 2.6. and development files for it:
+
+  - On Ubuntu::
+
+      sudo apt-get install python2.6-dev
+
+- `libsuinput-0.1 <http://codegrove.org/libsuinput/0.1/>`_
 
 Example usage
 =============
@@ -38,14 +44,20 @@ To create and use an uinput driver::
 Downloading
 ===========
 
-- Tarball is available at: http://codegrove.org/python-uinput/python-uinput-0.1.tar.gz
-- Public git-repository: http://github.com/tuos/python-uinput/ ::
+- Tarball is available at: http://codegrove.org/python-uinput/0.1/python-uinput-0.1.tar.gz
+- Latest sources from public git-repository: http://github.com/tuos/python-uinput/ ::
 
     git clone git://github.com/tuos/python-uinput.git
 
-Install
-=======
+Installing
+==========
 
 The install-procedure adheres the "standard"::
 
   python setup build && sudo python setup install
+
+Bug reporting
+=============
+
+Report bugs by sending email to tuos@codegrove.org or by opening an issue
+at http://github.com/tuos/python-uinput/issues .
