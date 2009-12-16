@@ -18,7 +18,7 @@ General information
 - **Author**: `Tuomas Räsänen <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
 - **Homepage**: http://codegrove.org/python-uinput/
 - **License**: LGPLv3+ (see COPYING for details)
-- **Version**: 0.1
+- **Version**: 0.2
 
 Requirements
 ============
@@ -29,7 +29,7 @@ Requirements
 
       sudo apt-get install python2.6-dev
 
-- `libsuinput-0.1 <http://codegrove.org/libsuinput/0.1/>`_
+- `libsuinput-0.2 <http://codegrove.org/libsuinput/0.2/>`_
 
 Example usage
 =============
@@ -44,7 +44,7 @@ To create and use an uinput driver::
 Downloading
 ===========
 
-- Tarball is available at: http://codegrove.org/python-uinput/0.1/python-uinput-0.1.tar.gz
+- Tarball is available at: http://codegrove.org/python-uinput/0.2/python-uinput-0.2.tar.gz
 - Latest sources from public git-repository: http://github.com/tuos/python-uinput/ ::
 
     git clone git://github.com/tuos/python-uinput.git

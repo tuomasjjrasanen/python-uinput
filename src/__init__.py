@@ -127,10 +127,23 @@ class Driver(object):
         uinput.codes -module.
 
         This method is provided as a convenience and has effectively the
-        same result as calling press(uinput_fd) and release(uinput_fd)
-        sequentially.
+        same result as calling press() and release() sequentially.
         """
         _suinput.click(self._input_fd, uinput_code)
+
+    def press_release(self, signed_uinput_code):
+        """Sends a press or a release event to the event device. The sign
+        of the `signed_uinput_code` determines which type of event is sent.
+        Positive `signed_uinput_code` means press and negative means release.
+
+        Absolute value of `signed_uinput_code` must be one of the constant
+        values defined in uinput.codes -module.
+
+        This method is provided as a convenience and has effectively the
+        same result as calling press() when the value of `signed_uinput_code`
+        is positive and release() when negative.
+        """
+        _suinput.press_release(self._input_fd, signed_uinput_code)
 
     def __del__(self):
         _suinput.close(self._input_fd)

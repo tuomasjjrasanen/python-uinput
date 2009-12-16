@@ -94,6 +94,17 @@ static PyObject* pysuinput_move_pointer(PyObject *self, PyObject *args)
   Py_RETURN_NONE;
 }
 
+static PyObject* pysuinput_press_release(PyObject *self, PyObject *args)
+{
+  int uinput_fd;
+  int16_t code;
+  if (!PyArg_ParseTuple(args, "ih", &uinput_fd, &code))
+    return NULL;
+  if (suinput_press_release(uinput_fd, code) == -1)
+    return PyErr_SetFromErrno(PyExc_IOError);
+  Py_RETURN_NONE;
+}
+
 static PyMethodDef pysuinputMethods[] = {
   {"open", pysuinput_open, METH_VARARGS,
    "open(str(name), int(bustype), int(vendor), int(product), int(version))\n\n"
@@ -163,6 +174,25 @@ static PyMethodDef pysuinputMethods[] = {
    "\n"
    "Behaviour is undefined when passed a file descriptor not returned by\n"
    "suinput_open()."
+  },
+
+  {"press_release", pysuinput_press_release, METH_VARARGS,
+   "press_release(int(uinput_fd), int(signed_code))\n\n"
+   "Sends a press or a release event to the event device. The sign of\n"
+   "`code` determines which type of event is sent. Positive `code`\n"
+   "means press and negative `code` means release. Returns 0 on\n"
+   "success. On error, -1 is returned, and errno is set appropriately.\n"
+   "\n"
+   "Behaviour is undefined when passed a file descriptor not returned by\n"
+   "suinput_open().\n"
+   "\n"
+   "All possible absolute values of `code` are defined as constants in\n"
+   "uinput.codes -module.\n"
+   "\n"
+   "This function is provided as a convenience and has effectively the\n"
+   "same result as calling suinput_press() when the value of `code` is\n"
+   "positive and suinput_release() when negative."
+
   },
 
   {NULL, NULL, 0, NULL}
