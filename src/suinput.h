@@ -89,4 +89,22 @@ int suinput_release(int uinput_fd, uint16_t code);
 */
 int suinput_click(int uinput_fd, uint16_t code);
 
+/*
+  Sends a press or a release event to the event device. The sign of
+  `code` determines which type of event is sent. Positive `code`
+  means press and negative `code` means release. Returns 0 on
+  success. On error, -1 is returned, and errno is set appropriately.
+
+  Behaviour is undefined when passed a file descriptor not returned by
+  suinput_open().
+
+  All possible absolute values of `code` are defined in linux/input.h
+  prefixed by KEY_ or BTN_.
+
+  This function is provided as a convenience and has effectively the
+  same result as calling suinput_press() when the value of `code` is
+  positive and suinput_release() when negative.
+*/
+int suinput_press_release(int uinput_fd, int16_t code);
+
 #endif /* SUINPUT_H */

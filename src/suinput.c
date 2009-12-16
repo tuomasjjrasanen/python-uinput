@@ -21,6 +21,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <linux/uinput.h>
 
 #include "suinput.h"
@@ -184,4 +185,11 @@ int suinput_click(int uinput_fd, uint16_t code)
   if (suinput_press(uinput_fd, code))
     return -1;
   return suinput_release(uinput_fd, code);
+}
+
+int suinput_press_release(int uinput_fd, int16_t code)
+{
+  if (code > 0)
+    return suinput_press(uinput_fd, code);
+  return suinput_release(uinput_fd, abs(code));
 }

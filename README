@@ -20,7 +20,7 @@ General information
 - **Author**: `Tuomas Räsänen <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
 - **Homepage**: http://codegrove.org/libsuinput/
 - **License**: LGPLv3+ (see COPYING for details)
-- **Version**: 0.1
+- **Version**: 0.2
 
 Requirements
 ============
@@ -73,7 +73,7 @@ Move pointer and then generate a left mouse button click::
 Downloading
 ===========
 
-- Tarball is available at: http://codegrove.org/libsuinput/0.1/libsuinput-0.1.tar.gz
+- Tarball is available at: http://codegrove.org/libsuinput/0.2/libsuinput-0.2.tar.gz
 - Latest sources from public git-repository: http://github.com/tuos/libsuinput/ ::
 
     git clone git://github.com/tuos/libsuinput.git
