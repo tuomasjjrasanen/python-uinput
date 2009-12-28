@@ -144,6 +144,8 @@ int suinput_open(const char* device_name, const struct input_id* id)
 
 int suinput_close(int uinput_fd)
 {
+  int original_errno;
+
   /*
     Sleep before destroying the device because there still can be some
     unprocessed events. This is not the right way, but I am still
@@ -153,14 +155,13 @@ int suinput_close(int uinput_fd)
   sleep(2);
 
   if (ioctl(uinput_fd, UI_DEV_DESTROY) == -1) {
+    original_errno = errno;
     close(uinput_fd);
+    errno = original_errno;
     return -1;
   }
 
-  if (close(uinput_fd) == -1)
-    return -1;
-
-  return 0;
+  return close(uinput_fd);
 }
 
 int suinput_move_pointer(int uinput_fd, int32_t x, int32_t y)
