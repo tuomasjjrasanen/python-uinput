@@ -1,20 +1,20 @@
 /*
-suinput - Simple C-API to the Linux uinput-system.
-Copyright (C) 2009 Tuomas Räsänen <tuos@codegrove.org>
+  suinput - Simple C-API to the Linux uinput-system.
+  Copyright (C) 2009 Tuomas Räsänen <tuos@codegrove.org>
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation; either
-version 3 of the License, or (at your option) any later version.
+  This library is free software; you can redistribute it and/or
+  modify it under the terms of the GNU Lesser General Public
+  License as published by the Free Software Foundation; either
+  version 3 of the License, or (at your option) any later version.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+  This library is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+  You should have received a copy of the GNU Lesser General Public
+  License along with this library; if not, write to the Free Software
+  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #ifndef SUINPUT_H
@@ -28,14 +28,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
   descriptor on success. On error, -1 is returned, and errno is set
   appropriately.
 */
-int suinput_open(const char* device_name, const struct input_id* id);
+int suinput_open(const char *device_name, const struct input_id *id);
 
 /* 
-  Destroys and closes a connection to the event device. Returns 0 on success.
-  On error, -1 is returned, and errno is set appropriately.
+   Destroys and closes a connection to the event device. Returns 0 on success.
+   On error, -1 is returned, and errno is set appropriately.
    
-  Behaviour is undefined when passed a file descriptor not returned by
-  suinput_open().
+   Behaviour is undefined when passed a file descriptor not returned by
+   suinput_open().
 */
 int suinput_close(int uinput_fd);
 
