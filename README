@@ -86,13 +86,6 @@ The install-procedure adheres the "standard"::
   ./configure --prefix=/usr/local
   make && sudo make install
 
-Known issues
-============
-
-- ``suinput_open()`` and ``suinput_close()`` both introduce a small delay to
-  ensure that every event after initialization and before finalization is
-  processed by the input system.
-
 Bug reporting
 =============
 

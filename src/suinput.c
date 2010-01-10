@@ -115,15 +115,6 @@ int suinput_open(const char* device_name, const struct input_id* id)
   if (ioctl(uinput_fd, UI_DEV_CREATE) == -1)
     goto err;
 
-  /*
-  The reason for generating a small delay is that creating succesfully
-  an uinput device does not guarantee that the device is ready to process
-  input events. It's probably due the asynchronous nature of the udev.
-  However, my experiments show that the device is not ready to process input
-  events even after a device creation event is received from udev.
-  */
-  sleep(2);
-
   return uinput_fd;
 
  err:
@@ -145,14 +136,6 @@ int suinput_open(const char* device_name, const struct input_id* id)
 int suinput_close(int uinput_fd)
 {
   int original_errno;
-
-  /*
-    Sleep before destroying the device because there still can be some
-    unprocessed events. This is not the right way, but I am still
-    looking for better ways. The question is: how to know whether there
-    are any unprocessed uinput events?
-   */
-  sleep(2);
 
   if (ioctl(uinput_fd, UI_DEV_DESTROY) == -1) {
     original_errno = errno;
