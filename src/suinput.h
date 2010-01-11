@@ -31,6 +31,9 @@ struct suinput_driver;
   object representing the input driver on success. On error,
   NULL is returned, and errno is set appropriately.
 
+  If device_name is NULL, "suinput driver" is used instead.
+  If id is NULL, { BUS_VIRTUAL, 0, 0, 0 } is used instead.
+
    suinput_close() needs to be called to release the resources of the driver.
 */
 struct suinput_driver *suinput_open(const char *device_name,

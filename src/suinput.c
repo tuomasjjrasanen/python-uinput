@@ -111,11 +111,19 @@ struct suinput_driver *suinput_open(const char *device_name,
 
 	memset(&user_dev, 0, sizeof(user_dev));
 
-	strncpy(user_dev.name, device_name, UINPUT_MAX_NAME_SIZE);
-	user_dev.id.bustype = id->bustype;
-	user_dev.id.vendor = id->vendor;
-	user_dev.id.product = id->product;
-	user_dev.id.version = id->version;
+	if (device_name)
+		strncpy(user_dev.name, device_name, sizeof(user_dev.name));
+	else
+		strncpy(user_dev.name, "suinput driver", sizeof(user_dev.name));
+
+	if (id) {
+		user_dev.id.bustype = id->bustype;
+		user_dev.id.vendor = id->vendor;
+		user_dev.id.product = id->product;
+		user_dev.id.version = id->version;
+	} else {
+		user_dev.id.bustype = BUS_VIRTUAL;
+	}
 
 	if (write(uinput_fd, &user_dev, sizeof(user_dev)) != sizeof(user_dev))
 		goto err;
