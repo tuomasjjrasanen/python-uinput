@@ -14,38 +14,42 @@ int main(void)
 		0,       /* Seconds. */
 		25000000 /* Nanoseconds. */
 	};
-	int uinput_fd = suinput_open("HelloInput", &id);
+	struct suinput_driver *driver = suinput_open("HelloInput", &id);
 
-	suinput_press(uinput_fd, KEY_LEFTSHIFT);
-	suinput_click(uinput_fd, KEY_H);
-	suinput_release(uinput_fd, KEY_LEFTSHIFT);
-	suinput_click(uinput_fd, KEY_E);
-	suinput_click(uinput_fd, KEY_L);
-	suinput_click(uinput_fd, KEY_L);
-	suinput_click(uinput_fd, KEY_O);
-	suinput_click(uinput_fd, KEY_SPACE);
-	suinput_click(uinput_fd, KEY_W);
-	suinput_click(uinput_fd, KEY_O);
-	suinput_click(uinput_fd, KEY_R);
-	suinput_click(uinput_fd, KEY_L);
-	suinput_click(uinput_fd, KEY_D);
+	/* sleep(1); */
+
+	suinput_press(driver, KEY_LEFTSHIFT);
+	suinput_click(driver, KEY_H);
+	suinput_release(driver, KEY_LEFTSHIFT);
+	suinput_click(driver, KEY_E);
+	suinput_click(driver, KEY_L);
+	suinput_click(driver, KEY_L);
+	suinput_click(driver, KEY_O);
+	suinput_click(driver, KEY_SPACE);
+	suinput_click(driver, KEY_W);
+	suinput_click(driver, KEY_O);
+	suinput_click(driver, KEY_R);
+	suinput_click(driver, KEY_L);
+	suinput_click(driver, KEY_D);
 
 	/* Assume that SHIFT+1 -> ! */
-	suinput_press(uinput_fd, KEY_LEFTSHIFT);
-	suinput_click(uinput_fd, KEY_1);
-	suinput_release(uinput_fd, KEY_LEFTSHIFT);
+	suinput_press(driver, KEY_LEFTSHIFT);
+	suinput_click(driver, KEY_1);
+	suinput_release(driver, KEY_LEFTSHIFT);
   
 	for (i = 0; i < 50; ++i) {
-		suinput_move_pointer(uinput_fd, i, 10);
+		suinput_move_pointer(driver, i, 10);
 		nanosleep(&pointer_motion_delay, NULL);
 	}
 
 	for (i = 0; i < 50; ++i) {
-		suinput_move_pointer(uinput_fd, -10, -i);
+		suinput_move_pointer(driver, -10, -i);
 		nanosleep(&pointer_motion_delay, NULL);
 	}
 
-	suinput_close(uinput_fd);
+	/* sleep(1); */
+
+	suinput_close(driver);
 
 	return 0;
 }

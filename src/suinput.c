@@ -26,12 +26,25 @@
 
 #include "suinput.h"
 
+struct suinput_driver {
+	int uinput_fd;
+	uint8_t code_bits[KEY_MAX / 8 + 1];
+};
+
 char *UINPUT_FILEPATHS[] = {
 	"/dev/uinput",
 	"/dev/input/uinput",
 	"/dev/misc/uinput",
 };
 #define UINPUT_FILEPATHS_COUNT (sizeof(UINPUT_FILEPATHS) / sizeof(char *))
+
+#define KEY_MIN 1
+
+static inline int test_code_bit(const struct suinput_driver *driver,
+				uint16_t code)
+{
+	return driver->code_bits[code / 8] & (1 << (code % 8));
+}
 
 static int suinput_write(int uinput_fd, uint16_t type, uint16_t code,
 			 int32_t value)
@@ -55,12 +68,14 @@ static int suinput_write_syn(int uinput_fd,
 	return suinput_write(uinput_fd, EV_SYN, SYN_REPORT, 0);
 }
 
-int suinput_open(const char *device_name, const struct input_id *id)
+struct suinput_driver *suinput_open(const char *device_name,
+				    const struct input_id *id)
 {
 	int original_errno = 0;
 	int uinput_fd = -1;
 	struct uinput_user_dev user_dev;
 	int i;
+	struct suinput_driver *driver;
 
 	for (i = 0; i < UINPUT_FILEPATHS_COUNT; ++i) {
 		uinput_fd = open(UINPUT_FILEPATHS[i], O_WRONLY | O_NONBLOCK);
@@ -69,7 +84,7 @@ int suinput_open(const char *device_name, const struct input_id *id)
 	}
 
 	if (uinput_fd == -1)
-		return -1;
+		return NULL;
 
 	if (ioctl(uinput_fd, UI_SET_EVBIT, EV_KEY) == -1)
 		goto err;
@@ -89,12 +104,13 @@ int suinput_open(const char *device_name, const struct input_id *id)
 	if (ioctl(uinput_fd, UI_SET_RELBIT, REL_Y) == -1)
 		goto err;
 
-	for (i = 0; i < KEY_MAX; i++) {
+	for (i = KEY_MIN; i < KEY_MAX; i++) {
 		if (ioctl(uinput_fd, UI_SET_KEYBIT, i) == -1)
 			goto err;
 	}
 
 	memset(&user_dev, 0, sizeof(user_dev));
+
 	strncpy(user_dev.name, device_name, UINPUT_MAX_NAME_SIZE);
 	user_dev.id.bustype = id->bustype;
 	user_dev.id.vendor = id->vendor;
@@ -107,55 +123,96 @@ int suinput_open(const char *device_name, const struct input_id *id)
 	if (ioctl(uinput_fd, UI_DEV_CREATE) == -1)
 		goto err;
 
-	return uinput_fd;
+	driver = (struct suinput_driver *) malloc(sizeof(struct suinput_driver));
+	if (driver == NULL)
+		goto err;
+
+	memset(driver, 0, sizeof(struct suinput_driver));
+	driver->uinput_fd = uinput_fd;
+
+	return driver;
 err:
 	original_errno = errno;
 	close(uinput_fd);
 	errno = original_errno;
-	return -1;
+	return NULL;
 }
 
-int suinput_close(int uinput_fd)
+int suinput_close(struct suinput_driver *driver)
 {
+	int retval;
 	int original_errno;
 
-	if (ioctl(uinput_fd, UI_DEV_DESTROY) == -1) {
+	if (ioctl(driver->uinput_fd, UI_DEV_DESTROY) == -1) {
 		original_errno = errno;
-		close(uinput_fd);
+		close(driver->uinput_fd);
 		errno = original_errno;
 		return -1;
 	}
 
-	return close(uinput_fd);
+	retval = close(driver->uinput_fd);
+	free(driver);
+	return retval;
 }
 
-int suinput_move_pointer(int uinput_fd, int32_t x, int32_t y)
+int suinput_move_pointer(struct suinput_driver *driver, int32_t x, int32_t y)
 {
-	if (suinput_write(uinput_fd, EV_REL, REL_X, x))
+	if (suinput_write(driver->uinput_fd, EV_REL, REL_X, x))
 		return -1;
-	return suinput_write_syn(uinput_fd, EV_REL, REL_Y, y);
+	return suinput_write_syn(driver->uinput_fd, EV_REL, REL_Y, y);
 }
 
-int suinput_press(int uinput_fd, uint16_t code)
+int suinput_press(struct suinput_driver *driver, uint16_t code)
 {
-	return suinput_write_syn(uinput_fd, EV_KEY, code, 1);
+	int retval = suinput_write_syn(driver->uinput_fd, EV_KEY, code, 1);
+	if (retval == -1)
+		return retval;
+	driver->code_bits[code / 8] |= 1 << (code % 8);
+	return retval;
 }
 
-int suinput_release(int uinput_fd, uint16_t code)
+int suinput_release(struct suinput_driver *driver, uint16_t code)
 {
-	return suinput_write_syn(uinput_fd, EV_KEY, code, 0);
+	int retval = suinput_write_syn(driver->uinput_fd, EV_KEY, code, 0);
+	if (retval == -1)
+		return retval;
+	driver->code_bits[code / 8] &= ~(1 << (code % 8));
+	return retval;
 }
 
-int suinput_click(int uinput_fd, uint16_t code)
+int suinput_click(struct suinput_driver *driver, uint16_t code)
 {
-	if (suinput_press(uinput_fd, code))
+	if (suinput_press(driver, code))
 		return -1;
-	return suinput_release(uinput_fd, code);
+	return suinput_release(driver, code);
 }
 
-int suinput_press_release(int uinput_fd, int16_t code)
+int suinput_press_release(struct suinput_driver *driver, int16_t code)
 {
 	if (code > 0)
-		return suinput_press(uinput_fd, code);
-	return suinput_release(uinput_fd, abs(code));
+		return suinput_press(driver, code);
+	return suinput_release(driver, abs(code));
+}
+
+int suinput_toggle(struct suinput_driver *driver, uint16_t code)
+{
+	if (suinput_is_valid_code(code)) {
+		errno = EINVAL;
+		return -1;
+	}
+	if (test_code_bit(driver, code))
+		return suinput_release(driver, code);
+	return suinput_press(driver, code);	
+}
+
+int suinput_is_pressed(const struct suinput_driver *driver, uint16_t code)
+{
+	if (suinput_is_valid_code(code))
+		return -1;
+	return test_code_bit(driver, code);
+}
+
+inline int suinput_is_valid_code(uint16_t code)
+{
+	return (KEY_MIN > code) || (code >= KEY_MAX);
 }
