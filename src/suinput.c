@@ -28,7 +28,7 @@
 
 struct suinput_driver {
 	int uinput_fd;
-	uint8_t code_bits[KEY_MAX / 8 + 1];
+	uint8_t keycode_bits[KEY_MAX / 8 + 1];
 };
 
 char *UINPUT_FILEPATHS[] = {
@@ -62,9 +62,9 @@ static int suinput_write_syn(int uinput_fd,
 	return suinput_write(uinput_fd, EV_SYN, SYN_REPORT, 0);
 }
 
-inline int suinput_is_valid_code(uint16_t code)
+inline int suinput_is_valid_keycode(uint16_t keycode)
 {
-	return (KEY_MIN <= code) && (code < KEY_MAX);
+	return (KEY_MIN <= keycode) && (keycode < KEY_MAX);
 }
 
 struct suinput_driver *suinput_open(const char *device_name,
@@ -169,54 +169,54 @@ int suinput_move_pointer(struct suinput_driver *driver, int32_t x, int32_t y)
 	return suinput_write_syn(driver->uinput_fd, EV_REL, REL_Y, y);
 }
 
-int suinput_press(struct suinput_driver *driver, uint16_t code)
+int suinput_press(struct suinput_driver *driver, uint16_t keycode)
 {
-	if (!suinput_is_valid_code(code)) {
+	if (!suinput_is_valid_keycode(keycode)) {
 		errno = EINVAL;
 		return -1;
 	}
-	if (suinput_write_syn(driver->uinput_fd, EV_KEY, code, 1) == -1)
+	if (suinput_write_syn(driver->uinput_fd, EV_KEY, keycode, 1) == -1)
 		return -1;
-	driver->code_bits[code / 8] |= 1 << (code % 8);
+	driver->keycode_bits[keycode / 8] |= 1 << (keycode % 8);
 	return 0;
 }
 
-int suinput_release(struct suinput_driver *driver, uint16_t code)
+int suinput_release(struct suinput_driver *driver, uint16_t keycode)
 {
-	if (!suinput_is_valid_code(code)) {
+	if (!suinput_is_valid_keycode(keycode)) {
 		errno = EINVAL;
 		return -1;
 	}
-	if (suinput_write_syn(driver->uinput_fd, EV_KEY, code, 0) == -1)
+	if (suinput_write_syn(driver->uinput_fd, EV_KEY, keycode, 0) == -1)
 		return -1;
-	driver->code_bits[code / 8] &= ~(1 << (code % 8));
+	driver->keycode_bits[keycode / 8] &= ~(1 << (keycode % 8));
 	return 0;
 }
 
-int suinput_click(struct suinput_driver *driver, uint16_t code)
+int suinput_click(struct suinput_driver *driver, uint16_t keycode)
 {
-	if (suinput_press(driver, code))
+	if (suinput_press(driver, keycode))
 		return -1;
-	return suinput_release(driver, code);
+	return suinput_release(driver, keycode);
 }
 
-int suinput_press_release(struct suinput_driver *driver, int16_t code)
+int suinput_press_release(struct suinput_driver *driver, int16_t keycode)
 {
-	if (code > 0)
-		return suinput_press(driver, code);
-	return suinput_release(driver, abs(code));
+	if (keycode > 0)
+		return suinput_press(driver, keycode);
+	return suinput_release(driver, abs(keycode));
 }
 
-int suinput_toggle(struct suinput_driver *driver, uint16_t code)
+int suinput_toggle(struct suinput_driver *driver, uint16_t keycode)
 {
-	if (suinput_is_pressed(driver, code))
-		return suinput_release(driver, code);
-	return suinput_press(driver, code);	
+	if (suinput_is_pressed(driver, keycode))
+		return suinput_release(driver, keycode);
+	return suinput_press(driver, keycode);	
 }
 
-int suinput_is_pressed(const struct suinput_driver *driver, uint16_t code)
+int suinput_is_pressed(const struct suinput_driver *driver, uint16_t keycode)
 {
-	if (!suinput_is_valid_code(code))
+	if (!suinput_is_valid_keycode(keycode))
 		return 0;
-	return driver->code_bits[code / 8] & (1 << (code % 8));
+	return driver->keycode_bits[keycode / 8] & (1 << (keycode % 8));
 }

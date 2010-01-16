@@ -59,13 +59,13 @@ int suinput_move_pointer(struct suinput_driver *driver, int32_t x, int32_t y);
   a short delay until a release event is sent. Returns 0 on success.
   On error, -1 is returned, and errno is set appropriately.
 */
-int suinput_press(struct suinput_driver *driver, uint16_t code);
+int suinput_press(struct suinput_driver *driver, uint16_t keycode);
 
 /*
   Sends a release event to the event device. Returns 0 on success.
   On error, -1 is returned, and errno is set appropriately.
 */
-int suinput_release(struct suinput_driver *driver, uint16_t code);
+int suinput_release(struct suinput_driver *driver, uint16_t keycode);
 
 /*
   Sends a press and release events to the event device. Returns 0 on
@@ -74,19 +74,19 @@ int suinput_release(struct suinput_driver *driver, uint16_t code);
   This function is provided as a convenience and has effectively the
   same result as calling suinput_press() and suinput_release() sequentially.
 */
-int suinput_click(struct suinput_driver *driver, uint16_t code);
+int suinput_click(struct suinput_driver *driver, uint16_t keycode);
 
 /*
   Sends a press or a release event to the event device. The sign of
-  code determines which type of event is sent. Positive code
-  means press and negative code means release. Returns 0 on
+  keycode determines which type of event is sent. Positive keycode
+  means press and negative keycode means release. Returns 0 on
   success. On error, -1 is returned, and errno is set appropriately.
 
   This function is provided as a convenience and has effectively the
-  same result as calling suinput_press() when the value of code is
+  same result as calling suinput_press() when the value of keycode is
   positive and suinput_release() when negative.
 */
-int suinput_press_release(struct suinput_driver *driver, int16_t code);
+int suinput_press_release(struct suinput_driver *driver, int16_t keycode);
 
 /*
   Sends a press or a release event to the event device. If a press event
@@ -98,20 +98,20 @@ int suinput_press_release(struct suinput_driver *driver, int16_t code);
   same result as calling suinput_press() if suinput_is_pressed() returns
   False and suinput_release() otherwise.
 */
-int suinput_toggle(struct suinput_driver *driver, uint16_t code);
+int suinput_toggle(struct suinput_driver *driver, uint16_t keycode);
 
 /*
-  Returns 1 if a button or a key denoted by code is pressed
+  Returns 1 if a button or a key denoted by keycode is pressed
   and 0 if it is not.
 */
-int suinput_is_pressed(const struct suinput_driver *driver, uint16_t code);
+int suinput_is_pressed(const struct suinput_driver *driver, uint16_t keycode);
 
 /*
-  Returns 1 if code is valid, 0 otherwise.
+  Returns 1 if keycode is valid, 0 otherwise.
   
-  Valid codes are defined in linux/input.h prefixed by KEY_ or BTN_
-  such that KEY_RESERVED < code < KEY_MAX.
+  Valid keycodes are defined in linux/input.h prefixed by KEY_ or BTN_
+  such that KEY_RESERVED < keycode < KEY_MAX.
 */
-int suinput_is_valid_code(uint16_t code);
+int suinput_is_valid_keycode(uint16_t keycode);
 
 #endif /* SUINPUT_H */
