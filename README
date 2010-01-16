@@ -57,16 +57,10 @@ Move pointer and then generate a left mouse button click::
 
   int main(void)
   {
-    struct input_id id = {
-      BUS_BLUETOOTH, /* Bus type. */
-      13,            /* Vendor id. */
-      3,             /* Product id. */
-      7              /* Version id. */
-    };
-    int uinput_fd = suinput_open("HelloInput", &id);
-    suinput_move_pointer(uinput_fd, 100, 100);
-    suinput_click(uinput_fd, BTN_LEFT);
-    suinput_close(uinput_fd);
+    struct suinput_driver *driver = suinput_open(NULL, NULL);
+    suinput_move_pointer(driver, 100, 100);
+    suinput_click(driver, BTN_LEFT);
+    suinput_close(driver);
     return 0;
   }
 
