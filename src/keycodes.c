@@ -18,10 +18,22 @@
 */
 
 #include <Python.h>
+#include <suinput.h>
 
-#include "linux/uinput.h"
+static PyObject *pysuinput_is_valid(PyObject *self, PyObject *args)
+{
+	uint16_t keycode;
+	if (!PyArg_ParseTuple(args, "H", &keycode))
+		return NULL;
+	return PyBool_FromLong(suinput_is_valid_keycode(keycode));
+}
 
 static PyMethodDef keycodesMethods[] = {
+	{"is_valid", pysuinput_is_valid, METH_VARARGS,
+	 "is_valid(keycode)\n\n"
+	 "Return True if keycode is valid, otherwise return False."
+	},
+
 	{NULL, NULL, 0, NULL}
 };
 

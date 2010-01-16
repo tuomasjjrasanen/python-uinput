@@ -11,7 +11,9 @@ pysuinput_module = Extension('uinput._suinput',
                              )
 
 keycodes_module = Extension('uinput.keycodes',
-                         sources=['src/keycodes.c'])
+                            sources=['src/keycodes.c'],
+                            libraries=['suinput'],
+                            )
 
 setup(name='python-uinput',
       version='0.2',

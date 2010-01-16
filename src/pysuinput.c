@@ -54,11 +54,11 @@ static PyObject *pysuinput_press(PyObject *self, PyObject *args)
 {
 	PyObject *py_driver;
 	struct suinput_driver *c_driver;
-	uint16_t code;
-	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
+	uint16_t keycode;
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &keycode))
 		return NULL;
 	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
-	if (suinput_press(c_driver, code) == -1)
+	if (suinput_press(c_driver, keycode) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
@@ -67,11 +67,11 @@ static PyObject *pysuinput_release(PyObject *self, PyObject *args)
 {
 	PyObject *py_driver;
 	struct suinput_driver *c_driver;
-	uint16_t code;
-	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
+	uint16_t keycode;
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &keycode))
 		return NULL;
 	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
-	if (suinput_release(c_driver, code) == -1)
+	if (suinput_release(c_driver, keycode) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
@@ -80,11 +80,11 @@ static PyObject *pysuinput_click(PyObject *self, PyObject *args)
 {
 	PyObject *py_driver;
 	struct suinput_driver *c_driver;
-	uint16_t code;
-	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
+	uint16_t keycode;
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &keycode))
 		return NULL;
 	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
-	if (suinput_click(c_driver, code) == -1)
+	if (suinput_click(c_driver, keycode) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
@@ -108,11 +108,11 @@ static PyObject *pysuinput_press_release(PyObject *self, PyObject *args)
 {
 	PyObject *py_driver;
 	struct suinput_driver *c_driver;
-	int16_t code;
-	if (!PyArg_ParseTuple(args, "Oh", &py_driver, &code))
+	int16_t keycode;
+	if (!PyArg_ParseTuple(args, "Oh", &py_driver, &keycode))
 		return NULL;
 	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
-	if (suinput_press_release(c_driver, code) == -1)
+	if (suinput_press_release(c_driver, keycode) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
@@ -121,11 +121,11 @@ static PyObject *pysuinput_toggle(PyObject *self, PyObject *args)
 {
 	PyObject *py_driver;
 	struct suinput_driver *c_driver;
-	uint16_t code;
-	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
+	uint16_t keycode;
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &keycode))
 		return NULL;
 	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
-	if (suinput_toggle(c_driver, code) == -1)
+	if (suinput_toggle(c_driver, keycode) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
@@ -134,121 +134,64 @@ static PyObject *pysuinput_is_pressed(PyObject *self, PyObject *args)
 {
 	PyObject *py_driver;
 	struct suinput_driver *c_driver;
-	uint16_t code;
-	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
+	uint16_t keycode;
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &keycode))
 		return NULL;
 	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
-	return PyBool_FromLong(suinput_is_pressed(c_driver, code));
-}
-
-static PyObject *pysuinput_is_valid_code(PyObject *self, PyObject *args)
-{
-	uint16_t code;
-	if (!PyArg_ParseTuple(args, "H", &code))
-		return NULL;
-	return PyBool_FromLong(suinput_is_valid_code(code));
+	return PyBool_FromLong(suinput_is_pressed(c_driver, keycode));
 }
 
 static PyMethodDef pysuinputMethods[] = {
 	{"open", pysuinput_open, METH_VARARGS,
 	 "open(name, bustype, vendor, product, version)\n\n"
-	 "Creates and opens a connection to the event device. Returns an uinput\n"
-	 "file descriptor on success. On error, -1 is returned, and errno is set\n"
-	 "appropriately.\n"
-	 "\n"
-	 "All possible values of `bustype` are defined as constants prefixed\n"
-	 "by BUS_.\n"   
+	 "Return an input driver.\n"
+	 "All possible values of bustype are defined as constants prefixed\n"
+	 "by BUS_, vendor, product and version are unsigned 16 bit integers."
+	 "close() must be called for every object returned by this function."
 	},
 
 	{"close", pysuinput_close, METH_VARARGS,
 	 "close(driver)\n\n"
-	 "Destroys and closes a connection to the event device. Returns 0 on\n"
-	 "success. On error, -1 is returned, and errno is set appropriately.\n"
-	 "\n"
-	 "Behaviour is undefined when passed a file descriptor not returned by\n"
-	 "suinput_open()."
+	 "Close and destroy the driver."
 	},
 
 	{"click", pysuinput_click, METH_VARARGS,
-	 "click(driver, code)\n\n"
-	 "Sends a press and release events to the event device. Returns 0 on\n"
-	 "success. On error, -1 is returned, and errno is set appropriately.\n"
-	 "\n"
-	 "Behaviour is undefined when passed a file descriptor not returned by\n"
-	 "suinput_open().\n"
-	 "\n"
-	 "All possible values of `code` are defined as constants in\n"
-	 "uinput.codes -module.\n"
-	 "\n"
-	 "This function is provided as a convenience and has effectively the\n"
-	 "same result as calling suinput_press() and suinput_release()\n"
-	 "sequentially."
+	 "click(driver, keycode)\n\n"
+	 "Send a press and a release event."
 	},
 
 	{"press", pysuinput_press, METH_VARARGS,
-	 "press(driver, code)\n\n"
-	 "Sends a press event to the event device. Event is repeated after\n"
-	 "a short delay until a release event is sent. Returns 0 on success.\n"
-	 "On error, -1 is returned, and errno is set appropriately.\n"
-	 "\n"
-	 "Behaviour is undefined when passed a file descriptor not returned by\n"
-	 "suinput_open().\n"
-	 "\n"
-	 "All possible values of `code` are defined as constants in\n"
-	 "uinput.codes -module."
+	 "press(driver, keycode)\n\n"
+	 "Send a press event.\n"
+	 "Event is repeated after a short delay until a release event is sent."
 	},
 
 	{"release", pysuinput_release, METH_VARARGS,
-	 "release(driver, code)\n\n"
-	 "Sends a release event to the event device. Returns 0 on success.\n"
-	 "On error, -1 is returned, and errno is set appropriately.\n"
-	 "\n"
-	 "Behaviour is undefined when passed a file descriptor not returned by\n"
-	 "suinput_open().\n"
-	 "\n"
-	 "All possible values of `code` are defined as constants in\n"
-	 "uinput.codes -module."
+	 "release(driver, keycode)\n\n"
+	 "Send a release event."
 	},
 
 	{"move_pointer", pysuinput_move_pointer, METH_VARARGS,
 	 "move_pointer(driver, x, y)\n\n"
-	 "Sends a relative pointer motion event to the event device. Values\n"
-	 "increase towards right-bottom. Returns 0 on success. On error, -1\n"
-	 "is returned, and errno is set appropriately.\n"
-	 "\n"
-	 "Behaviour is undefined when passed a file descriptor not returned by\n"
-	 "suinput_open()."
+	 "Move pointer towards bottom-right."
 	},
 
 	{"press_release", pysuinput_press_release, METH_VARARGS,
-	 "press_release(driver, signed_code)\n\n"
-	 "Sends a press or a release event to the event device. The sign of\n"
-	 "`code` determines which type of event is sent. Positive `code`\n"
-	 "means press and negative `code` means release. Returns 0 on\n"
-	 "success. On error, -1 is returned, and errno is set appropriately.\n"
-	 "\n"
-	 "Behaviour is undefined when passed a file descriptor not returned by\n"
-	 "suinput_open().\n"
-	 "\n"
-	 "All possible absolute values of `code` are defined as constants in\n"
-	 "uinput.codes -module.\n"
-	 "\n"
-	 "This function is provided as a convenience and has effectively the\n"
-	 "same result as calling suinput_press() when the value of `code` is\n"
-	 "positive and suinput_release() when negative."
-
+	 "press_release(driver, signed_keycode)\n\n"
+	 "Send a press event if signed_keycode > 0, otherwise send\n"
+	 "a release event."
 	},
 
 	{"toggle", pysuinput_toggle, METH_VARARGS,
-	 ""
+	 "toggle(driver, keycode)\n\n"
+	 "Press button if it is not pressed currently, release it otherwise."
 	},
 
 	{"is_pressed", pysuinput_is_pressed, METH_VARARGS,
-	 ""
-	},
-
-	{"is_valid_code", pysuinput_is_valid_code, METH_VARARGS,
-	 ""
+	 "is_pressed(driver, keycode)\n\n"
+	 "Return True if button is pressed, False otherwise.\n"
+	 "keycode must be one of the constant values defined in\n"
+	 "uinput.keycodes -module."
 	},
 
 	{NULL, NULL, 0, NULL}

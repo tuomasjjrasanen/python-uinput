@@ -56,6 +56,8 @@ __all__ = [
 class Driver(object):
     """Device driver for the Linux uinput-system.
 
+    keycodes are defined in uinput.keycodes -module.
+
     For the documentation of the constructor arguments, see the
     documentation of the corresponding properties.
     """
@@ -76,8 +78,7 @@ class Driver(object):
 
     @property
     def bustype(self):
-        """Bustype of the device.
-        Must be one of the BUS_ -prefixed constant values.
+        """One of the BUS_ -prefixed constant values.
         """
         return self._bustype
 
@@ -97,74 +98,34 @@ class Driver(object):
         return self._version
 
     def move_pointer(self, x, y):
-        """Sends a relative pointer motion event to the event device.
-        Values increase towards right-bottom.
-        """
+        "Move pointer towards bottom-right."
         _suinput.move_pointer(self._context, x, y)
 
     def press(self, keycode):
-        """Sends a press event to the event device. Event is repeated after
-        a short delay until a release event is sent.
-
-        keycode must be one of the constant values defined in
-        uinput.keycodes -module.
-        """
+        """Send a press event.
+        Event is repeated after a short delay until a release event is sent."""
         _suinput.press(self._context, keycode)
 
     def release(self, keycode):
-        """Sends a release event to the event device.
-
-        keycode must be one of the constant values defined in
-        uinput.keycodes -module.
-        """
+        "Send a release event."
         _suinput.release(self._context, keycode)
 
     def click(self, keycode):
-        """Sends a press and release events to the event device.
-
-        keycode must be one of the constant values defined in
-        uinput.keycodes -module.
-
-        This method is provided as a convenience and has effectively the
-        same result as calling press() and release() sequentially.
-        """
+        "Send a press and a release event."
         _suinput.click(self._context, keycode)
 
     def press_release(self, signed_keycode):
-        """Sends a press or a release event to the event device.
-        The sign of the signed_keycode determines which type of event is sent.
-        Positive signed_keycode means press and negative means release.
-
-        Absolute value of signed_keycode must be one of the constant
-        values defined in uinput.keycodes module.
-
-        This method is provided as a convenience and has effectively the
-        same result as calling press() when the value of signed_keycode
-        is positive and release() when negative.
-        """
+        """Send a press event if signed_keycode > 0, otherwise send
+        a release event."""
         _suinput.press_release(self._context, signed_keycode)
 
     def toggle(self, keycode):
-        """Press button if it is not pressed currently, release it otherwise.
-        
-        keycode must be one of the constant values defined in
-        uinput.keycodes -module.
-
-        This method is provided as a convenience and has effectively the
-        same result as calling press() if is_pressed() returns False
-        and release() otherwise.
-        """
+        "Press button if it is not pressed currently, release it otherwise."
         _suinput.toggle(self._context, keycode)
 
     def is_pressed(self, keycode):
-        """Return True if button is pressed, False otherwise.
-
-        keycode must be one of the constant values defined in
-        uinput.keycodes -module.
-        """
+        "Return True if button is pressed, otherwise return False."
         return _suinput.is_pressed(self._context, keycode)
 
     def __del__(self):
         _suinput.close(self._context)
-
-is_valid_keycode = _suinput.is_valid_code
