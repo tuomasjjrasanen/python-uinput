@@ -1,4 +1,4 @@
-AC_INIT([libsuinput], [0.1], [tuos@codegrove.org])
+AC_INIT([libsuinput], [0.2], [tuos@codegrove.org])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 dnl AC_CONFIG_MACRO_DIR([m4])

@@ -1,5 +1,5 @@
 AM_CPPFLAGS = -pedantic -Wall -Werror
 lib_LTLIBRARIES = libsuinput.la
 libsuinput_la_SOURCES = suinput.c
-libsuinput_la_LDFLAGS = -version-info 0:0:0
+libsuinput_la_LDFLAGS = -version-info 1:0:0
 include_HEADERS = suinput.h
