@@ -93,6 +93,10 @@ int suinput_press_release(struct suinput_driver *driver, int16_t code);
   was sent previously, a release event is sent and vice versa.
   Returns 0 on success. On error, -1 is returned, and errno is set
   appropriately.
+
+  This method is provided as a convenience and has effectively the
+  same result as calling suinput_press() if suinput_is_pressed() returns
+  False and suinput_release() otherwise.
 */
 int suinput_toggle(struct suinput_driver *driver, uint16_t code);
 

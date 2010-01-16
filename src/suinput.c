@@ -40,12 +40,6 @@ char *UINPUT_FILEPATHS[] = {
 
 #define KEY_MIN 1
 
-static inline int test_code_bit(const struct suinput_driver *driver,
-				uint16_t code)
-{
-	return driver->code_bits[code / 8] & (1 << (code % 8));
-}
-
 static int suinput_write(int uinput_fd, uint16_t type, uint16_t code,
 			 int32_t value)
 {
@@ -66,6 +60,11 @@ static int suinput_write_syn(int uinput_fd,
 	if (suinput_write(uinput_fd, type, code, value))
 		return -1;
 	return suinput_write(uinput_fd, EV_SYN, SYN_REPORT, 0);
+}
+
+inline int suinput_is_valid_code(uint16_t code)
+{
+	return (KEY_MIN <= code) && (code < KEY_MAX);
 }
 
 struct suinput_driver *suinput_open(const char *device_name,
@@ -172,20 +171,26 @@ int suinput_move_pointer(struct suinput_driver *driver, int32_t x, int32_t y)
 
 int suinput_press(struct suinput_driver *driver, uint16_t code)
 {
-	int retval = suinput_write_syn(driver->uinput_fd, EV_KEY, code, 1);
-	if (retval == -1)
-		return retval;
+	if (!suinput_is_valid_code(code)) {
+		errno = EINVAL;
+		return -1;
+	}
+	if (suinput_write_syn(driver->uinput_fd, EV_KEY, code, 1) == -1)
+		return -1;
 	driver->code_bits[code / 8] |= 1 << (code % 8);
-	return retval;
+	return 0;
 }
 
 int suinput_release(struct suinput_driver *driver, uint16_t code)
 {
-	int retval = suinput_write_syn(driver->uinput_fd, EV_KEY, code, 0);
-	if (retval == -1)
-		return retval;
+	if (!suinput_is_valid_code(code)) {
+		errno = EINVAL;
+		return -1;
+	}
+	if (suinput_write_syn(driver->uinput_fd, EV_KEY, code, 0) == -1)
+		return -1;
 	driver->code_bits[code / 8] &= ~(1 << (code % 8));
-	return retval;
+	return 0;
 }
 
 int suinput_click(struct suinput_driver *driver, uint16_t code)
@@ -204,11 +209,7 @@ int suinput_press_release(struct suinput_driver *driver, int16_t code)
 
 int suinput_toggle(struct suinput_driver *driver, uint16_t code)
 {
-	if (!suinput_is_valid_code(code)) {
-		errno = EINVAL;
-		return -1;
-	}
-	if (test_code_bit(driver, code))
+	if (suinput_is_pressed(driver, code))
 		return suinput_release(driver, code);
 	return suinput_press(driver, code);	
 }
@@ -217,10 +218,5 @@ int suinput_is_pressed(const struct suinput_driver *driver, uint16_t code)
 {
 	if (!suinput_is_valid_code(code))
 		return 0;
-	return test_code_bit(driver, code);
-}
-
-inline int suinput_is_valid_code(uint16_t code)
-{
-	return (KEY_MIN <= code) && (code < KEY_MAX);
+	return driver->code_bits[code / 8] & (1 << (code % 8));
 }
