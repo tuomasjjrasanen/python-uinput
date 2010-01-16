@@ -98,7 +98,7 @@ int suinput_toggle(struct suinput_driver *driver, uint16_t code);
 
 /*
   Returns 1 if a button or a key denoted by code is pressed
-  and 0 if it is not. If code is not valid, -1 is returned.
+  and 0 if it is not.
 */
 int suinput_is_pressed(const struct suinput_driver *driver, uint16_t code);
 

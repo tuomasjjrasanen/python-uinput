@@ -204,7 +204,7 @@ int suinput_press_release(struct suinput_driver *driver, int16_t code)
 
 int suinput_toggle(struct suinput_driver *driver, uint16_t code)
 {
-	if (suinput_is_valid_code(code)) {
+	if (!suinput_is_valid_code(code)) {
 		errno = EINVAL;
 		return -1;
 	}
@@ -215,12 +215,12 @@ int suinput_toggle(struct suinput_driver *driver, uint16_t code)
 
 int suinput_is_pressed(const struct suinput_driver *driver, uint16_t code)
 {
-	if (suinput_is_valid_code(code))
-		return -1;
+	if (!suinput_is_valid_code(code))
+		return 0;
 	return test_code_bit(driver, code);
 }
 
 inline int suinput_is_valid_code(uint16_t code)
 {
-	return (KEY_MIN > code) || (code >= KEY_MAX);
+	return (KEY_MIN <= code) && (code < KEY_MAX);
 }
