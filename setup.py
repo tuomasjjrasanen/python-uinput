@@ -10,8 +10,8 @@ pysuinput_module = Extension('uinput._suinput',
                              libraries=['suinput'],
                              )
 
-codes_module = Extension('uinput.codes',
-                         sources=['src/codes.c'])
+keycodes_module = Extension('uinput.keycodes',
+                         sources=['src/keycodes.c'])
 
 setup(name='python-uinput',
       version='0.2',
@@ -22,7 +22,7 @@ setup(name='python-uinput',
       download_url='http://codegrove.org/python-uinput/0.2/python-uinput-0.2.tar.gz',
       package_dir={'uinput': 'src'},
       packages=['uinput'],
-      ext_modules=[pysuinput_module, codes_module],
+      ext_modules=[pysuinput_module, keycodes_module],
       license='LGPLv3+',
       platforms=['Linux'],
       classifiers=[

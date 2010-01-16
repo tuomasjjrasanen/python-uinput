@@ -1,5 +1,5 @@
 /*
-  codes.c - Button and key codes used in Linux input system
+  keycodes.c - Button and key codes used in Linux input system
   Copyright (C) 2009 Tuomas Räsänen <tuos@codegrove.org>
 
   This library is free software; you can redistribute it and/or
@@ -21,14 +21,14 @@
 
 #include "linux/uinput.h"
 
-static PyMethodDef codesMethods[] = {
+static PyMethodDef keycodesMethods[] = {
 	{NULL, NULL, 0, NULL}
 };
 
-PyMODINIT_FUNC initcodes(void)
+PyMODINIT_FUNC initkeycodes(void)
 {
 	PyObject *module;
-	module = Py_InitModule3("codes", codesMethods,
+	module = Py_InitModule3("keycodes", keycodesMethods,
 				"Button and key codes used in Linux input system");
 	PyModule_AddIntMacro(module, KEY_ESC);
 	PyModule_AddIntMacro(module, KEY_1);
