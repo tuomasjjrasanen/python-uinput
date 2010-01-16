@@ -3,7 +3,6 @@
 
 int main(void)
 {
-	char kissa[5];
 	int i;
 	struct timespec pointer_motion_delay = {
 		0,       /* Seconds. */
