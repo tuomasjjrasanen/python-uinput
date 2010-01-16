@@ -2,7 +2,7 @@
  python-uinput - Simple Python API to the Linux uinput-system
 ==============================================================
 
-:date: 2009-12-16
+:date: 2010-01-16
 
 .. contents::
 
@@ -39,7 +39,7 @@ To create and use an uinput driver::
   import uinput
   driver = uinput.Driver()
   driver.move_pointer(100, 100)
-  driver.click(uinput.codes.BTN_LEFT)
+  driver.click(uinput.keycodes.BTN_LEFT)
 
 Downloading
 ===========
