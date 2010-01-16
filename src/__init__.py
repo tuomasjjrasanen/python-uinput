@@ -54,7 +54,6 @@ __all__ = [
     ]
 
 class Driver(object):
-
     """Device driver for the Linux uinput-system.
 
     For the documentation of the constructor arguments, see the
@@ -63,7 +62,7 @@ class Driver(object):
 
     def __init__(self, name="python-uinput", bustype=_suinput.BUS_VIRTUAL,
                  vendor=0, product=0, version=0):
-        self._input_fd = _suinput.open(name, bustype, vendor, product, version)
+        self._context = _suinput.open(name, bustype, vendor, product, version)
         self._name = name
         self._bustype = bustype
         self._vendor = vendor
@@ -72,7 +71,7 @@ class Driver(object):
 
     @property
     def name(self):
-        "Kernel name of the device."
+        "Name of the device."
         return self._name
 
     @property
@@ -84,66 +83,88 @@ class Driver(object):
 
     @property
     def vendor(self):
-        """Vendor number of the device."""
+        """Arbitrary 16 bit unsigned integer vendor id."""
         return self._vendor
 
     @property
     def product(self):
-        """Product number of the device."""
+        """Arbitrary 16 bit unsigned integer product id."""
         return self._product
 
     @property
     def version(self):
-        """Version number of the device."""
+        """Arbitrary 16 bit unsigned integer version number."""
         return self._version
 
     def move_pointer(self, x, y):
         """Sends a relative pointer motion event to the event device.
         Values increase towards right-bottom.
         """
-        _suinput.move_pointer(self._input_fd, x, y)
+        _suinput.move_pointer(self._context, x, y)
 
-    def press(self, uinput_code):
+    def press(self, code):
         """Sends a press event to the event device. Event is repeated after
         a short delay until a release event is sent.
 
-        `uinput_code` must be one of the constant values defined in
+        code must be one of the constant values defined in
         uinput.codes -module.
         """
-        _suinput.press(self._input_fd, uinput_code)
+        _suinput.press(self._context, code)
 
-    def release(self, uinput_code):
+    def release(self, code):
         """Sends a release event to the event device.
 
-        `uinput_code` must be one of the constant values defined in
+        code must be one of the constant values defined in
         uinput.codes -module.
         """
-        _suinput.release(self._input_fd, uinput_code)
+        _suinput.release(self._context, code)
 
-    def click(self, uinput_code):
+    def click(self, code):
         """Sends a press and release events to the event device.
 
-        `uinput_code` must be one of the constant values defined in
+        code must be one of the constant values defined in
         uinput.codes -module.
 
         This method is provided as a convenience and has effectively the
         same result as calling press() and release() sequentially.
         """
-        _suinput.click(self._input_fd, uinput_code)
+        _suinput.click(self._context, code)
 
-    def press_release(self, signed_uinput_code):
-        """Sends a press or a release event to the event device. The sign
-        of the `signed_uinput_code` determines which type of event is sent.
-        Positive `signed_uinput_code` means press and negative means release.
+    def press_release(self, signed_code):
+        """Sends a press or a release event to the event device.
+        The sign of the signed_code determines which type of event is sent.
+        Positive signed_code means press and negative means release.
 
-        Absolute value of `signed_uinput_code` must be one of the constant
-        values defined in uinput.codes -module.
+        Absolute value of signed_code must be one of the constant
+        values defined in uinput.codes module.
 
         This method is provided as a convenience and has effectively the
-        same result as calling press() when the value of `signed_uinput_code`
+        same result as calling press() when the value of signed_code
         is positive and release() when negative.
         """
-        _suinput.press_release(self._input_fd, signed_uinput_code)
+        _suinput.press_release(self._context, signed_code)
+
+    def toggle(self, code):
+        """Press button if it is not pressed currently, release it otherwise.
+        
+        code must be one of the constant values defined in
+        uinput.codes -module.
+
+        This method is provided as a convenience and has effectively the
+        same result as calling press() if is_pressed() returns False
+        and release() otherwise.
+        """
+        _suinput.toggle(self._context, code)
+
+    def is_pressed(self, code):
+        """Return True if button is pressed, False otherwise.
+
+        code must be one of the constant values defined in
+        uinput.codes -module.
+        """
+        return _suinput.is_pressed(self._context, code)
 
     def __del__(self):
-        _suinput.close(self._input_fd)
+        _suinput.close(self._context)
+
+is_valid_code = _suinput.is_valid_code

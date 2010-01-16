@@ -30,7 +30,6 @@ PyMODINIT_FUNC initcodes(void)
 	PyObject *module;
 	module = Py_InitModule3("codes", codesMethods,
 				"Button and key codes used in Linux input system");
-	PyModule_AddIntMacro(module, KEY_RESERVED);
 	PyModule_AddIntMacro(module, KEY_ESC);
 	PyModule_AddIntMacro(module, KEY_1);
 	PyModule_AddIntMacro(module, KEY_2);

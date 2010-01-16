@@ -32,82 +32,126 @@ static PyObject *pysuinput_open(PyObject *self, PyObject *args)
 			      &version))
 		return NULL;
 	struct input_id id = {bustype, vendor, product, version};
-	int uinput_fd = suinput_open(name, &id);
-	if (uinput_fd == -1)
+	struct suinput_driver *c_driver = suinput_open(name, &id);
+	if (c_driver == NULL)
 		return PyErr_SetFromErrno(PyExc_IOError);
-	return Py_BuildValue("i", uinput_fd);
+	return PyCObject_FromVoidPtr((void *)c_driver, NULL);
 }
 
 static PyObject *pysuinput_close(PyObject *self, PyObject *args)
 {
-	int uinput_fd;
-	if (!PyArg_ParseTuple(args, "i", &uinput_fd))
+	PyObject *py_driver;
+	struct suinput_driver *c_driver;
+	if (!PyArg_ParseTuple(args, "O", &py_driver))
 		return NULL;
-	if (suinput_close(uinput_fd) == -1)
+	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
+	if (suinput_close(c_driver) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
 
 static PyObject *pysuinput_press(PyObject *self, PyObject *args)
 {
-	int uinput_fd;
+	PyObject *py_driver;
+	struct suinput_driver *c_driver;
 	uint16_t code;
-	if (!PyArg_ParseTuple(args, "iH", &uinput_fd, &code))
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
 		return NULL;
-	if (suinput_press(uinput_fd, code) == -1)
+	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
+	if (suinput_press(c_driver, code) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
 
 static PyObject *pysuinput_release(PyObject *self, PyObject *args)
 {
-	int uinput_fd;
+	PyObject *py_driver;
+	struct suinput_driver *c_driver;
 	uint16_t code;
-	if (!PyArg_ParseTuple(args, "iH", &uinput_fd, &code))
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
 		return NULL;
-	if (suinput_release(uinput_fd, code) == -1)
+	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
+	if (suinput_release(c_driver, code) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
 
 static PyObject *pysuinput_click(PyObject *self, PyObject *args)
 {
-	int uinput_fd;
+	PyObject *py_driver;
+	struct suinput_driver *c_driver;
 	uint16_t code;
-	if (!PyArg_ParseTuple(args, "iH", &uinput_fd, &code))
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
 		return NULL;
-	if (suinput_click(uinput_fd, code) == -1)
+	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
+	if (suinput_click(c_driver, code) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
 
 static PyObject *pysuinput_move_pointer(PyObject *self, PyObject *args)
 {
-	int uinput_fd;
+	PyObject *py_driver;
+	struct suinput_driver *c_driver;
 	int32_t x;
 	int32_t y;
-	if (!PyArg_ParseTuple(args, "iii", &uinput_fd, &x, &y)) {
+	if (!PyArg_ParseTuple(args, "Oii", &py_driver, &x, &y)) {
 		return NULL;
 	}
-	if (suinput_move_pointer(uinput_fd, x, y) == -1)
+	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
+	if (suinput_move_pointer(c_driver, x, y) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
 
 static PyObject *pysuinput_press_release(PyObject *self, PyObject *args)
 {
-	int uinput_fd;
+	PyObject *py_driver;
+	struct suinput_driver *c_driver;
 	int16_t code;
-	if (!PyArg_ParseTuple(args, "ih", &uinput_fd, &code))
+	if (!PyArg_ParseTuple(args, "Oh", &py_driver, &code))
 		return NULL;
-	if (suinput_press_release(uinput_fd, code) == -1)
+	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
+	if (suinput_press_release(c_driver, code) == -1)
 		return PyErr_SetFromErrno(PyExc_IOError);
 	Py_RETURN_NONE;
 }
 
+static PyObject *pysuinput_toggle(PyObject *self, PyObject *args)
+{
+	PyObject *py_driver;
+	struct suinput_driver *c_driver;
+	uint16_t code;
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
+		return NULL;
+	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
+	if (suinput_toggle(c_driver, code) == -1)
+		return PyErr_SetFromErrno(PyExc_IOError);
+	Py_RETURN_NONE;
+}
+
+static PyObject *pysuinput_is_pressed(PyObject *self, PyObject *args)
+{
+	PyObject *py_driver;
+	struct suinput_driver *c_driver;
+	uint16_t code;
+	if (!PyArg_ParseTuple(args, "OH", &py_driver, &code))
+		return NULL;
+	c_driver = (struct suinput_driver *)PyCObject_AsVoidPtr(py_driver);
+	return PyBool_FromLong(suinput_is_pressed(c_driver, code));
+}
+
+static PyObject *pysuinput_is_valid_code(PyObject *self, PyObject *args)
+{
+	uint16_t code;
+	if (!PyArg_ParseTuple(args, "H", &code))
+		return NULL;
+	return PyBool_FromLong(suinput_is_valid_code(code));
+}
+
 static PyMethodDef pysuinputMethods[] = {
 	{"open", pysuinput_open, METH_VARARGS,
-	 "open(str(name), int(bustype), int(vendor), int(product), int(version))\n\n"
+	 "open(name, bustype, vendor, product, version)\n\n"
 	 "Creates and opens a connection to the event device. Returns an uinput\n"
 	 "file descriptor on success. On error, -1 is returned, and errno is set\n"
 	 "appropriately.\n"
@@ -117,7 +161,7 @@ static PyMethodDef pysuinputMethods[] = {
 	},
 
 	{"close", pysuinput_close, METH_VARARGS,
-	 "close(int(uinput_fd))\n\n"
+	 "close(driver)\n\n"
 	 "Destroys and closes a connection to the event device. Returns 0 on\n"
 	 "success. On error, -1 is returned, and errno is set appropriately.\n"
 	 "\n"
@@ -126,7 +170,7 @@ static PyMethodDef pysuinputMethods[] = {
 	},
 
 	{"click", pysuinput_click, METH_VARARGS,
-	 "click(int(uinput_fd), int(code))\n\n"
+	 "click(driver, code)\n\n"
 	 "Sends a press and release events to the event device. Returns 0 on\n"
 	 "success. On error, -1 is returned, and errno is set appropriately.\n"
 	 "\n"
@@ -142,7 +186,7 @@ static PyMethodDef pysuinputMethods[] = {
 	},
 
 	{"press", pysuinput_press, METH_VARARGS,
-	 "press(int(uinput_fd), int(code))\n\n"
+	 "press(driver, code)\n\n"
 	 "Sends a press event to the event device. Event is repeated after\n"
 	 "a short delay until a release event is sent. Returns 0 on success.\n"
 	 "On error, -1 is returned, and errno is set appropriately.\n"
@@ -155,7 +199,7 @@ static PyMethodDef pysuinputMethods[] = {
 	},
 
 	{"release", pysuinput_release, METH_VARARGS,
-	 "release(int(uinput_fd), int(code))\n\n"
+	 "release(driver, code)\n\n"
 	 "Sends a release event to the event device. Returns 0 on success.\n"
 	 "On error, -1 is returned, and errno is set appropriately.\n"
 	 "\n"
@@ -167,7 +211,7 @@ static PyMethodDef pysuinputMethods[] = {
 	},
 
 	{"move_pointer", pysuinput_move_pointer, METH_VARARGS,
-	 "move_pointer(int(uinput_fd), int(x), int(y))\n\n"
+	 "move_pointer(driver, x, y)\n\n"
 	 "Sends a relative pointer motion event to the event device. Values\n"
 	 "increase towards right-bottom. Returns 0 on success. On error, -1\n"
 	 "is returned, and errno is set appropriately.\n"
@@ -177,7 +221,7 @@ static PyMethodDef pysuinputMethods[] = {
 	},
 
 	{"press_release", pysuinput_press_release, METH_VARARGS,
-	 "press_release(int(uinput_fd), int(signed_code))\n\n"
+	 "press_release(driver, signed_code)\n\n"
 	 "Sends a press or a release event to the event device. The sign of\n"
 	 "`code` determines which type of event is sent. Positive `code`\n"
 	 "means press and negative `code` means release. Returns 0 on\n"
@@ -193,6 +237,18 @@ static PyMethodDef pysuinputMethods[] = {
 	 "same result as calling suinput_press() when the value of `code` is\n"
 	 "positive and suinput_release() when negative."
 
+	},
+
+	{"toggle", pysuinput_toggle, METH_VARARGS,
+	 ""
+	},
+
+	{"is_pressed", pysuinput_is_pressed, METH_VARARGS,
+	 ""
+	},
+
+	{"is_valid_code", pysuinput_is_valid_code, METH_VARARGS,
+	 ""
 	},
 
 	{NULL, NULL, 0, NULL}
