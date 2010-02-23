@@ -1,5 +1,6 @@
 #include <time.h>
 #include <suinput.h>
+#include <err.h>
 
 int main(void)
 {
@@ -9,6 +10,8 @@ int main(void)
 		25000000 /* Nanoseconds. */
 	};
 	struct suinput_driver *driver = suinput_open("HelloInputDriver", NULL);
+    if (driver == NULL)
+            err(1, "suinput_open");
 
 	for (i = 0; i < 20; ++i) {
 		suinput_move_pointer(driver, i, 2);
@@ -33,7 +36,7 @@ int main(void)
 	suinput_press(driver, KEY_LEFTSHIFT);
 	suinput_click(driver, KEY_1);
 	suinput_release(driver, KEY_LEFTSHIFT);
-  
+
 	for (i = 0; i < 20; ++i) {
 		suinput_move_pointer(driver, -2, -i);
 		nanosleep(&pointer_motion_delay, NULL);
