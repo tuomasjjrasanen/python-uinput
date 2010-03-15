@@ -34,12 +34,12 @@ struct suinput_driver;
   If device_name is NULL, "suinput driver" is used instead.
   If id is NULL, { BUS_VIRTUAL, 0, 0, 0 } is used instead.
 
-   suinput_close() needs to be called to release the resources of the driver.
+  suinput_close() needs to be called to release the resources of the driver.
 */
 struct suinput_driver *suinput_open(const char *device_name,
-				    const struct input_id *id);
+                                    const struct input_id *id);
 
-/* 
+/*
    Destroys and closes a connection to the event device. Returns 0 on success.
    On error, -1 is returned, and errno is set appropriately.
 
@@ -108,7 +108,7 @@ int suinput_is_pressed(const struct suinput_driver *driver, uint16_t keycode);
 
 /*
   Returns 1 if keycode is valid, 0 otherwise.
-  
+
   Valid keycodes are defined in linux/input.h prefixed by KEY_ or BTN_
   such that KEY_RESERVED < keycode < KEY_MAX.
 */
