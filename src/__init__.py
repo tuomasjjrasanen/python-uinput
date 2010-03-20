@@ -1,131 +1,161 @@
-# -*- coding: utf-8 -*-
-# uinput - Simple Python API to the Linux uinput-system
-# Copyright (C) 2009 Tuomas Räsänen <tuos@codegrove.org>
+from __future__ import absolute_import
 
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 3 of the License, or (at your option) any later version.
+from uinput import suinput
 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Lesser General Public License for more details.
+from .evtypes import EV_KEY
+from .evtypes import EV_ABS
+from .evtypes import EV_REL
 
-# You should have received a copy of the GNU Lesser General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+from .bustypes import *
+from .keycodes import *
+from .abscodes import *
+from .relcodes import *
 
-"""Simple Python API to the Linux uinput-system
+class DeviceError(Exception):
+    pass
 
-A high-level API to programmatically generate Linux input events.
-
-Example usage:
->>> import uinput
->>> driver = uinput.Driver()
->>> driver.move_pointer(100, 100)
->>> driver.click(uinput.keycodes.BTN_LEFT)
-"""
-
-import _suinput
-from _suinput import BUS_PCI
-from _suinput import BUS_ISAPNP
-from _suinput import BUS_USB
-from _suinput import BUS_HIL
-from _suinput import BUS_BLUETOOTH
-from _suinput import BUS_VIRTUAL
-from _suinput import BUS_ISA
-from _suinput import BUS_I8042
-from _suinput import BUS_XTKBD
-from _suinput import BUS_RS232
-from _suinput import BUS_GAMEPORT
-from _suinput import BUS_PARPORT
-from _suinput import BUS_AMIGA
-from _suinput import BUS_ADB
-from _suinput import BUS_I2C
-from _suinput import BUS_HOST
-from _suinput import BUS_GSC
-from _suinput import BUS_ATARI
-
-import keycodes
-
-__all__ = [
-    "Driver",
-    ]
-
-class Driver(object):
-    """Device driver for the Linux uinput-system.
-
-    keycodes are defined in uinput.keycodes -module.
-
-    For the documentation of the constructor arguments, see the
-    documentation of the corresponding properties.
-    """
-
-    def __init__(self, name="python-uinput", bustype=_suinput.BUS_VIRTUAL,
-                 vendor=0, product=0, version=0):
-        self._context = _suinput.open(name, bustype, vendor, product, version)
+class Device(object):
+    def __init__(self, name="python-uinput",
+                 bustype=BUS_VIRTUAL, vendor=0, product=0, version=3,
+                 ff_effects_max=0):
+        self._uinput_fd = None
+        self._capability_catalogue = {}
         self._name = name
         self._bustype = bustype
         self._vendor = vendor
         self._product = product
         self._version = version
+        self._ff_effects_max = ff_effects_max
+        self._absmin = [0] * (ABS_CNT)
+        self._absmax = [0] * (ABS_CNT)
+        self._absfuzz = [0] * (ABS_CNT)
+        self._absflat = [0] * (ABS_CNT)
+
+    def set_abs_parameters(self, abs_code, abs_min=0, abs_max=0, abs_fuzz=0,
+                           abs_flat=0):
+        self._absmin[abs_code] = abs_min
+        self._absmax[abs_code] = abs_max
+        self._absfuzz[abs_code] = abs_fuzz
+        self._absflat[abs_code] = abs_flat
+
+    def get_abs_parameters(self, abs_code):
+        return (self._absmin[abs_code], self._absmax[abs_code],
+                self._absfuzz[abs_code], self._absflat[abs_code])
+
+    def send(self, ev_type, ev_code, ev_value):
+        if self._uinput_fd is None:
+            self.activate()
+        try:
+            capability_set = self._capability_catalogue[ev_type]
+            if ev_code not in capability_set:
+                raise KeyError()
+        except KeyError:
+            raise DeviceError("Device is not capable of handling event.",
+                              ev_type, ev_code)
+        suinput.uinput_write(self._uinput_fd, ev_type, ev_code, ev_value)
+
+    def activate(self):
+        uinput_fd = suinput.uinput_open()
+        try:
+            for ev_type, capabilities in self._capability_catalogue.items():
+                suinput.uinput_set_capabilities(uinput_fd, ev_type,
+                                                capabilities)
+            suinput.uinput_create(uinput_fd, self._name,
+                                  self._bustype, self._vendor,
+                                  self._product, self._version,
+                                  self._ff_effects_max, self._absmin,
+                                  self._absmax, self._absfuzz,
+                                  self._absflat)
+        except Exception:
+            suinput.uinput_destroy(uinput_fd)
+            return
+        self._uinput_fd = uinput_fd
+
+    def is_active(self):
+        return self._uinput_fd is not None
+
+    def syn(self):
+        suinput.uinput_syn(self._uinput_fd)
+
+    def add_capability(self, ev_type, ev_code):
+        if self._uinput_fd is not None:
+            raise DeviceError("Device is already active.")
+        capabilities = self._capability_catalogue.setdefault(ev_type, set())
+        capabilities.add(ev_code)
+
+    def remove_capability(self, ev_type, ev_code):
+        if self._uinput_fd is not None:
+            raise DeviceError("Device is already active.")
+        capability_set = self._capability_catalogue[ev_type]
+        capability_set.remove(ev_code)
+        if len(capability_set) == 0:
+            self._capability_catalogue.pop(ev_type)
 
     @property
-    def name(self):
-        "Name of the device."
-        return self._name
-
-    @property
-    def bustype(self):
-        """One of the BUS_ -prefixed constant values.
-        """
-        return self._bustype
-
-    @property
-    def vendor(self):
-        """Arbitrary 16 bit unsigned integer vendor id."""
-        return self._vendor
-
-    @property
-    def product(self):
-        """Arbitrary 16 bit unsigned integer product id."""
-        return self._product
-
-    @property
-    def version(self):
-        """Arbitrary 16 bit unsigned integer version number."""
-        return self._version
-
-    def move_pointer(self, x, y):
-        "Move pointer towards bottom-right."
-        _suinput.move_pointer(self._context, x, y)
-
-    def press(self, keycode):
-        """Send a press event.
-        Event is repeated after a short delay until a release event is sent."""
-        _suinput.press(self._context, keycode)
-
-    def release(self, keycode):
-        "Send a release event."
-        _suinput.release(self._context, keycode)
-
-    def click(self, keycode):
-        "Send a press and a release event."
-        _suinput.click(self._context, keycode)
-
-    def press_release(self, signed_keycode):
-        """Send a press event if signed_keycode > 0, otherwise send
-        a release event."""
-        _suinput.press_release(self._context, signed_keycode)
-
-    def toggle(self, keycode):
-        "Press button if it is not pressed currently, release it otherwise."
-        _suinput.toggle(self._context, keycode)
-
-    def is_pressed(self, keycode):
-        "Return True if button is pressed, otherwise return False."
-        return _suinput.is_pressed(self._context, keycode)
+    def capabilities(self):
+        return dict(self._capability_catalogue)
 
     def __del__(self):
-        _suinput.close(self._context)
+        if self._uinput_fd is not None:
+            suinput.uinput_destroy(self._uinput_fd)
+
+class Capabilities(object):
+    """Abstract class representing a set of input capabilities.
+    Descendants must define _EV_TYPE."""
+
+    def __init__(self, device):
+        self._device = device
+
+    def __iter__(self):
+        try:
+            return iter(self.device.capabilities[self._EV_TYPE])
+        except KeyError:
+            return iter(())
+
+    def _send_to_device(self, ev_code, ev_value, syn):
+        self.device.send(self._EV_TYPE, ev_code, ev_value)
+        if syn:
+            self.device.syn()
+
+    @property
+    def device(self):
+        return self._device
+
+    def add(self, ev_code):
+        self.device.add_capability(self._EV_TYPE, ev_code)
+
+    def remove(self, ev_code):
+        self.device.remove_capability(self._EV_TYPE, ev_code)
+
+class KeyCapabilities(Capabilities):
+
+    _EV_TYPE = EV_KEY
+
+    def press(self, key_code, syn=True):
+        self._send_to_device(key_code, 1, syn)
+
+    def release(self, key_code, syn=True):
+        self._send_to_device(key_code, 0, syn)
+
+    def click(self, key_code):
+        self.press(key_code)
+        self.release(key_code)
+
+class RelativeAxisCapabilities(Capabilities):
+
+    _EV_TYPE = EV_REL
+
+    def move_by(self, rel_code, rel_value, syn=True):
+        self._send_to_device(rel_code, rel_value, syn)
+
+class AbsoluteAxisCapabilities(Capabilities):
+
+    _EV_TYPE = EV_ABS
+
+    def add(self, abs_code, abs_min=0, abs_max=0, abs_fuzz=0, abs_flat=0):
+        Capabilities.add(self, abs_code)
+        self.device.set_abs_parameters(abs_code, abs_min, abs_max, abs_fuzz,
+                                       abs_flat)
+
+    def move_to(self, abs_code, abs_value, syn=True):
+        self._send_to_device(abs_code, abs_value, syn)
