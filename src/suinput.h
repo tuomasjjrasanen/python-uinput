@@ -30,9 +30,9 @@ int suinput_uinput_write(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
 
 int suinput_uinput_syn(int uinput_fd);
 
-const char *suinput_uinput_get_devnode();
+const char *suinput_uinput_get_devnode(void);
 
-int suinput_uinput_open();
+int suinput_uinput_open(void);
 
 int suinput_uinput_create(int uinput_fd,
                           const struct uinput_user_dev *user_dev);

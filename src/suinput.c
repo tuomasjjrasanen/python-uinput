@@ -52,7 +52,7 @@ int suinput_uinput_syn(int uinput_fd)
         return suinput_uinput_write(uinput_fd, EV_SYN, SYN_REPORT, 0);
 }
 
-const char *suinput_uinput_get_devnode()
+const char *suinput_uinput_get_devnode(void)
 {
         static char uinput_devnode[_POSIX_PATH_MAX + 1];
         struct udev *udev;
@@ -88,7 +88,7 @@ out:
         return retval;
 }
 
-int suinput_uinput_open()
+int suinput_uinput_open(void)
 {
         int uinput_fd;
         const char *uinput_devnode;
