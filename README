@@ -1,8 +1,6 @@
-======================================================
- libsuinput - Simple C-API to the Linux uinput-system
-======================================================
-
-:date: 2010-01-16
+===============================================
+ libsuinput - A set of uinput helper functions
+===============================================
 
 .. contents::
 
@@ -11,8 +9,8 @@ Description
 
 Uinput allows attaching user-space device drivers into the Linux kernel. As
 magnificient as the uinput-system is, it is pretty low level from the
-application developers perspective. Libsuinput provides a higher level API
-and hides many devilish details.
+application developers perspective. Libsuinput provides a set of helper
+functions and hides many devilish details.
 
 General information
 ===================
@@ -20,7 +18,19 @@ General information
 - **Author**: `Tuomas Räsänen <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
 - **Homepage**: http://codegrove.org/libsuinput/
 - **License**: LGPLv3+ (see COPYING for details)
-- **Version**: 0.2
+- **Version**: 0.3
+
+Changes
+=======
+
+0.3
+---
+
+As of version 0.3, libsuinput is nothing more than a set of helper
+functions. Previous versions provided full abstraction over uinput,
+but it appeared to be too restricting. Now libsuinput's functions can
+be used side by side with normal uinput interface to hide several
+devilish details.
 
 Requirements
 ============
@@ -48,26 +58,10 @@ Recommendations
     # udevadm info --query=env --name=input/uinput | grep DEVNAME | sed s'/DEVNAME=//' | xargs sudo chmod 0666
     find /dev -regex .*/uinput$ | xargs sudo chmod 0666
 
-Example usage
-=============
-
-Move pointer and then generate a left mouse button click::
-
-  #include <suinput.h>
-
-  int main(void)
-  {
-    struct suinput_driver *driver = suinput_open(NULL, NULL);
-    suinput_move_pointer(driver, 100, 100);
-    suinput_click(driver, BTN_LEFT);
-    suinput_close(driver);
-    return 0;
-  }
-
 Downloading
 ===========
 
-- Tarball is available at: http://codegrove.org/libsuinput/0.2/libsuinput-0.2.tar.gz
+- Tarball is available at: http://codegrove.org/libsuinput/0.3/libsuinput-0.3.tar.gz
 - Latest sources from public git-repository: http://github.com/tuos/libsuinput/ ::
 
     git clone git://github.com/tuos/libsuinput.git

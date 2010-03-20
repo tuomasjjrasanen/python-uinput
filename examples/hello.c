@@ -1,48 +1,39 @@
-#include <time.h>
-#include <suinput.h>
 #include <err.h>
+#include <string.h>
+
+#include <suinput.h>
 
 int main(void)
 {
-        int i;
-        struct timespec pointer_motion_delay = {
-                0,       /* Seconds. */
-                25000000 /* Nanoseconds. */
-        };
-        struct suinput_driver *driver = suinput_open("HelloInputDriver", NULL);
-        if (driver == NULL)
-                err(1, "suinput_open");
+        int uinput_fd;
+        int keys[] = {KEY_E, KEY_H, KEY_L, KEY_O};
+        struct uinput_user_dev user_dev;
 
-        for (i = 0; i < 20; ++i) {
-                suinput_move_pointer(driver, i, 2);
-                nanosleep(&pointer_motion_delay, NULL);
-        }
+        memset(&user_dev, 0, sizeof(struct uinput_user_dev));
+        strcpy(user_dev.name, "hello-driver");
 
-        suinput_press(driver, KEY_LEFTSHIFT);
-        suinput_click(driver, KEY_H);
-        suinput_release(driver, KEY_LEFTSHIFT);
-        suinput_click(driver, KEY_E);
-        suinput_click(driver, KEY_L);
-        suinput_click(driver, KEY_L);
-        suinput_click(driver, KEY_O);
-        suinput_click(driver, KEY_SPACE);
-        suinput_click(driver, KEY_W);
-        suinput_click(driver, KEY_O);
-        suinput_click(driver, KEY_R);
-        suinput_click(driver, KEY_L);
-        suinput_click(driver, KEY_D);
+        uinput_fd = suinput_uinput_open();
 
-        /* Assume that SHIFT+1 -> ! */
-        suinput_press(driver, KEY_LEFTSHIFT);
-        suinput_click(driver, KEY_1);
-        suinput_release(driver, KEY_LEFTSHIFT);
+        if (uinput_fd == -1)
+                err(1, "suinput_uinput_open");
 
-        for (i = 0; i < 20; ++i) {
-                suinput_move_pointer(driver, -2, -i);
-                nanosleep(&pointer_motion_delay, NULL);
-        }
+        /* Error handling is omitted to keep code as readible as possible. */
 
-        suinput_close(driver);
+        suinput_uinput_set_capabilities(uinput_fd, EV_KEY, keys, 4);
+        suinput_uinput_create(uinput_fd, &user_dev);
+
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_H, 1); /* press */
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_H, 0); /* release */
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_E, 1); /* press */
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_E, 0); /* release */
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_L, 1); /* press */
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_L, 0); /* release */
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_L, 1); /* press */
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_L, 0); /* release */
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_O, 1); /* press */
+        suinput_uinput_write(uinput_fd, EV_KEY, KEY_O, 0); /* release */
+
+        suinput_uinput_destroy(uinput_fd);
 
         return 0;
 }

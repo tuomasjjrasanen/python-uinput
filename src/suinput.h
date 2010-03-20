@@ -1,5 +1,5 @@
 /*
-  suinput - Simple C-API to the Linux uinput-system.
+  suinput - A set of uinput helper functions
   Copyright (C) 2009 Tuomas Räsänen <tuos@codegrove.org>
 
   This library is free software; you can redistribute it and/or
@@ -21,97 +21,25 @@
 #define SUINPUT_H
 #include <stdint.h>
 
-#include <linux/input.h>
+#include <linux/uinput.h>
 
-/* Opaque object representing the input driver. */
-struct suinput_driver;
+int suinput_uinput_write_event(int uinput_fd, const struct input_event *event);
 
-/*
-  Creates and opens a connection to the event device. Returns an opaque
-  object representing the input driver on success. On error,
-  NULL is returned, and errno is set appropriately.
+int suinput_uinput_write(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
+                         int32_t ev_value);
 
-  If device_name is NULL, "suinput driver" is used instead.
-  If id is NULL, { BUS_VIRTUAL, 0, 0, 0 } is used instead.
+int suinput_uinput_syn(int uinput_fd);
 
-  suinput_close() needs to be called to release the resources of the driver.
-*/
-struct suinput_driver *suinput_open(const char *device_name,
-                                    const struct input_id *id);
+const char *suinput_uinput_get_devnode();
 
-/*
-   Destroys and closes a connection to the event device. Returns 0 on success.
-   On error, -1 is returned, and errno is set appropriately.
+int suinput_uinput_open();
 
-   This function has to be called exactly once for every opened driver.
-*/
-int suinput_close(struct suinput_driver *driver);
+int suinput_uinput_create(int uinput_fd,
+                          const struct uinput_user_dev *user_dev);
 
-/*
-  Sends a relative pointer motion event to the event device. Values increase
-  towards right-bottom. Returns 0 on success. On error, -1 is returned, and
-  errno is set appropriately.
-*/
-int suinput_move_pointer(struct suinput_driver *driver, int32_t x, int32_t y);
+int suinput_uinput_destroy(int uinput_fd);
 
-/*
-  Sends a press event to the event device. Event is repeated after
-  a short delay until a release event is sent. Returns 0 on success.
-  On error, -1 is returned, and errno is set appropriately.
-*/
-int suinput_press(struct suinput_driver *driver, uint16_t keycode);
-
-/*
-  Sends a release event to the event device. Returns 0 on success.
-  On error, -1 is returned, and errno is set appropriately.
-*/
-int suinput_release(struct suinput_driver *driver, uint16_t keycode);
-
-/*
-  Sends a press and release events to the event device. Returns 0 on
-  success. On error, -1 is returned, and errno is set appropriately.
-
-  This function is provided as a convenience and has effectively the
-  same result as calling suinput_press() and suinput_release() sequentially.
-*/
-int suinput_click(struct suinput_driver *driver, uint16_t keycode);
-
-/*
-  Sends a press or a release event to the event device. The sign of
-  keycode determines which type of event is sent. Positive keycode
-  means press and negative keycode means release. Returns 0 on
-  success. On error, -1 is returned, and errno is set appropriately.
-
-  This function is provided as a convenience and has effectively the
-  same result as calling suinput_press() when the value of keycode is
-  positive and suinput_release() when negative.
-*/
-int suinput_press_release(struct suinput_driver *driver, int16_t keycode);
-
-/*
-  Sends a press or a release event to the event device. If a press event
-  was sent previously, a release event is sent and vice versa.
-  Returns 0 on success. On error, -1 is returned, and errno is set
-  appropriately.
-
-  This method is provided as a convenience and has effectively the
-  same result as calling suinput_press() if suinput_is_pressed() returns
-  False and suinput_release() otherwise.
-*/
-int suinput_toggle(struct suinput_driver *driver, uint16_t keycode);
-
-/*
-  Returns 1 if a button or a key denoted by keycode is pressed
-  and 0 if it is not.
-*/
-int suinput_is_pressed(const struct suinput_driver *driver, uint16_t keycode);
-
-/*
-  Returns 1 if keycode is valid, 0 otherwise.
-
-  Valid keycodes are defined in linux/input.h prefixed by KEY_ or BTN_
-  such that KEY_RESERVED < keycode < KEY_MAX.
-*/
-int suinput_is_valid_keycode(uint16_t keycode);
+int suinput_uinput_set_capabilities(int uinput_fd, uint16_t ev_type,
+                                    int *ev_codes, size_t ev_codes_len);
 
 #endif /* SUINPUT_H */
