@@ -1,1 +1,3 @@
 include COPYING
+include include/suinput.h
+include examples/

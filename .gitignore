@@ -2,3 +2,5 @@ build
 dist
 *~
 MANIFEST
+include/suinput.h
+src/suinput.c

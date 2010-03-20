@@ -3,11 +3,19 @@
 import os
 import sys
 reload(sys).setdefaultencoding('utf-8')
+import shutil
+
+if os.path.exists('.git'):
+    shutil.copy('lib/libsuinput/src/suinput.h', 'include/suinput.h')
+    shutil.copy('lib/libsuinput/src/suinput.c', 'src/suinput.c')
+
 from distutils.core import setup, Extension
 
 suinput_module = Extension('uinput.suinput',
-                           sources=['src/suinputmodule.c'],
-                           libraries=['suinput', 'udev'],
+                           sources=['src/suinputmodule.c',
+                                    'src/suinput.c'],
+                           include_dirs=['include'],
+                           libraries=['udev'],
                            )
 
 keycodes_module = Extension('uinput.keycodes',
