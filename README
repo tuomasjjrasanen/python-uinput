@@ -81,6 +81,27 @@ Create and use a new device with key and absolute-axis capability::
   abs_axes.move_to(uinput.ABS_X, 15)
   keys.click(uinput.BTN_GAMEPAD)
 
+All the above things can also be done through the "lower-level API"::
+
+  import uinput
+
+  device = uinput.Device()
+
+  device.add_capability(uinput.EV_KEY, uinput.KEY_A)
+  device.add_capability(uinput.EV_KEY, uinput.KEY_B)
+
+  device.send(uinput.EV_KEY, uinput.KEY_A, 1) # press
+  device.send(uinput.EV_KEY, uinput.KEY_A, 0) # release
+  device.send(uinput.EV_KEY, uinput.KEY_B, 1) # press
+  device.send(uinput.EV_KEY, uinput.KEY_B, 0) # release
+  device.send(uinput.EV_KEY, uinput.KEY_B, 1) # press
+  device.send(uinput.EV_KEY, uinput.KEY_B, 0) # release
+  device.send(uinput.EV_KEY, uinput.KEY_A, 1) # press
+  device.send(uinput.EV_KEY, uinput.KEY_A, 0) # release
+
+In other words, uinput.Capabilities descendants provide just higher level API
+for the uinput.Device.
+
 Downloading
 ===========
 
