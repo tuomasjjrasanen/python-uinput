@@ -23,23 +23,22 @@
 
 #include <linux/uinput.h>
 
-int suinput_uinput_write_event(int uinput_fd, const struct input_event *event);
+int suinput_write_event(int uinput_fd, const struct input_event *event);
 
-int suinput_uinput_write(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
-                         int32_t ev_value);
+int suinput_write(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
+                  int32_t ev_value);
 
-int suinput_uinput_syn(int uinput_fd);
+int suinput_syn(int uinput_fd);
 
-const char *suinput_uinput_get_devnode(void);
+const char *suinput_get_uinput_path(void);
 
-int suinput_uinput_open(void);
+int suinput_open(void);
 
-int suinput_uinput_create(int uinput_fd,
-                          const struct uinput_user_dev *user_dev);
+int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev);
 
-int suinput_uinput_destroy(int uinput_fd);
+int suinput_destroy(int uinput_fd);
 
-int suinput_uinput_set_capabilities(int uinput_fd, uint16_t ev_type,
-                                    int *ev_codes, size_t ev_codes_len);
+int suinput_set_capabilities(int uinput_fd, uint16_t ev_type,
+                             int *ev_codes, size_t ev_codes_len);
 
 #endif /* SUINPUT_H */
