@@ -152,7 +152,7 @@ class AbsoluteAxisCapabilities(Capabilities):
 
     _EV_TYPE = EV_ABS
 
-    def add(self, abs_code, abs_min=0, abs_max=0, abs_fuzz=0, abs_flat=0):
+    def add(self, abs_code, abs_min=0, abs_max=255, abs_fuzz=0, abs_flat=0):
         Capabilities.add(self, abs_code)
         self.device.set_abs_parameters(abs_code, abs_min, abs_max, abs_fuzz,
                                        abs_flat)
