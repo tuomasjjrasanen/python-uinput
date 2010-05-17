@@ -14,7 +14,7 @@ def main():
     keys.add(uinput.KEY_O)
 
     device.activate()
-    time.sleep(1)
+    time.sleep(1) # See examples/mouse.py.
 
     keys.click(uinput.KEY_H)
     keys.click(uinput.KEY_E)
