@@ -1,23 +1,23 @@
 #! /usr/bin/env python
 
-import time
-
 import uinput
 
 def main():
     device = uinput.Device()
+    device.capabilities = {
+        uinput.EV_KEY: (uinput.KEY_E, uinput.KEY_H, uinput.KEY_L, uinput.KEY_O),
+        }
 
-    keys = uinput.KeyCapabilities(device)
-    keys.add(uinput.KEY_E)
-    keys.add(uinput.KEY_H)
-    keys.add(uinput.KEY_L)
-    keys.add(uinput.KEY_O)
-
-    keys.click(uinput.KEY_H)
-    keys.click(uinput.KEY_E)
-    keys.click(uinput.KEY_L)
-    keys.click(uinput.KEY_L)
-    keys.click(uinput.KEY_O)
+    device.emit(uinput.EV_KEY, uinput.KEY_H, 1) # Press.
+    device.emit(uinput.EV_KEY, uinput.KEY_H, 0) # Release.
+    device.emit(uinput.EV_KEY, uinput.KEY_E, 1)
+    device.emit(uinput.EV_KEY, uinput.KEY_E, 0)
+    device.emit(uinput.EV_KEY, uinput.KEY_L, 1)
+    device.emit(uinput.EV_KEY, uinput.KEY_L, 0)
+    device.emit(uinput.EV_KEY, uinput.KEY_L, 1)
+    device.emit(uinput.EV_KEY, uinput.KEY_L, 0)
+    device.emit(uinput.EV_KEY, uinput.KEY_O, 1)
+    device.emit(uinput.EV_KEY, uinput.KEY_O, 0)
 
 if __name__ == "__main__":
     main()

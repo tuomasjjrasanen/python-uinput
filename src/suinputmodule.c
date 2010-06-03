@@ -21,8 +21,7 @@
 
 #include <suinput.h>
 
-static PyObject *pysuinput_set_capabilities(PyObject *self,
-                                            PyObject *args)
+static PyObject *pysuinput_set_capabilities(PyObject *self, PyObject *args)
 {
     int uinput_fd;
     uint16_t type;
