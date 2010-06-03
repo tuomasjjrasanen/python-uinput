@@ -22,6 +22,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <limits.h>
+#include <stdlib.h>
+
 #include <libudev.h>
 
 #include "suinput.h"
@@ -64,8 +66,7 @@ const char *suinput_get_uinput_path(void)
     if ((udev = udev_new()) == NULL)
         return NULL;
 
-    udev_dev = udev_device_new_from_subsystem_sysname(udev, "misc",
-                                                      "uinput");
+    udev_dev = udev_device_new_from_subsystem_sysname(udev, "misc", "uinput");
     if (udev_dev == NULL)
         goto out;
 
@@ -110,7 +111,32 @@ int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev)
     if (bytes != sizeof(struct uinput_user_dev))
         return -1;
 
-    return ioctl(uinput_fd, UI_DEV_CREATE);
+    if (ioctl(uinput_fd, UI_DEV_CREATE) == -1)
+        return -1;
+
+    /**
+       This magic sleep needs to be taken under X because of the way
+       how X assigns handlers for new devices. It goes somehow like
+       this:
+
+       1. Kernel creates an evdev device.
+
+       2. A dbus signal "DeviceAdded" is sent.
+
+       3. X's handler assigner catches the dbus event and assigns a
+       handler for the new device.
+
+       Now the "problem" is in the asynchronous nature of this whole
+       process. Kernel is totally happy once it has created the evdev
+       device, but X cannot assign a handler for the new device before
+       it receives the dbus signal. Without this delay, kernel would
+       generate events before a handler is assigned. Perhaps a better
+       way would be to listen to the dbus?
+    */
+    if (getenv("DISPLAY"))
+        sleep(1);
+
+    return 0;
 }
 
 int suinput_destroy(int uinput_fd)
@@ -128,7 +154,7 @@ int suinput_destroy(int uinput_fd)
 }
 
 int suinput_set_capabilities(int uinput_fd, uint16_t ev_type,
-                             int *ev_codes, size_t ev_codes_len)
+                             const int *ev_codes, size_t ev_codes_len)
 {
     int i;
     int io;

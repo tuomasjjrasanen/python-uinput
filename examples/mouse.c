@@ -14,7 +14,7 @@ int main(void)
     int i;
 
     memset(&user_dev, 0, sizeof(struct uinput_user_dev));
-    strcpy(user_dev.name, "hello-driver");
+    strcpy(user_dev.name, "libsuinput-example-mouse");
 
     uinput_fd = suinput_open();
 
@@ -27,7 +27,6 @@ int main(void)
     suinput_set_capabilities(uinput_fd, EV_REL, rel_axes, 3);
 
     suinput_create(uinput_fd, &user_dev);
-    sleep(1);
 
     /* Move pointer 20 * 5 units towards bottom-right. */
     for (i = 0; i < 20; ++i) {

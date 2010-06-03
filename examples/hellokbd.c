@@ -12,7 +12,7 @@ int main(void)
     struct uinput_user_dev user_dev;
 
     memset(&user_dev, 0, sizeof(struct uinput_user_dev));
-    strcpy(user_dev.name, "hello-driver");
+    strcpy(user_dev.name, "libsuinput-example-keyboard");
 
     uinput_fd = suinput_open();
 
@@ -24,7 +24,6 @@ int main(void)
     suinput_set_capabilities(uinput_fd, EV_KEY, keys, 4);
 
     suinput_create(uinput_fd, &user_dev);
-    sleep(1);
 
     suinput_write(uinput_fd, EV_KEY, KEY_H, 1); /* Press. */
     suinput_syn(uinput_fd); /* "Flushes" events written so far. */

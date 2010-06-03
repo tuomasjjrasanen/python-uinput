@@ -39,6 +39,6 @@ int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev);
 int suinput_destroy(int uinput_fd);
 
 int suinput_set_capabilities(int uinput_fd, uint16_t ev_type,
-                             int *ev_codes, size_t ev_codes_len);
+                             const int *ev_codes, size_t ev_codes_len);
 
 #endif /* SUINPUT_H */
