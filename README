@@ -61,7 +61,7 @@ Recommendations
 Downloading
 ===========
 
-- Tarball is available at: http://codegrove.org/libsuinput/0.3/libsuinput-0.3.tar.gz
+- Tarball is available at: http://codegrove.org/libsuinput/releases/libsuinput-0.3.tar.gz
 - Latest sources from public git-repository: http://github.com/tuos/libsuinput/ ::
 
     git clone git://github.com/tuos/libsuinput.git
