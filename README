@@ -53,7 +53,7 @@ Create and use a new uinput device with key-capabilities::
 Downloading
 ===========
 
-- Tarball is available at: http://codegrove.org/python-uinput/0.3/python-uinput-0.3.tar.gz
+- Tarball is available at: http://codegrove.org/python-uinput/releases/python-uinput-0.3.tar.gz
 - Latest sources from public git-repository: http://github.com/tuos/python-uinput/ ::
 
     git clone git://github.com/tuos/python-uinput.git
