@@ -16,7 +16,7 @@ General information
 - **Author**: `Tuomas Räsänen <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
 - **Homepage**: http://codegrove.org/python-uinput/
 - **License**: LGPLv3+ (see COPYING for details)
-- **Version**: 0.3
+- **Version**: 0.3.1
 
 Requirements
 ============
@@ -26,6 +26,8 @@ Requirements
   - On Ubuntu::
 
       sudo apt-get install python-dev
+
+- libudev-dev
 
 Example usage
 =============
@@ -53,7 +55,7 @@ Create and use a new uinput device with key-capabilities::
 Downloading
 ===========
 
-- Tarball is available at: http://codegrove.org/python-uinput/releases/python-uinput-0.3.tar.gz
+- Tarball is available at: http://codegrove.org/python-uinput/releases/python-uinput-0.3.1.tar.gz
 - Latest sources from public git-repository: http://github.com/tuos/python-uinput/ ::
 
     git clone git://github.com/tuos/python-uinput.git

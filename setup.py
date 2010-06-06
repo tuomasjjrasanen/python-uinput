@@ -3,17 +3,11 @@
 import os
 import sys
 reload(sys).setdefaultencoding('utf-8')
-import shutil
-
-if os.path.exists('.git'):
-    shutil.copy('lib/libsuinput/src/suinput.h', 'include/suinput.h')
-    shutil.copy('lib/libsuinput/src/suinput.c', 'src/suinput.c')
 
 from distutils.core import setup, Extension
 
 suinput_module = Extension('uinput.suinput',
-                           sources=['src/suinputmodule.c',
-                                    'src/suinput.c'],
+                           sources=['src/suinputmodule.c', 'src/suinput.c'],
                            include_dirs=['include'],
                            libraries=['udev'],
                            )
@@ -23,21 +17,21 @@ bustypes_module = Extension('uinput.bustypes',
                             )
 
 setup(name='python-uinput',
-      version='0.3',
+      version='0.3.1',
       description='Python API to the Linux uinput-system.',
       author='Tuomas Räsänen',
       author_email='tuos@codegrove.org',
       url='http://codegrove.org/python-uinput/',
-      download_url='http://codegrove.org/python-uinput/0.3/python-uinput-0.3.tar.gz',
+      download_url='http://codegrove.org/python-uinput/0.3.1/python-uinput-0.3.1.tar.gz',
       package_dir={'uinput': 'src'},
       packages=['uinput'],
       ext_modules=[suinput_module, bustypes_module],
-      license='LGPLv3+',
+      license='GPLv3+',
       platforms=['Linux'],
       classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)",
+        "License :: OSI Approved :: GNU Library or General Public License (GPL)",
         "Operating System :: POSIX :: Linux",
         "Topic :: System :: Operating System Kernels :: Linux",
         "Programming Language :: Python :: 2.6",
