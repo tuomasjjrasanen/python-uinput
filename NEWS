@@ -1,0 +1,8 @@
+0.3.1
+
+        - Licensing changed from LGPLv3+ to GPLv3+
+
+0.3
+
+        - Provide more generic interface, "compatible" with standard
+        uinput, just providing helper functions.

@@ -1,5 +1,5 @@
 ==========
-libsuinput
+@PACKAGE@
 ==========
 
 .. contents::
@@ -15,10 +15,10 @@ functions and hides many devilish details.
 General information
 ===================
 
-- **Author**: Tuomas Räsänen (tuos) <tuos@codegrove.org>
-- **Homepage**: http://codegrove.org/libsuinput/
+- **Author**: @PACKAGE_AUTHOR@
+- **Homepage**: @PACKAGE_URL@
 - **License**: GPLv3+ (see COPYING for details)
-- **Version**: 0.3.1
+- **Version**: @VERSION@
 
 Build requirements
 ==================
@@ -39,11 +39,11 @@ Downloading
 ===========
 
 - Ubuntu package: https://launchpad.net/~tuos/+archive/codegrove
-- Tarball is available at: http://codegrove.org/libsuinput/releases/libsuinput-0.3.1.tar.gz
-- Tarballs of every release at: http://codegrove.org/libsuinput/releases/
-- Latest sources from public git-repository: http://github.com/tuos/libsuinput/ ::
+- Tarball is available at: @PACKAGE_URL@releases/@PACKAGE@-@VERSION@.tar.gz
+- Tarballs of every release at: @PACKAGE_URL@releases/
+- Latest sources from public git-repository: http://github.com/tuos/@PACKAGE@/ ::
 
-    git clone git://github.com/tuos/libsuinput.git
+    git clone git://github.com/tuos/@PACKAGE@.git
 
 Installing
 ==========
@@ -51,9 +51,9 @@ Installing
 Ubuntu
 ------
 
-The recommended way to install libsuinput is to
+The recommended way to install @PACKAGE@ is to
 `add it's PPA to your system <https://launchpad.net/~tuos/+archive/codegrove>`_.
-This allows you to treat libsuinput as any other Ubuntu package.
+This allows you to treat @PACKAGE@ as any other Ubuntu package.
 
 Other systems
 -------------
@@ -66,5 +66,5 @@ The install-procedure adheres the "standard"::
 Bug reporting
 =============
 
-Report bugs by sending email to tuos@codegrove.org or by opening an issue
-at http://github.com/tuos/libsuinput/issues .
+Report bugs by sending email to @PACKAGE_BUGREPORT@ or by opening an issue
+at http://github.com/tuos/@PACKAGE@/issues .
