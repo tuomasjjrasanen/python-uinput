@@ -31,7 +31,7 @@ setup(name='python-uinput',
       classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: GNU Library or General Public License (GPL)",
+        "License :: OSI Approved :: GNU General Public License (GPL)",
         "Operating System :: POSIX :: Linux",
         "Topic :: System :: Operating System Kernels :: Linux",
         "Programming Language :: Python :: 2.6",
