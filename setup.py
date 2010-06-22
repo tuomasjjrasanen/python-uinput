@@ -8,7 +8,6 @@ from distutils.core import setup, Extension
 
 suinput_module = Extension('uinput.suinput',
                            sources=['src/suinputmodule.c'],
-                           include_dirs=['include'],
                            libraries=['suinput'],
                            )
 
