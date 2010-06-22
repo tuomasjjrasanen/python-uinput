@@ -25,13 +25,13 @@ Requirements
 
   - On Ubuntu (from Code Grove ppa)::
 
-    sudo apt-get install python-dev
+      sudo apt-get install python-dev
 
 - libsuinput-dev
 
   - On Ubuntu (from Code Grove ppa)::
 
-    sudo apt-get install libsuinput-dev
+      sudo apt-get install libsuinput-dev
 
 Example usage
 =============
