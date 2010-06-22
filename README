@@ -15,19 +15,23 @@ General information
 
 - **Author**: `Tuomas Räsänen <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
 - **Homepage**: http://codegrove.org/python-uinput/
-- **License**: LGPLv3+ (see COPYING for details)
-- **Version**: 0.3.2
+- **License**: GPLv3+ (see COPYING for details)
+- **Version**: 0.3.3
 
 Requirements
 ============
 
 - Python 2.5.x+ and development files for it:
 
-  - On Ubuntu::
+  - On Ubuntu (from Code Grove ppa)::
 
-      sudo apt-get install python-dev
+    sudo apt-get install python-dev
 
-- libudev-dev
+- libsuinput-dev
+
+  - On Ubuntu (from Code Grove ppa)::
+
+    sudo apt-get install libsuinput-dev
 
 Example usage
 =============
@@ -56,7 +60,7 @@ Downloading
 ===========
 
 - Ubuntu package: https://launchpad.net/~tuos/+archive/codegrove
-- Tarball is available at: http://codegrove.org/python-uinput/releases/python-uinput-0.3.2.tar.gz
+- Tarball is available at: http://codegrove.org/python-uinput/releases/python-uinput-0.3.3.tar.gz
 - Tarballs of every release at: http://codegrove.org/python-uinput/releases/
 - Latest sources from public git-repository: http://github.com/tuos/python-uinput/ ::
 

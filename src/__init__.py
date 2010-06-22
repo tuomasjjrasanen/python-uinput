@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # uinput - Uinput API for Python
 # Copyright © 2010 Tuomas Räsänen (tuos) <tuos@codegrove.org>
 

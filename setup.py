@@ -7,9 +7,9 @@ reload(sys).setdefaultencoding('utf-8')
 from distutils.core import setup, Extension
 
 suinput_module = Extension('uinput.suinput',
-                           sources=['src/suinputmodule.c', 'src/suinput.c'],
+                           sources=['src/suinputmodule.c'],
                            include_dirs=['include'],
-                           libraries=['udev'],
+                           libraries=['suinput'],
                            )
 
 bustypes_module = Extension('uinput.bustypes',
