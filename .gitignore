@@ -9,10 +9,6 @@ autom4te.cache/
 config.h
 config.log
 config.status
-examples/.deps/
-examples/Makefile
-examples/hello
-examples/hello.o
 libtool
 src/.deps/
 src/.libs/
@@ -23,3 +19,7 @@ src/suinput.lo
 src/suinput.o
 stamp-h1
 index.html
+examples/kbd
+examples/mouse
+examples/.deps
+!examples/Makefile
