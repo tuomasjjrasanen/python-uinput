@@ -13,23 +13,23 @@ Python-uinput provides a simple and easy to use API to the Linux uinput-system.
 General information
 ===================
 
-- **Author**: `Tuomas Räsänen <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
-- **Homepage**: http://codegrove.org/python-uinput/
-- **License**: GPLv3+ (see COPYING for details)
-- **Version**: 0.3.3
+- **Author**: `Tuomas Räsänen (tuos) <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
+- **Homepage**: http://codegrove.org/projects/python-uinput/
+- **License**: GPLv3 (see COPYING for details)
+- **Version**: 0.4
 
 Requirements
 ============
 
 - Python 2.5.x+ and development files for it:
 
-  - On Ubuntu (from Code Grove ppa)::
+  - On Ubuntu (from Codegrove ppa)::
 
       sudo apt-get install python-dev
 
 - libsuinput-dev
 
-  - On Ubuntu (from Code Grove ppa)::
+  - On Ubuntu (from Codegrove ppa)::
 
       sudo apt-get install libsuinput-dev
 
@@ -60,11 +60,10 @@ Downloading
 ===========
 
 - Ubuntu package: https://launchpad.net/~tuos/+archive/codegrove
-- Tarball is available at: http://codegrove.org/python-uinput/releases/python-uinput-0.3.3.tar.gz
-- Tarballs of every release at: http://codegrove.org/python-uinput/releases/
-- Latest sources from public git-repository: http://github.com/tuos/python-uinput/ ::
+- Tarball is available at: http://pypi.python.org/packages/source/p/python-uinput/python-uinput-0.4.tar.gz
+- Latest sources from public bzr-repository: http://code.launchpad.net/python-uinput ::
 
-    git clone git://github.com/tuos/python-uinput.git
+    bzr branch lp:python-uinput
 
 Installing
 ==========
@@ -86,5 +85,4 @@ The install-procedure adheres the "standard"::
 Bug reporting
 =============
 
-Report bugs by sending email to tuos@codegrove.org or by opening an issue
-at http://github.com/tuos/python-uinput/issues .
+Report bugs at http://bugs.launchpad.net/python-uinput .

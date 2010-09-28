@@ -2,7 +2,6 @@
 
 import os
 import sys
-reload(sys).setdefaultencoding('utf-8')
 
 from distutils.core import setup, Extension
 
@@ -16,16 +15,21 @@ bustypes_module = Extension('uinput.bustypes',
                             )
 
 setup(name='python-uinput',
-      version='0.3.3',
+      provides='uinput',
+      version='0.4',
       description='Python API to the Linux uinput-system.',
-      author='Tuomas Räsänen',
+      author='Tuomas Räsänen (tuos)',
       author_email='tuos@codegrove.org',
-      url='http://codegrove.org/python-uinput/',
-      download_url='http://codegrove.org/python-uinput/releases/python-uinput-0.3.3.tar.gz',
-      package_dir={'uinput': 'src'},
-      packages=['uinput'],
+      url='http://codegrove.org/projects/python-uinput/',
+      download_url='http://pypi.python.org/packages/source/p/python-uinput/python-uinput-0.4.tar.gz',
+      package_dir={
+        'uinput': 'src',
+        },
+      packages=[
+        'uinput',
+        ],
       ext_modules=[suinput_module, bustypes_module],
-      license='GPLv3+',
+      license='License :: OSI Approved :: GNU General Public License (GPL)',
       platforms=['Linux'],
       classifiers=[
         "Development Status :: 3 - Alpha",
@@ -33,7 +37,7 @@ setup(name='python-uinput',
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "Operating System :: POSIX :: Linux",
         "Topic :: System :: Operating System Kernels :: Linux",
-        "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.5",
         "Programming Language :: C",
         ],
       long_description="""

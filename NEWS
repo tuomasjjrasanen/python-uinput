@@ -1,4 +1,9 @@
-0.3.3.
+0.4
+
+        - Libsuinput is included in the distribution.
+        - Licensed under GPLv3.
+
+0.3.3
 
         - Explicit dependence on libsuinput.
 
