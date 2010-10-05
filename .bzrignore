@@ -16,3 +16,4 @@ src/Makefile.in
 src/libsuinput.la
 src/suinput.lo
 libsuinput-*.tar.gz
+libsuinput-*.tar.gz.asc

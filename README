@@ -43,7 +43,7 @@ Downloading
 ===========
 
 - Ubuntu package: https://launchpad.net/~tuos/+archive/codegrove
-- Tarball: http://codegrove.org/projects/libsuinput/releases/libsuinput-0.4.tar.gz
+- Tarball: http://launchpad.net/libsuinput/trunk/0.4/+download/libsuinput-0.4.tar.gz
 - Development: http://code.launchpad.net/libsuinput ::
 
     bzr clone lp:libsuinput
