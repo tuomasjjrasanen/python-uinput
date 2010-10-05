@@ -1,8 +1,12 @@
-0.3.1
+0.4
+===
 
-        - Licensing changed from LGPLv3+ to GPLv3+
+Licensing changed from LGPLv3+ to GPLv3+. Usage examples are now
+included.
 
 0.3
+===
 
-        - Provide more generic interface, "compatible" with standard
-        uinput, just providing helper functions.
+Provides more generic interface that is "compatible" with standard
+uinput. Functions are just helper functions operating on an uinput
+file descriptor.

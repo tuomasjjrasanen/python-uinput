@@ -1,8 +1,8 @@
 AC_INIT([libsuinput],
-        [0.3.2],
+        [0.4],
         [tuos@codegrove.org],
         [libsuinput],
-        [http://codegrove.org/libsuinput/])
+        [http://codegrove.org/projects/libsuinput/])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 dnl AC_CONFIG_MACRO_DIR([m4])
@@ -24,7 +24,6 @@ then
 fi
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([
-        README
         Makefile
         src/Makefile
 ])
