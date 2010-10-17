@@ -1,8 +1,8 @@
-=======================================================
- python-uinput - Python API to the Linux uinput-system
-=======================================================
+===============
+ python-uinput
+===============
 
-.. contents::
+Python API to the Linux uinput-system.
 
 Description
 ===========
@@ -13,55 +13,38 @@ Python-uinput provides a simple and easy to use API to the Linux uinput-system.
 General information
 ===================
 
-- **Author**: `Tuomas Räsänen (tuos) <http://tuos.codegrove.org/>`_ <tuos@codegrove.org>
+- **Author**: Tuomas Räsänen (tuos) <tuos@codegrove.org>
 - **Homepage**: http://codegrove.org/projects/python-uinput/
-- **License**: GPLv3 (see COPYING for details)
+- **License**: GPLv3+ (see COPYING for details)
 - **Version**: 0.4
 
-Requirements
-============
+Build requirements
+==================
 
-- Python 2.5.x+ and development files for it:
+- Python 2.5 or 2.6.
+- Python development files.
+- Libsuinput development files.
 
-  - On Ubuntu (from Codegrove ppa)::
+Runtime requirements
+====================
 
-      sudo apt-get install python-dev
+- Libsuinput.
+- Uinput-module installed::
 
-- libsuinput-dev
+    # For the current run:
+    sudo modprobe -i uinput
+    # To load uinput at boot time:
+    grep -q ^uinput /etc/modules || sudo sh -c 'echo uinput >> /etc/modules'
 
-  - On Ubuntu (from Codegrove ppa)::
-
-      sudo apt-get install libsuinput-dev
-
-Example usage
-=============
-
-Create and use a new uinput device with key-capabilities::
-
-  import uinput
-
-  device = uinput.Device()
-  device.capabilities = {
-      uinput.EV_KEY: (uinput.KEY_E, uinput.KEY_H, uinput.KEY_L, uinput.KEY_O),
-      }
-
-  device.emit(uinput.EV_KEY, uinput.KEY_H, 1) # Press.
-  device.emit(uinput.EV_KEY, uinput.KEY_H, 0) # Release.
-  device.emit(uinput.EV_KEY, uinput.KEY_E, 1)
-  device.emit(uinput.EV_KEY, uinput.KEY_E, 0)
-  device.emit(uinput.EV_KEY, uinput.KEY_L, 1)
-  device.emit(uinput.EV_KEY, uinput.KEY_L, 0)
-  device.emit(uinput.EV_KEY, uinput.KEY_L, 1)
-  device.emit(uinput.EV_KEY, uinput.KEY_L, 0)
-  device.emit(uinput.EV_KEY, uinput.KEY_O, 1)
-  device.emit(uinput.EV_KEY, uinput.KEY_O, 0)
+- Write permissions to /dev/uinput. Normally only root is permitted to
+  write.
 
 Downloading
 ===========
 
 - Ubuntu package: https://launchpad.net/~tuos/+archive/codegrove
-- Tarball is available at: http://pypi.python.org/packages/source/p/python-uinput/python-uinput-0.4.tar.gz
-- Latest sources from public bzr-repository: http://code.launchpad.net/python-uinput ::
+- Tarball: http://pypi.python.org/packages/source/p/python-uinput/python-uinput-0.4.tar.gz
+- Development: http://code.launchpad.net/python-uinput ::
 
     bzr branch lp:python-uinput
 
@@ -71,18 +54,24 @@ Installing
 Ubuntu
 ------
 
-The recommended way to install python-uinput is to
-`add it's PPA to your system <https://launchpad.net/~tuos/+archive/codegrove>`_.
-This allows you to treat python-uinput as any other Ubuntu package.
+Ubuntu
+------
+
+Add `Codegrove PPA`_ to your system and install using standard tools. For
+example with apt-get::
+
+  sudo apt-get install python-uinput
+
+.. _Codegrove PPA: https://launchpad.net/~tuos/+archive/codegrove
 
 Other systems
 -------------
 
-The install-procedure adheres the "standard"::
+Satisfy the requirements listed above and then build and install normally::
 
   python setup build && sudo python setup install
 
 Bug reporting
 =============
 
-Report bugs at http://bugs.launchpad.net/python-uinput .
+Please report bugs at http://bugs.launchpad.net/python-uinput .

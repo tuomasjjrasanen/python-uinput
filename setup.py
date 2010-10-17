@@ -15,21 +15,16 @@ bustypes_module = Extension('uinput.bustypes',
                             )
 
 setup(name='python-uinput',
-      provides='uinput',
       version='0.4',
       description='Python API to the Linux uinput-system.',
       author='Tuomas Räsänen (tuos)',
       author_email='tuos@codegrove.org',
       url='http://codegrove.org/projects/python-uinput/',
       download_url='http://pypi.python.org/packages/source/p/python-uinput/python-uinput-0.4.tar.gz',
-      package_dir={
-        'uinput': 'src',
-        },
-      packages=[
-        'uinput',
-        ],
+      package_dir={'uinput': 'src'},
+      packages=['uinput'],
       ext_modules=[suinput_module, bustypes_module],
-      license='License :: OSI Approved :: GNU General Public License (GPL)',
+      license='GPLv3+',
       platforms=['Linux'],
       classifiers=[
         "Development Status :: 3 - Alpha",
@@ -38,9 +33,11 @@ setup(name='python-uinput',
         "Operating System :: POSIX :: Linux",
         "Topic :: System :: Operating System Kernels :: Linux",
         "Programming Language :: Python :: 2.5",
+        "Programming Language :: Python :: 2.6",
         "Programming Language :: C",
         ],
       long_description="""
-A high-level API for generating Linux input events.
+Uinput allows attaching user-space device drivers into the Linux kernel.
+Python-uinput provides a simple and easy to use API to the Linux uinput-system.
 """,
       )

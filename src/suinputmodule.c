@@ -3,8 +3,9 @@
   Copyright © 2010 Tuomas Räsänen (tuos) <tuos@codegrove.org>
 
   This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License version 3 as
-  published by the Free Software Foundation.
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -185,35 +186,35 @@ static PyObject *pysuinput_destroy(PyObject *self, PyObject *args)
 }
 
 static PyMethodDef pysuinputMethods[] = {
-    {"open", pysuinput_open, METH_VARARGS,
-     "open()\n\n"
-     "Open an uinput device and return a file descriptor."
+    {"uinput_open", pysuinput_open, METH_VARARGS,
+     "uinput_open()\n\n"
+     "Open the uinput device and return a file descriptor."
     },
 
-    {"write", pysuinput_write, METH_VARARGS,
-     "write(uinput_fd, ev_type, ev_code, ev_value)\n\n"
-     "Write an event to the uinput device.\n"
-    },
-
-    {"set_capabilities", pysuinput_set_capabilities, METH_VARARGS,
-     "set_capabilities(uinput_fd, ev_type, capabilities)\n\n"
-     "Set the capabilities of the uinput device.\n"
-    },
-
-    {"syn", pysuinput_syn, METH_VARARGS,
-     "syn(uinput_fd, ev_type, ev_code, ev_value)\n\n"
-     "Write EV_SYN event to the uinput device.\n"
-    },
-
-    {"destroy", pysuinput_destroy, METH_VARARGS,
-     "destroy(uinput_fd)\n\n"
+    {"uinput_write", pysuinput_write, METH_VARARGS,
+     "uinput_write(uinput_fd, ev_type, ev_code, ev_value)\n\n"
      "Destory and close the uinput device.\n"
     },
 
-    {"create", pysuinput_create, METH_VARARGS,
-     "create(uinput_fd, name, bustype, vendor, product, version,\n"
-     "       ff_effects_max, absmin, absmax, absfuzz, absflat)\n\n"
-     "Create and initialize the uinput device with giver parameters.\n"
+    {"uinput_set_capabilities", pysuinput_set_capabilities, METH_VARARGS,
+     "uinput_set_capabilities(uinput_fd, ev_type, capabilities)\n\n"
+     "Destory and close the uinput device.\n"
+    },
+
+    {"uinput_syn", pysuinput_syn, METH_VARARGS,
+     "uinput_syn(uinput_fd, ev_type, ev_code, ev_value)\n\n"
+     "Destory and close the uinput device.\n"
+    },
+
+    {"uinput_destroy", pysuinput_destroy, METH_VARARGS,
+     "uinput_destroy(uinput_fd)\n\n"
+     "Destory and close the uinput device.\n"
+    },
+
+    {"uinput_create", pysuinput_create, METH_VARARGS,
+     "uinput_create(uinput_fd, name, bustype, vendor, product, version,\n"
+     "              ff_effects_max, absmin, absmax, absfuzz, absflat)\n\n"
+     "Destory and close the uinput device.\n"
     },
 
     {NULL, NULL, 0, NULL}
