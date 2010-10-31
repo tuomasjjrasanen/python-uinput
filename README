@@ -16,7 +16,7 @@ General information
 - **Author**: Tuomas Räsänen (tuos) <tuos@codegrove.org>
 - **Homepage**: http://codegrove.org/projects/python-uinput/
 - **License**: GPLv3+ (see COPYING for details)
-- **Version**: 0.4
+- **Version**: 0.5
 
 Build requirements
 ==================
@@ -43,7 +43,7 @@ Downloading
 ===========
 
 - Ubuntu package: https://launchpad.net/~tuos/+archive/codegrove
-- Tarball: http://pypi.python.org/packages/source/p/python-uinput/python-uinput-0.4.tar.gz
+- Tarball: http://pypi.python.org/packages/source/p/python-uinput/python-uinput-0.5.tar.gz
 - Development: http://code.launchpad.net/python-uinput ::
 
     bzr branch lp:python-uinput
