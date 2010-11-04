@@ -1,5 +1,6 @@
 0.5
         - Documented uinput-module.
+        - A minimal joystick (abs-axis) example: examples/joystick.py.
 
 0.4
 
