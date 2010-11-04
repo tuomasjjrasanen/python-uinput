@@ -36,6 +36,13 @@ from uinput import suinput
 from .bustypes import *
 from .capabilities import *
 
+DEFAULT_ABS_MIN = 0
+DEFAULT_ABS_MAX = 255
+DEFAULT_ABS_FUZZ = 0
+DEFAULT_ABS_FLAT = 0
+DEFAULT_ABS_PARAMETERS = (DEFAULT_ABS_MIN, DEFAULT_ABS_MAX,
+                          DEFAULT_ABS_FUZZ, DEFAULT_ABS_FLAT)
+
 class Device(object):
 
     """
@@ -66,7 +73,7 @@ class Device(object):
 
     def __init__(self, name="python-uinput",
                  bustype=BUS_VIRTUAL, vendor=0, product=0, version=3,
-                 ff_effects_max=0, capabilities={}, abs_parameters={}):
+                 ff_effects_max=0, capabilities={}, abs_parameters=None):
         self.__uinput_fd = None
         self.capabilities = capabilities
         self.name = name
@@ -75,6 +82,21 @@ class Device(object):
         self.product = product
         self.version = version
         self.ff_effects_max = ff_effects_max
+
+        if abs_parameters is None:
+            # Provide reasonable default values for ABS-axis
+            # parameters.
+            abs_parameters = {}
+            try:
+                abs_codes = self.capabilities[EV_ABS]
+            except KeyError:
+                # ABS capabilities not used, no need to define default
+                # values.
+                pass
+            else:
+                # Set DEFAULT_ABS_PARAMETERS for each used ABS-axis.
+                for abs_code in abs_codes:
+                    abs_parameters[abs_code] = DEFAULT_ABS_PARAMETERS
         self.abs_parameters = abs_parameters
 
     def _activate(self):
