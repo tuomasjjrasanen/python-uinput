@@ -13,6 +13,8 @@ def main():
                            capabilities=capabilities)
 
     for i in range(20):
+        # syn=False for the first call to emit an "atomic" (1, 1)
+        # event.
         device.emit(uinput.EV_REL, uinput.REL_X, 5, syn=False)
         device.emit(uinput.EV_REL, uinput.REL_Y, 5)
         time.sleep(0.01) # Just to show the motion.
