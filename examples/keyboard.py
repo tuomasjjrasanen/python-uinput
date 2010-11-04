@@ -3,10 +3,12 @@
 import uinput
 
 def main():
-    device = uinput.Device()
-    device.capabilities = {
+    capabilities = {
         uinput.EV_KEY: (uinput.KEY_E, uinput.KEY_H, uinput.KEY_L, uinput.KEY_O),
         }
+
+    device = uinput.Device(name="python-uinput-keyboard",
+                           capabilities=capabilities)
 
     device.emit(uinput.EV_KEY, uinput.KEY_H, 1) # Press.
     device.emit(uinput.EV_KEY, uinput.KEY_H, 0) # Release.
