@@ -1,6 +1,7 @@
 0.5
         - Documented uinput-module.
         - A minimal joystick (abs-axis) example: examples/joystick.py.
+        - Reasonable defaults for abs_parameters (0, 255, 0, 0).
 
 0.4
 
