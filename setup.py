@@ -16,7 +16,7 @@ bustypes_module = Extension('uinput.bustypes',
 
 setup(name='python-uinput',
       version='0.5',
-      description='Python API to the Linux uinput-system.',
+      description='Create Linux input device drivers with Python.',
       author='Tuomas Räsänen (tuos)',
       author_email='tuos@codegrove.org',
       url='http://codegrove.org/projects/python-uinput/',
@@ -37,7 +37,8 @@ setup(name='python-uinput',
         "Programming Language :: C",
         ],
       long_description="""
-Uinput allows attaching user-space device drivers into the Linux kernel.
-Python-uinput provides a simple and easy to use API to the Linux uinput-system.
+Uinput allows attaching user-space device drivers into the Linux
+kernel. Python-uinput provides a simple and easy to use API to the
+Linux uinput-system.
 """,
       )
