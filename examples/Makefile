@@ -1,3 +1,5 @@
+CFLAGS=-Wall -Wextra -Werror -pedantic -std=c89
+LDFLAGS=
 PROGRAMS=kbd mouse
 
 .PHONY: all clean
@@ -5,7 +7,7 @@ PROGRAMS=kbd mouse
 all: $(PROGRAMS)
 
 %: %.c
-	gcc -o$@ -lsuinput -Wall $^
+	gcc -o$@ $(CFLAGS) $(LDFLAGS) -lsuinput $^
 
 clean: $(PROGRAMS)
 	rm -f $^
