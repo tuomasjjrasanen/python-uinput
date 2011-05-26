@@ -123,10 +123,8 @@ int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev_p)
 
 int suinput_destroy(int uinput_fd)
 {
-    int original_errno;
-
     if (ioctl(uinput_fd, UI_DEV_DESTROY) == -1) {
-        original_errno = errno;
+        int original_errno = errno;
         close(uinput_fd);
         errno = original_errno;
         return -1;
@@ -135,8 +133,8 @@ int suinput_destroy(int uinput_fd)
     return close(uinput_fd);
 }
 
-int suinput_set_capabilities(int uinput_fd, uint16_t ev_type,
-                             const int *ev_code_v, size_t ev_code_c)
+int suinput_set_event_capabilities(int uinput_fd, uint16_t ev_type,
+                                   const uint16_t *ev_code_v, size_t ev_code_c)
 {
     size_t i;
     unsigned long io;
@@ -176,6 +174,17 @@ int suinput_set_capabilities(int uinput_fd, uint16_t ev_type,
     for (i = 0; i < ev_code_c; ++i) {
         int ev_code = ev_code_v[i];
         if (ioctl(uinput_fd, io, ev_code) == -1)
+            return -1;
+    }
+    return 0;
+}
+
+int suinput_set_input_properties(int uinput_fd, const uint8_t *input_prop_v, size_t input_prop_c)
+{
+    size_t i;
+    for (i = 0; i < input_prop_c; ++i) {
+        int input_prop = input_prop_v[i];
+        if (ioctl(uinput_fd, UI_SET_PROPBIT, input_prop) == -1)
             return -1;
     }
     return 0;
