@@ -1,6 +1,6 @@
 SET(suinput_SOURCES suinput.c)
 SET(suinput_HEADERS suinput.h)
-SET(suinput_SOVERSION 3)
+SET(suinput_SOVERSION 4)
 
 ADD_LIBRARY(suinput SHARED ${suinput_SOURCES})
 

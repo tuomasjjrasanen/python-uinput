@@ -1,6 +1,6 @@
 /*
   libsuinput - A set of uinput helper functions
-  Copyright © 2010 Tuomas Jorma Juhani Räsänen <tuomas.j.j.rasanen@tjjr.fi>
+  Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomas.j.j.rasanen@tjjr.fi>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -15,11 +15,11 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include <errno.h>
 #include <string.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <limits.h>
 #include <stdlib.h>
 
 #include <linux/limits.h>
@@ -28,10 +28,10 @@
 
 #include "suinput.h"
 
-int suinput_write_event(int uinput_fd, const struct input_event *event)
+int suinput_write_event(int uinput_fd, const struct input_event *event_p)
 {
     ssize_t bytes;
-    bytes = write(uinput_fd, event, sizeof(struct input_event));
+    bytes = write(uinput_fd, event_p, sizeof(struct input_event));
     if (bytes != sizeof(struct input_event))
         return -1;
     return 0;
@@ -54,13 +54,12 @@ int suinput_syn(int uinput_fd)
     return suinput_write(uinput_fd, EV_SYN, SYN_REPORT, 0);
 }
 
-const char *suinput_get_uinput_path(void)
+static char *suinput_get_uinput_path(void)
 {
-    static char uinput_devnode[PATH_MAX + 1];
     struct udev *udev;
     struct udev_device *udev_dev;
     const char *devnode;
-    const char *retval = NULL;
+    char *retval = NULL;
     int orig_errno;
 
     if ((udev = udev_new()) == NULL)
@@ -73,14 +72,10 @@ const char *suinput_get_uinput_path(void)
     if ((devnode = udev_device_get_devnode(udev_dev)) == NULL)
         goto out;
 
-    /* I'm on very defensive mood.. it's due the ignorance. :P */
-    if (strlen(devnode) > PATH_MAX) {
-        errno = ENAMETOOLONG;
+    if ((retval = malloc(strlen(devnode) + 1)) == NULL)
         goto out;
-    }
 
-    strncpy(uinput_devnode, devnode, PATH_MAX);
-    retval = uinput_devnode;
+    strcpy(retval, devnode);
   out:
     orig_errno = errno;
     udev_device_unref(udev_dev);
@@ -92,46 +87,33 @@ const char *suinput_get_uinput_path(void)
 int suinput_open(void)
 {
     int uinput_fd;
-    const char *uinput_devnode;
+    char *uinput_path;
 
-    if ((uinput_devnode = suinput_get_uinput_path()) == NULL)
+    if ((uinput_path = suinput_get_uinput_path()) == NULL)
         return -1;
 
-    if ((uinput_fd = open(uinput_devnode, O_WRONLY | O_NONBLOCK)) == -1)
-        return -1;
-
+    uinput_fd = open(uinput_path, O_WRONLY | O_NONBLOCK);
+    free(uinput_path);
     return uinput_fd;
 }
 
-int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev)
+int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev_p)
 {
     ssize_t bytes;
 
-    bytes = write(uinput_fd, user_dev, sizeof(struct uinput_user_dev));
+    bytes = write(uinput_fd, user_dev_p, sizeof(struct uinput_user_dev));
     if (bytes != sizeof(struct uinput_user_dev))
         return -1;
 
     if (ioctl(uinput_fd, UI_DEV_CREATE) == -1)
         return -1;
 
-    /**
-       This magic sleep needs to be taken under X because of the way
-       how X assigns handlers for new devices. It goes somehow like
-       this:
-
-       1. Kernel creates an evdev device.
-
-       2. A dbus signal "DeviceAdded" is sent.
-
-       3. X's handler assigner catches the dbus event and assigns a
-       handler for the new device.
-
-       Now the "problem" is in the asynchronous nature of this whole
-       process. Kernel is totally happy once it has created the evdev
-       device, but X cannot assign a handler for the new device before
-       it receives the dbus signal. Without this delay, kernel would
-       generate events before a handler is assigned. Perhaps a better
-       way would be to listen to the dbus?
+    /*
+       This magic sleep needs to be taken under X due to asynchronous
+       nature of X's device handler assignement. Without this delay,
+       kernel would generate events before X has assigned a handler
+       for the newly created device. Perhaps a better way would be to
+       wait for that event somehow?
     */
     if (getenv("DISPLAY"))
         sleep(1);
@@ -154,7 +136,7 @@ int suinput_destroy(int uinput_fd)
 }
 
 int suinput_set_capabilities(int uinput_fd, uint16_t ev_type,
-                             const int *ev_codes, size_t ev_codes_len)
+                             const int *ev_code_v, size_t ev_code_c)
 {
     size_t i;
     unsigned long io;
@@ -191,8 +173,8 @@ int suinput_set_capabilities(int uinput_fd, uint16_t ev_type,
         return -2;
     }
 
-    for (i = 0; i < ev_codes_len; ++i) {
-        int ev_code = ev_codes[i];
+    for (i = 0; i < ev_code_c; ++i) {
+        int ev_code = ev_code_v[i];
         if (ioctl(uinput_fd, io, ev_code) == -1)
             return -1;
     }
