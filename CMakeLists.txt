@@ -2,7 +2,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(libsuinput)
 
 SET(CMAKE_MODULE_PATH ${libsuinput_SOURCE_DIR}/cmake/modules)
-# add_definitions(-Wall -Werror -Wextra -pedantic -std=c89 -Wconversion)
+ADD_DEFINITIONS(-Wall -Werror -Wextra -pedantic -std=c89 -Wconversion)
 
 ADD_SUBDIRECTORY(src)
 

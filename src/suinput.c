@@ -22,13 +22,15 @@
 #include <limits.h>
 #include <stdlib.h>
 
+#include <linux/limits.h>
+
 #include <libudev.h>
 
 #include "suinput.h"
 
 int suinput_write_event(int uinput_fd, const struct input_event *event)
 {
-    size_t bytes;
+    ssize_t bytes;
     bytes = write(uinput_fd, event, sizeof(struct input_event));
     if (bytes != sizeof(struct input_event))
         return -1;
@@ -54,7 +56,7 @@ int suinput_syn(int uinput_fd)
 
 const char *suinput_get_uinput_path(void)
 {
-    static char uinput_devnode[_POSIX_PATH_MAX + 1];
+    static char uinput_devnode[PATH_MAX + 1];
     struct udev *udev;
     struct udev_device *udev_dev;
     const char *devnode;
@@ -72,12 +74,12 @@ const char *suinput_get_uinput_path(void)
         goto out;
 
     /* I'm on very defensive mood.. it's due the ignorance. :P */
-    if (strlen(devnode) > _POSIX_PATH_MAX) {
+    if (strlen(devnode) > PATH_MAX) {
         errno = ENAMETOOLONG;
         goto out;
     }
 
-    strncpy(uinput_devnode, devnode, _POSIX_PATH_MAX);
+    strncpy(uinput_devnode, devnode, PATH_MAX);
     retval = uinput_devnode;
   out:
     orig_errno = errno;
@@ -103,7 +105,7 @@ int suinput_open(void)
 
 int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev)
 {
-    size_t bytes;
+    ssize_t bytes;
 
     bytes = write(uinput_fd, user_dev, sizeof(struct uinput_user_dev));
     if (bytes != sizeof(struct uinput_user_dev))
@@ -154,8 +156,8 @@ int suinput_destroy(int uinput_fd)
 int suinput_set_capabilities(int uinput_fd, uint16_t ev_type,
                              const int *ev_codes, size_t ev_codes_len)
 {
-    int i;
-    int io;
+    size_t i;
+    unsigned long io;
 
     if (ioctl(uinput_fd, UI_SET_EVBIT, ev_type) == -1)
         return -1;
