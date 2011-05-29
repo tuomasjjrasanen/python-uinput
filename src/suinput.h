@@ -25,8 +25,8 @@
 
 int suinput_write_event(int uinput_fd, const struct input_event *event_p);
 
-int suinput_write(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
-                  int32_t ev_value);
+int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
+                 int32_t ev_value);
 
 int suinput_syn(int uinput_fd);
 

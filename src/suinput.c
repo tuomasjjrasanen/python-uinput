@@ -37,8 +37,8 @@ int suinput_write_event(int uinput_fd, const struct input_event *event_p)
     return 0;
 }
 
-int suinput_write(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
-                  int32_t ev_value)
+int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
+                 int32_t ev_value)
 {
     struct input_event event;
     memset(&event, 0, sizeof(event));
@@ -51,7 +51,7 @@ int suinput_write(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
 
 int suinput_syn(int uinput_fd)
 {
-    return suinput_write(uinput_fd, EV_SYN, SYN_REPORT, 0);
+    return suinput_emit(uinput_fd, EV_SYN, SYN_REPORT, 0);
 }
 
 static char *suinput_get_uinput_path(void)
