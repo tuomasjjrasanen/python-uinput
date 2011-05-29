@@ -37,8 +37,8 @@ setup(name='python-uinput',
         "Programming Language :: C",
         ],
       long_description="""
-Uinput allows attaching user-space device drivers into the Linux
-kernel. Python-uinput provides a simple and easy to use API to the
-Linux uinput-system.
+Uinput is Linux module which allows attaching user-space device
+drivers into the Linux kernel. Python-uinput provides a simple API to
+the Linux uinput-system.
 """,
       )

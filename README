@@ -7,9 +7,9 @@ Create Linux input device drivers with Python.
 Description
 ===========
 
-Uinput allows attaching user-space device drivers into the Linux
-kernel.  Python-uinput provides a simple and easy to use API to the
-Linux uinput-system.
+Uinput is Linux module which allows attaching user-space device
+drivers into the Linux kernel. Python-uinput provides a simple API to
+the Linux uinput-system.
 
 General information
 ===================
@@ -19,60 +19,13 @@ General information
 - **License**: GPLv3+ (see COPYING for details)
 - **Version**: 0.5
 
-Build requirements
-==================
+Requirements
+============
 
-- Python 2.5 or later.
-- Python development files.
-- Libsuinput development files.
-
-Runtime requirements
-====================
-
-- Libsuinput.
-- Uinput-module installed::
-
-    # For the current run:
-    sudo modprobe -i uinput
-    # To load uinput at boot time:
-    grep -q ^uinput /etc/modules || sudo sh -c 'echo uinput >> /etc/modules'
-
-- Write permissions to /dev/uinput. Normally only root is permitted to
-  write.
-
-Downloading
-===========
-
-- Ubuntu package: https://launchpad.net/~tuos/+archive/codegrove
-- Tarball: http://pypi.python.org/packages/source/p/python-uinput/python-uinput-0.5.tar.gz
-- Development: http://code.launchpad.net/python-uinput ::
-
-    bzr branch lp:python-uinput
-
-Installing
-==========
-
-Ubuntu
-------
-
-Ubuntu
-------
-
-Add `Codegrove PPA`_ to your system and install using standard tools. For
-example with apt-get::
-
-  sudo add-apt-repository ppa:tuos/codegrove
-  sudo apt-get update
-  sudo apt-get install python-uinput
-
-.. _Codegrove PPA: https://launchpad.net/~tuos/+archive/codegrove
-
-Other systems
--------------
-
-Satisfy the requirements listed above and then build and install normally::
-
-  python setup build && sudo python setup install
+- Python 2.5 or later
+- Python development files
+- Libsuinput 0.4
+- Libsuinput development files
 
 Bug reporting
 =============
