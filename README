@@ -1,33 +1,50 @@
-===============
- python-uinput
-===============
-
-Create Linux input device drivers with Python.
-
-Description
-===========
-
-Uinput is Linux module which allows attaching user-space device
-drivers into the Linux kernel. Python-uinput provides a simple API to
-the Linux uinput-system.
-
-General information
-===================
-
-- **Author**: Tuomas Jorma Juhani Räsänen <tuomas.j.j.rasanen@tjjr.fi>
-- **Homepage**: http://codegrove.org/projects/python-uinput/
-- **License**: GPLv3+ (see COPYING for details)
-- **Version**: 0.5
-
-Requirements
-============
-
-- Python 2.5 or later
-- Python development files
-- Libsuinput 0.4
-- Libsuinput development files
-
-Bug reporting
+Python-uinput
 =============
 
-Please report bugs at http://bugs.launchpad.net/python-uinput .
+Uinput is a Linux kernel module which allows attaching user-space
+device drivers into the Linux kernel. Python-uinput provides a
+pythonic API to the Linux uinput-system.
+
+Usage example
+-------------
+
+Create and use a new uinput device with key-capabilities:
+
+    import uinput
+
+    capabilities = {
+        uinput.EV_KEY: (uinput.KEY_E, uinput.KEY_H, uinput.KEY_L, uinput.KEY_O),
+        }
+
+    device = uinput.Device(name="python-uinput-keyboard",
+                           capabilities=capabilities)
+
+    device.emit(uinput.EV_KEY, uinput.KEY_H, 1) # Press.
+    device.emit(uinput.EV_KEY, uinput.KEY_H, 0) # Release.
+    device.emit(uinput.EV_KEY, uinput.KEY_E, 1)
+    device.emit(uinput.EV_KEY, uinput.KEY_E, 0)
+    device.emit(uinput.EV_KEY, uinput.KEY_L, 1)
+    device.emit(uinput.EV_KEY, uinput.KEY_L, 0)
+    device.emit(uinput.EV_KEY, uinput.KEY_L, 1)
+    device.emit(uinput.EV_KEY, uinput.KEY_L, 0)
+    device.emit(uinput.EV_KEY, uinput.KEY_O, 1)
+    device.emit(uinput.EV_KEY, uinput.KEY_O, 0)
+
+General information
+-------------------
+
+- Author:     Tuomas Jorma Juhani Räsänen <tuomas.rasanen@tjjr.fi>
+- Homepage:   <http://tjjr.fi/sw/python-uinput/>
+- License:    GPLv3+ (see COPYING for details)
+- Version:    0.5
+- Repository: <http://github.com/tuos/python-uinput>
+- Bugs:       <http://github.com/tuos/python-uinput/issues>
+- Tarballs:   <http://github.com/tuos/python-uinput/downloads>
+
+Runtime requirements
+--------------------
+
+- python2.5 or later
+- python-dev
+- libsuinput4
+- libsuinput-dev
