@@ -1,77 +1,30 @@
+Libsuinput
 ==========
-libsuinput
-==========
-
-Helper functions to simplify Uinput usage.
-
-Description
-===========
 
 Uinput allows attaching user-space device drivers into the Linux
-kernel. As magnificient as the Uinput is, it is pretty low level from
-the application developers perspective. Libsuinput provides a set of
-helper functions and hides many devilish details.
+kernel. However, it is pretty low level from the application
+developers perspective. This library provides a set of helper
+functions for making the uinput usage easier.
 
 General information
-===================
+-------------------
 
-- Author:   Tuomas Jorma Juhani Räsänen <tuomas.j.j.rasanen@tjjr.fi>
-- Homepage: http://codegrove.org/projects/libsuinput
-- License:  GPLv3+ (see COPYING for details)
-- Version:  0.4
+- Author:     [Tuomas Jorma Juhani Räsänen](http://tjjr.fi) <tuomas.rasanen@tjjr.fi>
+- Homepage:   <http://tjjr.fi/projects/libsuinput>
+- License:    GPLv3+ (see COPYING for details)
+- Version:    0.4
+- Bugs:       <http://bugs.launchpad.net/libsuinput>
+- Tarball:    <http://launchpad.net/libsuinput/trunk/0.4/+download/libsuinput-0.4.tar.gz>
+- Repository: <http://github.com/tuos/libsuinput>
 
 Build requirements
-==================
+------------------
 
-- Development files for libudev.
+- libudev-dev
 
 Runtime requirements
-====================
+--------------------
 
-- Libudev.
-- Uinput-module installed::
-
-    # For the current run:
-    sudo modprobe -i uinput
-    # To load uinput at boot time:
-    grep -q ^uinput /etc/modules || sudo sh -c 'echo uinput >> /etc/modules'
-
-- Write permissions to /dev/uinput. Normally only root is permitted to
-  write.
-
-Downloading
-===========
-
-- Ubuntu package: https://launchpad.net/~tuos/+archive/codegrove
-- Tarball: http://launchpad.net/libsuinput/trunk/0.4/+download/libsuinput-0.4.tar.gz
-- Development: http://code.launchpad.net/libsuinput ::
-
-    bzr clone lp:libsuinput
-
-Installing
-==========
-
-Ubuntu
-------
-
-Add `Codegrove PPA`_ to your system and install using standard tools. For
-example with apt-get::
-
-  sudo apt-get install libsuinput
-
-This method takes of depencies and 
-
-.. _Codegrove PPA: https://launchpad.net/~tuos/+archive/codegrove
-
-Other systems
--------------
-
-Satisfy the requirements listed above and then build and install normally::
-
-  ./configure
-  make && make install
-
-Bug reporting
-=============
-
-Please report bugs at http://bugs.launchpad.net/libsuinput .
+- libudev0
+- uinput-module installed
+- write permissions to `/dev/uinput`
