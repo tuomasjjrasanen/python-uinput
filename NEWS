@@ -1,6 +1,3 @@
-0.6
-===
-
 - Simplified API.
 
 - Uses ctypes instead of extension modules.
