@@ -1,23 +1,25 @@
-#! /usr/bin/env python
-
 import time
 
 import uinput
 
 def main():
-    capabilities = {uinput.EV_REL: [uinput.REL_X, uinput.REL_Y],
-                    uinput.EV_KEY: [uinput.BTN_LEFT, uinput.BTN_RIGHT],
-                    }
+    events = (
+        uinput.REL_X,
+        uinput.REL_Y,
+        uinput.BTN_LEFT,
+        uinput.BTN_RIGHT,
+        )
 
-    device = uinput.Device(name="python-uinput-mouse",
-                           capabilities=capabilities)
+    device = uinput.Device(events)
 
     for i in range(20):
-        # syn=False for the first call to emit an "atomic" (1, 1)
-        # event.
-        device.emit(uinput.EV_REL, uinput.REL_X, 5, syn=False)
-        device.emit(uinput.EV_REL, uinput.REL_Y, 5)
-        time.sleep(0.01) # Just to show the motion.
+        # syn=False to emit an "atomic" (5, 5) event.
+        device.emit(uinput.REL_X, 5, syn=False)
+        device.emit(uinput.REL_Y, 5)
+
+        # Just for demonstration purposes: shows the motion. In real
+        # application, this is of course unnecessary.
+        time.sleep(0.01)
 
 if __name__ == "__main__":
     main()

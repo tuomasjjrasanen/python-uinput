@@ -1,20 +1,35 @@
+0.6
+===
+
+- Simplified API.
+
+- Uses ctypes instead of extension modules.
+
 0.5
-        - Documented uinput-module.
-        - A minimal joystick (abs-axis) example: examples/joystick.py.
-        - Reasonable defaults for abs_parameters (0, 255, 0, 0).
+===
+
+- Documented uinput-module.
+
+- A minimal joystick (abs-axis) example: examples/joystick.py.
+
+- Reasonable defaults for abs_parameters (0, 255, 0, 0).
 
 0.4
+===
 
-        - Updated project details, such as homepage, download url, etc.
+- Updated project details, such as homepage, download url, etc.
 
 0.3.3
+=====
 
-        - Explicit dependence on libsuinput.
+- Explicit dependence on libsuinput.
 
 0.3.2
+=====
 
-        - Mention Ubuntu-package in README.
+- Mention Ubuntu-package in README.
 
 0.3.1
+=====
 
-        - New license: GPLv3+
+- New license: GPLv3+

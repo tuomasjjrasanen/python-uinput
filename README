@@ -12,39 +12,37 @@ Create and use a new uinput device with key-capabilities:
 
     import uinput
 
-    capabilities = {
-        uinput.EV_KEY: (uinput.KEY_E, uinput.KEY_H, uinput.KEY_L, uinput.KEY_O),
-        }
+    events = (uinput.KEY_E, uinput.KEY_H, uinput.KEY_L, uinput.KEY_O)
 
-    device = uinput.Device(name="python-uinput-keyboard",
-                           capabilities=capabilities)
+    device = uinput.Device(events)
 
-    device.emit(uinput.EV_KEY, uinput.KEY_H, 1) # Press.
-    device.emit(uinput.EV_KEY, uinput.KEY_H, 0) # Release.
-    device.emit(uinput.EV_KEY, uinput.KEY_E, 1)
-    device.emit(uinput.EV_KEY, uinput.KEY_E, 0)
-    device.emit(uinput.EV_KEY, uinput.KEY_L, 1)
-    device.emit(uinput.EV_KEY, uinput.KEY_L, 0)
-    device.emit(uinput.EV_KEY, uinput.KEY_L, 1)
-    device.emit(uinput.EV_KEY, uinput.KEY_L, 0)
-    device.emit(uinput.EV_KEY, uinput.KEY_O, 1)
-    device.emit(uinput.EV_KEY, uinput.KEY_O, 0)
+    device.emit(uinput.KEY_H, 1) # Press.
+    device.emit(uinput.KEY_H, 0) # Release.
+    device.emit(uinput.KEY_E, 1)
+    device.emit(uinput.KEY_E, 0)
+    device.emit(uinput.KEY_L, 1)
+    device.emit(uinput.KEY_L, 0)
+    device.emit(uinput.KEY_L, 1)
+    device.emit(uinput.KEY_L, 0)
+    device.emit(uinput.KEY_O, 1)
+    device.emit(uinput.KEY_O, 0)
 
 General information
 -------------------
 
-- Author:     Tuomas Jorma Juhani Räsänen <tuomas.rasanen@tjjr.fi>
-- Homepage:   <http://tjjr.fi/sw/python-uinput/>
+- Version:    0.6
 - License:    GPLv3+ (see COPYING for details)
-- Version:    0.5
-- Repository: <http://github.com/tuos/python-uinput>
-- Bugs:       <http://github.com/tuos/python-uinput/issues>
-- Tarballs:   <http://github.com/tuos/python-uinput/downloads>
+- Author:     Tuomas Jorma Juhani Räsänen
+- Homepage:   <http://tjjr.fi/sw/python-uinput/>
+- Code:       <https://code.launchpad.net/python-uinput/>
+- Bugs:       <https://bugs.launchpad.net/python-uinput/>
+
+Build requirements
+------------------
+
+- Python (2.5, 2.6)
 
 Runtime requirements
 --------------------
 
-- python2.5 or later
-- python-dev
-- libsuinput4
-- libsuinput-dev
+- [libsuinput4](http://tjjr.fi/sw/libsuinput/)

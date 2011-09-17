@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-# uinput - Uinput API for Python
-# Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomas.j.j.rasanen@tjjr.fi>
+# uinput - Python bindings for Linux uinput system
+# Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,127 +16,92 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Python Uinput API for creating Linux input device drivers.
+Python bindings for Linux uinput system.
 
 Usage:
->>> capabilities = {uinput.EV_ABS: (uinput.ABS_X, uinput.ABS_Y)}
->>> abs_parameters = {uinput.ABS_X: (0, 255, 0, 0), # min, max, fuzz, flat
->>>                   uinput.ABX_Y: (0, 255, 0, 0)}
->>> driver = uinput.Device(name="my-device-driver",
-                           capabilities=capabilities,
-                           abs_parameters=abs_parameters)
->>> driver.emit(uinput.EV_ABS, uinput.ABS_X, 5, syn=False)
->>> driver.emit(uinput.EV_ABS, uinput.ABS_Y, 5)
+>>> events = (
+>>>     uinput.BTN_JOYSTICK,
+>>>     uinput.ABS_X + (0, 255, 0, 0),
+>>>     uinput.ABS_Y + (0, 255, 0, 0),
+>>>     )
+>>> device = uinput.Device(events)
+>>> device.emit(uinput.ABS_X, 5, syn=False)
+>>> device.emit(uinput.ABS_Y, 5)
+>>> device.emit(uinput.BTN_JOYSTICK, 1) # Press.
+>>> device.emit(uinput.BTN_JOYSTICK, 0) # Release.
 """
 
 from __future__ import absolute_import
 
-from uinput import suinput
+import ctypes
+import os
 
-from .bustypes import *
-from .capabilities import *
+from uinput.ev import *
 
-DEFAULT_ABS_MIN = 0
-DEFAULT_ABS_MAX = 255
-DEFAULT_ABS_FUZZ = 0
-DEFAULT_ABS_FLAT = 0
-DEFAULT_ABS_PARAMETERS = (DEFAULT_ABS_MIN, DEFAULT_ABS_MAX,
-                          DEFAULT_ABS_FUZZ, DEFAULT_ABS_FLAT)
+_UINPUT_MAX_NAME_SIZE = 80
+_ABS_CNT = ABS_MAX[1] + 1
+
+class _struct_input_id(ctypes.Structure):
+    _fields_ = [("bustype", ctypes.c_int16),
+                ("vendor", ctypes.c_int16),
+                ("product", ctypes.c_int16),
+                ("version", ctypes.c_int16),
+                ]
+
+class _struct_uinput_user_dev(ctypes.Structure):
+    _fields_ = [("name", ctypes.c_char * _UINPUT_MAX_NAME_SIZE),
+                ("id", _struct_input_id),
+                ("ff_effects_max", ctypes.c_int),
+                ("absmax", ctypes.c_int * _ABS_CNT),
+                ("absmin", ctypes.c_int * _ABS_CNT),
+                ("absfuzz", ctypes.c_int * _ABS_CNT),
+                ("absflat", ctypes.c_int * _ABS_CNT),
+                ]
+
+def _error_handler(result, fn, args):
+    if result == -1:
+        code = ctypes.get_errno()
+        raise OSError(code, os.strerror(code))
+    return result
+
+_libsuinput = ctypes.CDLL("libsuinput.so.4", use_errno=True)
+
+_libsuinput.suinput_create.errcheck = _error_handler
 
 class Device(object):
 
-    """
-    Create a Uinput device.
+    """Create an uinput device.
 
-    `name`           - a string displayed in /proc/bus/input/devices
-
-    `bustype`        - uinput.BUS_*
-
-    `vendor`         - vendor id as an integer value
-
-    `product`        - product id as an integer value
-
-    `version`        - version id as an integer value
-
-    `ff_effects_max` - 
-
-    `capabilities`   - a dict describing capabilities of the device,
-                       for example for EV_REL and EV_ABS capable device:
-                       {uinput.EV_REL: (uinput.REL_X, uinput.REL_Y),
-                        uinput.EV_ABS: (uinput.ABS_X, uinput.ABS_Y)}
-
-    `abs_parameters` - a dict describing parameters of absolute axes,
-                       for example:
-                       {uinput.ABS_X: (0, 255, 0, 0), # min, max, fuzz, flat
-                        uinput.ABS_Y: (0, 255, 0, 0)}
+    `events`  - a sequence of event capability descriptors
+    `name`    - a string displayed in /proc/bus/input/devices
     """
 
-    def __init__(self, name="python-uinput",
-                 bustype=BUS_VIRTUAL, vendor=0, product=0, version=3,
-                 ff_effects_max=0, capabilities={}, abs_parameters=None):
-        self.__uinput_fd = None
-        self.capabilities = capabilities
-        self.name = name
-        self.bustype = bustype
-        self.vendor = vendor
-        self.product = product
-        self.version = version
-        self.ff_effects_max = ff_effects_max
+    def __init__(self, events, name="python-uinput"):
+        self.__events = events
+        self.__name = name
 
-        if abs_parameters is None:
-            # Provide reasonable default values for ABS-axis
-            # parameters.
-            abs_parameters = {}
-            try:
-                abs_codes = self.capabilities[EV_ABS]
-            except KeyError:
-                # ABS capabilities not used, no need to define default
-                # values.
-                pass
-            else:
-                # Set DEFAULT_ABS_PARAMETERS for each used ABS-axis.
-                for abs_code in abs_codes:
-                    abs_parameters[abs_code] = DEFAULT_ABS_PARAMETERS
-        self.abs_parameters = abs_parameters
+        user_dev = _struct_uinput_user_dev(name)
+        self.__uinput_fd = _libsuinput.suinput_open()
+        for ev_spec in self.__events:
+            ev_type, ev_code = ev_spec[:2]
+            _libsuinput.suinput_enable_event(self.__uinput_fd, ev_type, ev_code)
+            if len(ev_spec) > 2:
+                absmin, absmax, absfuzz, absflat = ev_spec[2:]
+                user_dev.absmin[ev_code] = absmin
+                user_dev.absmax[ev_code] = absmax
+                user_dev.absfuzz[ev_code] = absfuzz
+                user_dev.absflat[ev_code] = absflat
 
-    def _activate(self):
-        fd = suinput.uinput_open()
-        try:
-            for ev_type, capabilities in self.capabilities.items():
-                suinput.uinput_set_capabilities(fd, ev_type, set(capabilities))
-            abs_min_vals = ABS_CNT * [0]
-            abs_max_vals = ABS_CNT * [0]
-            abs_fuzz_vals = ABS_CNT * [0]
-            abs_flat_vals = ABS_CNT * [0]
-            for abs_code, (abs_min, abs_max, abs_fuzz, abs_flat) in self.abs_parameters.items():
-                abs_min_vals[abs_code] = abs_min
-                abs_max_vals[abs_code] = abs_max
-                abs_fuzz_vals[abs_code] = abs_fuzz
-                abs_flat_vals[abs_code] = abs_flat
-
-            suinput.uinput_create(fd,
-                                  self.name,
-                                  self.bustype,
-                                  self.vendor,
-                                  self.product,
-                                  self.version,
-                                  self.ff_effects_max,
-                                  abs_min_vals,
-                                  abs_max_vals,
-                                  abs_fuzz_vals,
-                                  abs_flat_vals)
-        except Exception, e:
-            suinput.uinput_destroy(fd)
-            raise e
-        self.__uinput_fd = fd
+        _libsuinput.suinput_create(self.__uinput_fd, ctypes.pointer(user_dev))
 
     def syn(self):
-        """
-        Fire all emitted events.  All emitted events will be placed in
-        a certain kind of event queue. Queued events will be fired when this
-        method is called.  This is makes it possible to emit "atomic"
-        events. For example sending REL_X and REL_Y atomically requires
-        to emit first event without syn and the second with syn::
+        """Fire all emitted events.
+
+        All emitted events will be placed in a certain kind of event
+        queue. Queued events will be fired when this method is called. This
+        makes it possible to emit "atomic" events. For example sending REL_X
+        and REL_Y atomically requires to emit first event without syn and the
+        second with syn::
 
           d.emit(uinput.EV_REL, uinput.REL_X, 1, syn=False)
           d.emit(uinput.EV_REL, uinput.REL_Y, 1)
@@ -144,37 +109,25 @@ class Device(object):
         The call above appears as a single (+1, +1) event.
         
         """
-        suinput.uinput_syn(self.__uinput_fd)
 
-    @property
-    def active(self):
-        """
-        Return boolean value indicating whether the device is
-        activated. Once the device is activated, changing attributes does not
-        have any effect on the driver behavior.
-        """
-        return self.__uinput_fd is not None
+        _libsuinput.suinput_syn(self.__uinput_fd)
 
-    def emit(self, ev_type, ev_code, ev_value, syn=True):
-        """
-        Emit event.
-        If the device is not yet active, activate it first.
+    def emit(self, event, value, syn=True):
+        """Emit event.
 
-        `ev_type`  - uinput.EV_[TYPE], for example uinput.EV_ABS
-        `ev_code`  - uinput.[TYPE]_[CODE], for example uinput.ABS_X
-        `ev_value` - value of the event type:
+        `event` - type-code -pair, for example (uinput.EV_REL, uinput.REL_X)
+        `value` - value of the event type:
            EV_KEY/EV_BTN: 1 (key-press) or 0 (key-release)
            EV_REL       : integer value of the relative change
-           EV_ABS       : integer value in the range of min and max values as
-                          defined in self.abs_parameters
-        `syn`      - If True, Device.syn(self) will be called before return.
+           EV_ABS       : integer value in the range of min and max values
+        `syn` - If True, Device.syn(self) will be called before return.
         """
-        if not self.active:
-            self._activate()
-        suinput.uinput_write(self.__uinput_fd, ev_type, ev_code, ev_value)
+
+        ev_type, ev_code = event
+        _libsuinput.suinput_emit(self.__uinput_fd, ev_type, ev_code, value)
         if syn:
             self.syn()
 
     def __del__(self):
-        if self.__uinput_fd is not None:
-            suinput.uinput_destroy(self.__uinput_fd)
+        if self.__uinput_fd >= 0:
+            _libsuinput.suinput_destroy(self.__uinput_fd)
