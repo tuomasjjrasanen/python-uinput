@@ -1,12 +1,20 @@
+0.5
+===
+
+- ABI change: `suinput_set_capapbilites()` is replaced by
+`suinput_enable_event()`.
+- SO-version: 4
+
 0.4
 ===
 
-Licensing changed from LGPLv3+ to GPLv3+. Usage examples are now
-included.
+- Licensing changed from LGPLv3+ to GPLv3+.
+
+- Usage examples are now included.
 
 0.3
 ===
 
-Provides more generic interface that is "compatible" with standard
-uinput. Functions are just helper functions operating on an uinput
-file descriptor.
+- More generic interface that is "compatible" with standard uinput.
+
+- Functions operating on an uinput file descriptor.

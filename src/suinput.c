@@ -1,6 +1,6 @@
 /*
   libsuinput - A set of uinput helper functions
-  Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomas.j.j.rasanen@tjjr.fi>
+  Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -133,27 +133,25 @@ int suinput_destroy(int uinput_fd)
     return close(uinput_fd);
 }
 
-int suinput_set_event_capabilities(int uinput_fd, uint16_t ev_type,
-                                   const uint16_t *ev_code_v, size_t ev_code_c)
+int suinput_enable_event(int uinput_fd, uint16_t ev_type, uint16_t ev_code)
 {
-    size_t i;
     unsigned long io;
 
     if (ioctl(uinput_fd, UI_SET_EVBIT, ev_type) == -1)
         return -1;
 
     switch (ev_type) {
-    case EV_REL:
-        io = UI_SET_RELBIT;
-        break;
-    case EV_MSC:
-        io = UI_SET_MSCBIT;
-        break;
     case EV_KEY:
         io = UI_SET_KEYBIT;
         break;
+    case EV_REL:
+        io = UI_SET_RELBIT;
+        break;
     case EV_ABS:
         io = UI_SET_ABSBIT;
+        break;
+    case EV_MSC:
+        io = UI_SET_MSCBIT;
         break;
     case EV_SW:
         io = UI_SET_SWBIT;
@@ -171,15 +169,12 @@ int suinput_set_event_capabilities(int uinput_fd, uint16_t ev_type,
         return -2;
     }
 
-    for (i = 0; i < ev_code_c; ++i) {
-        int ev_code = ev_code_v[i];
-        if (ioctl(uinput_fd, io, ev_code) == -1)
-            return -1;
-    }
-    return 0;
+    return ioctl(uinput_fd, io, ev_code);
 }
 
-int suinput_set_input_properties(int uinput_fd, const uint8_t *input_prop_v, size_t input_prop_c)
+int suinput_set_input_properties(int const uinput_fd,
+                                 uint8_t const *input_prop_v,
+                                 size_t const input_prop_c)
 {
     size_t i;
     for (i = 0; i < input_prop_c; ++i) {

@@ -21,38 +21,40 @@ int main(void)
 
     /* Error handling is omitted to keep code as readible as possible. */
 
-    suinput_set_capabilities(uinput_fd, EV_KEY, keys, 4);
+    for (int i = 0; i < 4; ++i) {
+        suinput_enable_event(uinput_fd, EV_KEY, keys[i]);
+    }
 
     suinput_create(uinput_fd, &user_dev);
 
-    suinput_write(uinput_fd, EV_KEY, KEY_H, 1); /* Press. */
+    suinput_emit(uinput_fd, EV_KEY, KEY_H, 1); /* Press. */
     suinput_syn(uinput_fd); /* "Flushes" events written so far. */
 
-    suinput_write(uinput_fd, EV_KEY, KEY_H, 0); /* Release */
+    suinput_emit(uinput_fd, EV_KEY, KEY_H, 0); /* Release */
     suinput_syn(uinput_fd);
 
-    suinput_write(uinput_fd, EV_KEY, KEY_E, 1);
+    suinput_emit(uinput_fd, EV_KEY, KEY_E, 1);
     suinput_syn(uinput_fd);
 
-    suinput_write(uinput_fd, EV_KEY, KEY_E, 0);
+    suinput_emit(uinput_fd, EV_KEY, KEY_E, 0);
     suinput_syn(uinput_fd);
 
-    suinput_write(uinput_fd, EV_KEY, KEY_L, 1);
+    suinput_emit(uinput_fd, EV_KEY, KEY_L, 1);
     suinput_syn(uinput_fd);
 
-    suinput_write(uinput_fd, EV_KEY, KEY_L, 0);
+    suinput_emit(uinput_fd, EV_KEY, KEY_L, 0);
     suinput_syn(uinput_fd);
 
-    suinput_write(uinput_fd, EV_KEY, KEY_L, 1);
+    suinput_emit(uinput_fd, EV_KEY, KEY_L, 1);
     suinput_syn(uinput_fd);
 
-    suinput_write(uinput_fd, EV_KEY, KEY_L, 0);
+    suinput_emit(uinput_fd, EV_KEY, KEY_L, 0);
     suinput_syn(uinput_fd);
 
-    suinput_write(uinput_fd, EV_KEY, KEY_O, 1);
+    suinput_emit(uinput_fd, EV_KEY, KEY_O, 1);
     suinput_syn(uinput_fd);
 
-    suinput_write(uinput_fd, EV_KEY, KEY_O, 0);
+    suinput_emit(uinput_fd, EV_KEY, KEY_O, 0);
     suinput_syn(uinput_fd);
 
     suinput_destroy(uinput_fd);

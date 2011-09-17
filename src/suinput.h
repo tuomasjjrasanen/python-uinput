@@ -1,6 +1,6 @@
 /*
   libsuinput - A set of uinput helper functions
-  Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomas.j.j.rasanen@tjjr.fi>
+  Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -23,6 +23,12 @@
 
 #include <linux/uinput.h>
 
+int suinput_open(void);
+
+int suinput_enable_event(int uinput_fd, uint16_t ev_type, uint16_t ev_code);
+
+int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev_p);
+
 int suinput_write_event(int uinput_fd, const struct input_event *event_p);
 
 int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
@@ -30,16 +36,10 @@ int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
 
 int suinput_syn(int uinput_fd);
 
-int suinput_open(void);
-
-int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev_p);
-
 int suinput_destroy(int uinput_fd);
 
-int suinput_set_event_capabilities(int uinput_fd, uint16_t ev_type,
-                                   const uint16_t *ev_code_v, size_t ev_code_c);
-
 int suinput_set_input_properties(int uinput_fd,
-                                 const uint8_t *input_prop_v, size_t input_prop_c);
+                                 const uint8_t *input_prop_v,
+                                 size_t input_prop_c);
 
 #endif /* SUINPUT_H */
