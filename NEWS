@@ -1,8 +1,13 @@
 0.5
 ===
 
-- ABI change: `suinput_set_capapbilites()` is replaced by
+- API change: `suinput_set_capapbilites()` is replaced by
 `suinput_enable_event()`.
+
+- API change: `suinput_write()` renamed to `suinput_emit()`.
+
+- API change: removed `suinput_get_uinput_path()`.
+
 - SO-version: 4
 
 0.4
