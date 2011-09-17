@@ -171,16 +171,3 @@ int suinput_enable_event(int uinput_fd, uint16_t ev_type, uint16_t ev_code)
 
     return ioctl(uinput_fd, io, ev_code);
 }
-
-int suinput_set_input_properties(int const uinput_fd,
-                                 uint8_t const *input_prop_v,
-                                 size_t const input_prop_c)
-{
-    size_t i;
-    for (i = 0; i < input_prop_c; ++i) {
-        int input_prop = input_prop_v[i];
-        if (ioctl(uinput_fd, UI_SET_PROPBIT, input_prop) == -1)
-            return -1;
-    }
-    return 0;
-}

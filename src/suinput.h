@@ -38,8 +38,4 @@ int suinput_syn(int uinput_fd);
 
 int suinput_destroy(int uinput_fd);
 
-int suinput_set_input_properties(int uinput_fd,
-                                 const uint8_t *input_prop_v,
-                                 size_t input_prop_c);
-
 #endif /* SUINPUT_H */
