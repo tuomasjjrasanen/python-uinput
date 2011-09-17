@@ -28,7 +28,7 @@ int main(void)
     }
 
     for (i = 0; i < 3; ++i) {
-            suinput_enable_events(uinput_fd, EV_REL, rel_axes[i]);
+            suinput_enable_event(uinput_fd, EV_REL, rel_axes[i]);
     }
 
     suinput_create(uinput_fd, &user_dev);

@@ -9,5 +9,5 @@ all: $(PROGRAMS)
 %: %.c
 	gcc -o$@ $(CFLAGS) $(LDFLAGS) -lsuinput $^
 
-clean: $(PROGRAMS)
-	rm -f $^
+clean:
+	rm -f $(PROGRAMS)

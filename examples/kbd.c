@@ -7,6 +7,7 @@
 
 int main(void)
 {
+    int i;
     int uinput_fd;
     int keys[] = {KEY_E, KEY_H, KEY_L, KEY_O};
     struct uinput_user_dev user_dev;
@@ -21,7 +22,7 @@ int main(void)
 
     /* Error handling is omitted to keep code as readible as possible. */
 
-    for (int i = 0; i < 4; ++i) {
+    for (i = 0; i < 4; ++i) {
         suinput_enable_event(uinput_fd, EV_KEY, keys[i]);
     }
 
