@@ -166,7 +166,8 @@ int suinput_enable_event(int uinput_fd, uint16_t ev_type, uint16_t ev_code)
         io = UI_SET_FFBIT;
         break;
     default:
-        return -2;
+        errno = EINVAL;
+        return -1;
     }
 
     return ioctl(uinput_fd, io, ev_code);
