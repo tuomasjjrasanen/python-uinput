@@ -30,145 +30,148 @@
 
 int suinput_write_event(int uinput_fd, const struct input_event *event_p)
 {
-    ssize_t bytes;
-    bytes = write(uinput_fd, event_p, sizeof(struct input_event));
-    if (bytes != sizeof(struct input_event))
-        return -1;
-    return 0;
+        ssize_t bytes;
+
+        bytes = write(uinput_fd, event_p, sizeof(struct input_event));
+        if (bytes != sizeof(struct input_event)) {
+                return -1;
+        }
+        return 0;
 }
 
 int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
                  int32_t ev_value)
 {
-    struct input_event event;
-    memset(&event, 0, sizeof(event));
-    gettimeofday(&event.time, 0);
-    event.type = ev_type;
-    event.code = ev_code;
-    event.value = ev_value;
-    return suinput_write_event(uinput_fd, &event);
+        struct input_event event;
+
+        memset(&event, 0, sizeof(event));
+        gettimeofday(&event.time, 0);
+        event.type = ev_type;
+        event.code = ev_code;
+        event.value = ev_value;
+
+        return suinput_write_event(uinput_fd, &event);
 }
 
 int suinput_syn(int uinput_fd)
 {
-    return suinput_emit(uinput_fd, EV_SYN, SYN_REPORT, 0);
+        return suinput_emit(uinput_fd, EV_SYN, SYN_REPORT, 0);
 }
 
 static char *suinput_get_uinput_path(void)
 {
-    struct udev *udev;
-    struct udev_device *udev_dev;
-    const char *devnode;
-    char *retval = NULL;
-    int orig_errno;
+        struct udev *udev;
+        struct udev_device *udev_dev;
+        const char *devnode;
+        char *retval = NULL;
+        int orig_errno;
 
-    if ((udev = udev_new()) == NULL)
-        return NULL;
+        if ((udev = udev_new()) == NULL) {
+                return NULL;
+        }
 
-    udev_dev = udev_device_new_from_subsystem_sysname(udev, "misc", "uinput");
-    if (udev_dev == NULL)
-        goto out;
+        udev_dev = udev_device_new_from_subsystem_sysname(udev, "misc",
+                                                          "uinput");
+        if (udev_dev == NULL) {
+                goto out;
+        }
 
-    if ((devnode = udev_device_get_devnode(udev_dev)) == NULL)
-        goto out;
+        if ((devnode = udev_device_get_devnode(udev_dev)) == NULL) {
+                goto out;
+        }
 
-    if ((retval = malloc(strlen(devnode) + 1)) == NULL)
-        goto out;
+        if ((retval = malloc(strlen(devnode) + 1)) == NULL) {
+                goto out;
+        }
 
-    strcpy(retval, devnode);
-  out:
-    orig_errno = errno;
-    udev_device_unref(udev_dev);
-    udev_unref(udev);
-    errno = orig_errno;
-    return retval;
+        strcpy(retval, devnode);
+out:
+        orig_errno = errno;
+        udev_device_unref(udev_dev);
+        udev_unref(udev);
+        errno = orig_errno;
+        return retval;
 }
 
 int suinput_open(void)
 {
-    int uinput_fd;
-    char *uinput_path;
+        int uinput_fd;
+        char *uinput_path;
 
-    if ((uinput_path = suinput_get_uinput_path()) == NULL)
-        return -1;
+        if ((uinput_path = suinput_get_uinput_path()) == NULL) {
+                return -1;
+        }
 
-    uinput_fd = open(uinput_path, O_WRONLY | O_NONBLOCK);
-    free(uinput_path);
-    return uinput_fd;
+        uinput_fd = open(uinput_path, O_WRONLY | O_NONBLOCK);
+        free(uinput_path);
+        return uinput_fd;
 }
 
 int suinput_create(int uinput_fd, const struct uinput_user_dev *user_dev_p)
 {
-    ssize_t bytes;
+        ssize_t bytes;
 
-    bytes = write(uinput_fd, user_dev_p, sizeof(struct uinput_user_dev));
-    if (bytes != sizeof(struct uinput_user_dev))
-        return -1;
+        bytes = write(uinput_fd, user_dev_p, sizeof(struct uinput_user_dev));
+        if (bytes != sizeof(struct uinput_user_dev)) {
+                return -1;
+        }
 
-    if (ioctl(uinput_fd, UI_DEV_CREATE) == -1)
-        return -1;
+        if (ioctl(uinput_fd, UI_DEV_CREATE) == -1) {
+                return -1;
+        }
 
-    /*
-       This magic sleep needs to be taken under X due to asynchronous
-       nature of X's device handler assignement. Without this delay,
-       kernel would generate events before X has assigned a handler
-       for the newly created device. Perhaps a better way would be to
-       wait for that event somehow?
-    */
-    if (getenv("DISPLAY"))
-        sleep(1);
-
-    return 0;
+        return 0;
 }
 
 int suinput_destroy(int uinput_fd)
 {
-    if (ioctl(uinput_fd, UI_DEV_DESTROY) == -1) {
-        int original_errno = errno;
-        close(uinput_fd);
-        errno = original_errno;
-        return -1;
-    }
+        if (ioctl(uinput_fd, UI_DEV_DESTROY) == -1) {
+                int original_errno = errno;
+                close(uinput_fd);
+                errno = original_errno;
+                return -1;
+        }
 
-    return close(uinput_fd);
+        return close(uinput_fd);
 }
 
 int suinput_enable_event(int uinput_fd, uint16_t ev_type, uint16_t ev_code)
 {
-    unsigned long io;
+        unsigned long io;
 
-    if (ioctl(uinput_fd, UI_SET_EVBIT, ev_type) == -1)
-        return -1;
+        if (ioctl(uinput_fd, UI_SET_EVBIT, ev_type) == -1) {
+                return -1;
+        }
 
-    switch (ev_type) {
-    case EV_KEY:
-        io = UI_SET_KEYBIT;
-        break;
-    case EV_REL:
-        io = UI_SET_RELBIT;
-        break;
-    case EV_ABS:
-        io = UI_SET_ABSBIT;
-        break;
-    case EV_MSC:
-        io = UI_SET_MSCBIT;
-        break;
-    case EV_SW:
-        io = UI_SET_SWBIT;
-        break;
-    case EV_LED:
-        io = UI_SET_LEDBIT;
-        break;
-    case EV_SND:
-        io = UI_SET_SNDBIT;
-        break;
-    case EV_FF:
-        io = UI_SET_FFBIT;
-        break;
-    default:
-        errno = EINVAL;
-        return -1;
-    }
+        switch (ev_type) {
+        case EV_KEY:
+                io = UI_SET_KEYBIT;
+                break;
+        case EV_REL:
+                io = UI_SET_RELBIT;
+                break;
+        case EV_ABS:
+                io = UI_SET_ABSBIT;
+                break;
+        case EV_MSC:
+                io = UI_SET_MSCBIT;
+                break;
+        case EV_SW:
+                io = UI_SET_SWBIT;
+                break;
+        case EV_LED:
+                io = UI_SET_LEDBIT;
+                break;
+        case EV_SND:
+                io = UI_SET_SNDBIT;
+                break;
+        case EV_FF:
+                io = UI_SET_FFBIT;
+                break;
+        default:
+                errno = EINVAL;
+                return -1;
+        }
 
-    return ioctl(uinput_fd, io, ev_code);
+        return ioctl(uinput_fd, io, ev_code);
 }

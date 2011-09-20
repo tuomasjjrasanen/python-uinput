@@ -7,46 +7,46 @@
 
 int main(void)
 {
-    int uinput_fd;
-    int btns[] = {BTN_LEFT, BTN_RIGHT, BTN_MIDDLE};
-    int rel_axes[] = {REL_X, REL_Y, REL_WHEEL};
-    struct uinput_user_dev user_dev;
-    int i;
+        int uinput_fd;
+        int btns[] = {BTN_LEFT, BTN_RIGHT, BTN_MIDDLE};
+        int rel_axes[] = {REL_X, REL_Y, REL_WHEEL};
+        struct uinput_user_dev user_dev;
+        int i;
 
-    memset(&user_dev, 0, sizeof(struct uinput_user_dev));
-    strcpy(user_dev.name, "libsuinput-example-mouse");
+        memset(&user_dev, 0, sizeof(struct uinput_user_dev));
+        strcpy(user_dev.name, "libsuinput-example-mouse");
 
-    uinput_fd = suinput_open();
+        uinput_fd = suinput_open();
 
-    if (uinput_fd == -1)
-        err(1, "suinput_open");
+        if (uinput_fd == -1)
+                err(1, "suinput_open");
 
-    /* Error handling is omitted to keep code as readible as possible. */
+        /* Error handling is omitted to keep code as readible as possible. */
 
-    for (i = 0; i < 3; ++i) {
-            suinput_enable_event(uinput_fd, EV_KEY, btns[i]);
-    }
+        for (i = 0; i < 3; ++i) {
+                suinput_enable_event(uinput_fd, EV_KEY, btns[i]);
+        }
 
-    for (i = 0; i < 3; ++i) {
-            suinput_enable_event(uinput_fd, EV_REL, rel_axes[i]);
-    }
+        for (i = 0; i < 3; ++i) {
+                suinput_enable_event(uinput_fd, EV_REL, rel_axes[i]);
+        }
 
-    suinput_create(uinput_fd, &user_dev);
+        suinput_create(uinput_fd, &user_dev);
 
-    /* Move pointer 20 * 5 units towards bottom-right. */
-    for (i = 0; i < 20; ++i) {
-        suinput_emit(uinput_fd, EV_REL, REL_X, 5);
-        suinput_emit(uinput_fd, EV_REL, REL_Y, 5);
+        /* Move pointer 20 * 5 units towards bottom-right. */
+        for (i = 0; i < 20; ++i) {
+                suinput_emit(uinput_fd, EV_REL, REL_X, 5);
+                suinput_emit(uinput_fd, EV_REL, REL_Y, 5);
+                suinput_syn(uinput_fd);
+        }
+
+        suinput_emit(uinput_fd, EV_KEY, BTN_LEFT, 1); /* Press. */
+        suinput_syn(uinput_fd); /* "Flushes" events written so far. */
+
+        suinput_emit(uinput_fd, EV_KEY, BTN_LEFT, 0); /* Release. */
         suinput_syn(uinput_fd);
-    }
 
-    suinput_emit(uinput_fd, EV_KEY, BTN_LEFT, 1); /* Press. */
-    suinput_syn(uinput_fd); /* "Flushes" events written so far. */
+        suinput_destroy(uinput_fd);
 
-    suinput_emit(uinput_fd, EV_KEY, BTN_LEFT, 0); /* Release. */
-    suinput_syn(uinput_fd);
-
-    suinput_destroy(uinput_fd);
-
-    return 0;
+        return 0;
 }
