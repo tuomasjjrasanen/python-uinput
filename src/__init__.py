@@ -62,11 +62,18 @@ def _error_handler(result, fn, args):
     if result == -1:
         code = ctypes.get_errno()
         raise OSError(code, os.strerror(code))
+    elif result < -1:
+        raise RuntimeError("unexpected return value: %s" % result)
     return result
 
 _libsuinput = ctypes.CDLL("libsuinput.so.4", use_errno=True)
-
+_libsuinput.suinput_open.errcheck = _error_handler
+_libsuinput.suinput_enable_event.errcheck = _error_handler
 _libsuinput.suinput_create.errcheck = _error_handler
+_libsuinput.suinput_write_event.errcheck = _error_handler
+_libsuinput.suinput_emit.errcheck = _error_handler
+_libsuinput.suinput_syn.errcheck = _error_handler
+_libsuinput.suinput_destroy.errcheck = _error_handler
 
 class Device(object):
 
