@@ -36,7 +36,7 @@ from __future__ import absolute_import
 import ctypes
 import os
 
-from uinput.ev import *
+from .ev import *
 
 _UINPUT_MAX_NAME_SIZE = 80
 _ABS_CNT = ABS_MAX[1] + 1
