@@ -19,6 +19,7 @@ General information
 Build requirements
 ------------------
 
+- cmake 2.8
 - libudev-dev
 
 Runtime requirements
