@@ -1,6 +1,6 @@
 CFLAGS=-Wall -Wextra -Werror -pedantic -std=c89
 LDFLAGS=
-PROGRAMS=kbd mouse
+PROGRAMS=keyboard mouse
 
 .PHONY: all clean
 
