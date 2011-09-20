@@ -6,7 +6,7 @@ ADD_DEFINITIONS(-Wall -Werror -Wextra -pedantic -std=c89 -Wconversion)
 
 ADD_SUBDIRECTORY(src)
 
-INSTALL(DIRECTORY examples DESTINATION share/doc/suinput)
+INSTALL(DIRECTORY examples DESTINATION share/doc/libsuinput)
 
 SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Simplified Uinput API")
 SET(CPACK_PACKAGE_VENDOR "Tuomas Jorma Juhani Räsänen")
