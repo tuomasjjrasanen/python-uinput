@@ -32,8 +32,8 @@ General information
 
 - Version:    0.5
 - License:    GPLv3+ (see COPYING for details)
-- Author:     Tuomas Jorma Juhani Räsänen
-- Homepage:   <http://tjjr.fi/sw/python-uinput/>
+- Author:     Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+- Homepage:   <http://tjjr.fi/software/python-uinput/>
 - Code:       <https://code.launchpad.net/python-uinput/>
 - Bugs:       <https://bugs.launchpad.net/python-uinput/>
 
@@ -45,4 +45,4 @@ Build requirements
 Runtime requirements
 --------------------
 
-- [libsuinput4](http://tjjr.fi/sw/libsuinput/)
+- [libsuinput4](http://tjjr.fi/software/libsuinput/)
