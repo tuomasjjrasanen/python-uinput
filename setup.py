@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from distutils.core import setup
+from distutils.core import setup, Extension
 
 setup(name='python-uinput',
       version='0.5',
@@ -27,4 +27,6 @@ Uinput is a Linux kernel module which allows attaching user-space
 device drivers into the Linux kernel. Python-uinput provides a
 pythonic API to the Linux uinput system.
 """,
+      ext_modules=[Extension('_libsuinput', ['libsuinput/src/suinput.c'],
+                             libraries=["udev"])]
       )

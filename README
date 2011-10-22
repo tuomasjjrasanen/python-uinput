@@ -40,9 +40,4 @@ General information
 Build requirements
 ------------------
 
-- Python (2.5, 2.6)
-
-Runtime requirements
---------------------
-
-- [libsuinput4](http://tjjr.fi/software/libsuinput/)
+- libudev0
