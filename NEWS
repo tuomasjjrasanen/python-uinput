@@ -1,6 +1,13 @@
+0.6
+===
+
 - Simplified API.
 
 - Uses ctypes instead of extension modules.
+
+- libsuinput is included as submodule in git repository
+
+- source distributions include suinput.c
 
 0.5
 ===
