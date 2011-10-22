@@ -30,7 +30,7 @@ Create and use a new uinput device with key-capabilities:
 General information
 -------------------
 
-- Version:    0.5
+- Version:    0.6
 - License:    GPLv3+ (see COPYING for details)
 - Author:     Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
 - Homepage:   <http://tjjr.fi/software/python-uinput/>

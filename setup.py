@@ -23,12 +23,12 @@ class build_py(_build_py):
         _build_py.run(self)
 
 setup(name='python-uinput',
-      version='0.5',
+      version='0.6',
       description='Python bindings for Linux uinput system.',
       author='Tuomas Jorma Juhani Räsänen',
       author_email='tuomasjjrasanen@tjjr.fi',
       url='http://tjjr.fi/sw/python-uinput/',
-      download_url='http://tjjr.fi/sw/python-uinput/src/python-uinput-0.5.tar.gz',
+      download_url='http://launchpad.net/python-uinput/trunk/0.6/+download/python-uinput-0.6.tar.gz',
       package_dir={'uinput': 'src'},
       packages=['uinput'],
       license='GPLv3+',
