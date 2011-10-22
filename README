@@ -37,8 +37,10 @@ General information
 - Code:       <https://code.launchpad.net/python-uinput/>
 - Bugs:       <https://bugs.launchpad.net/python-uinput/>
 
-Build requirements
-------------------
+Requirements
+------------
 
-- libudev-dev
 - libudev0
+- libudev-dev
+- uinput.ko
+- rw-permissions to uinput device node
