@@ -66,7 +66,8 @@ def _error_handler(result, fn, args):
         raise RuntimeError("unexpected return value: %s" % result)
     return result
 
-_libsuinput = ctypes.CDLL("libsuinput.so.4", use_errno=True)
+_libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput.so"))
+_libsuinput = ctypes.CDLL(_libsuinput_path, use_errno=True)
 _libsuinput.suinput_open.errcheck = _error_handler
 _libsuinput.suinput_enable_event.errcheck = _error_handler
 _libsuinput.suinput_create.errcheck = _error_handler
