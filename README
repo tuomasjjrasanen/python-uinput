@@ -40,4 +40,5 @@ General information
 Build requirements
 ------------------
 
+- libudev-dev
 - libudev0
