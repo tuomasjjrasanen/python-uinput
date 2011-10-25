@@ -28,3 +28,10 @@ Runtime requirements
 - libudev0
 - uinput.ko
 - rw-permissions to uinput device node
+
+Building and installing
+-----------------------
+
+    cmake .
+    make
+    sudo make install 
