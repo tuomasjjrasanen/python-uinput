@@ -1,0 +1,8 @@
+Building and installing
+-----------------------
+
+  mkdir -p build
+  cd build
+  cmake ../
+  make
+  sudo make install
