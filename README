@@ -16,15 +16,11 @@ General information
 - Code:       <http://code.launchpad.net/libsuinput/>
 - Bugs:       <http://bugs.launchpad.net/libsuinput/>
 
-Build requirements
-------------------
+Requirements
+------------
 
 - cmake 2.8
-- libudev-dev
-
-Runtime requirements
---------------------
-
 - libudev0
+- libudev-dev
 - uinput.ko
 - rw-permissions to uinput device node
