@@ -23,7 +23,7 @@ class build_py(_build_py):
         _build_py.run(self)
 
 setup(name='python-uinput',
-      version='0.6.1',
+      version='0.6.2',
       description='Python bindings for Linux uinput system.',
       author='Tuomas Jorma Juhani Räsänen',
       author_email='tuomasjjrasanen@tjjr.fi',
