@@ -1,5 +1,14 @@
-0.5
-===
+====================================================
+ Libsuinput NEWS -- history of user-visible changes
+====================================================
+
+Release M.m
+===========
+
+- Use GNU Autotools as a build system.
+
+Release 0.5
+===========
 
 - API change: `suinput_set_capapbilites()` is replaced by
 `suinput_enable_event()`.
@@ -10,15 +19,15 @@
 
 - SO-version: 4
 
-0.4
-===
+Release 0.4
+===========
 
 - Licensing changed from LGPLv3+ to GPLv3+.
 
 - Usage examples are now included.
 
-0.3
-===
+Release 0.3
+===========
 
 - More generic interface that is "compatible" with standard uinput.
 
