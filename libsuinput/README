@@ -1,0 +1,61 @@
+================
+ Libsuinput 0.5
+================
+
+Uinput is a Linux kernel module which allows attaching user-space
+device drivers into the Linux kernel. However, its C interface is
+pretty low level from an application developer's perspective. This
+library provides a set of helper functions for making the usage of
+uinput easier.
+
+Author: Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+Homepage: <http://tjjr.fi/sw/libsuinput/>
+
+How to install
+==============
+
+Libsuinput uses libudev and therefore requires libudev development
+files, more specifically libudev.h, to get compiled. On Debian and
+its derivatives, the header file is packaged in libudev-dev.
+
+After satisfying dependencies described above, the basic installation
+is easy. Just run the following command:
+
+  ./configure && make && make install
+
+It installs the library to /usr/local/lib and header files to
+/usr/local/include. See INSTALL for details.
+
+How to report bugs
+==================
+
+The bug database is hosted in Launchpad. If you have found a bug or
+have an improvement idea you want to share, please report it at
+<https://bugs.launchpad.net/libsuinput>. However, to avoid duplicate
+bug reports, before reporting, please check if similiar or identical
+bug has already been reported. If the description of the existing bug
+report If so, you can still subscribe to the existing bug to track its
+progress.
+
+If you are unsure whether the problem you have is due to a bug, you
+can ask questions at <https://answers.launchpad.net/libsuinput>.
+
+How to contribute
+=================
+
+In addition to reporting bugs and improvement suggestions, you are
+encouraged to contribute bug-fixes or features. Source code is
+maintained in Git VCS. The main repository is hosted in GitHub,
+<https://github.com/tuomasjjrasanen/libsuinput/> and mirrored in
+Launchpad as a Bazaar repository. The preferred way to contibute code
+is to clone the main Git repository and send a pull-request. Good old
+patches via email are also accepted.
+
+How to copy
+===========
+
+Libsuinput is free (libre) software and licensed under the terms of
+GNU Public License version 3 or later. In short, it means that you are
+free to copy, modify and redistribute this software as long as you
+place the derivative work under a compatible license. See COPYING for
+details.
