@@ -1,0 +1,49 @@
+0.7
+===
+
+- libsuinput is included as a subtree
+
+0.6.1
+=====
+
+- README and setup.py updated
+
+0.6
+===
+
+- Simplified API.
+
+- Uses ctypes instead of extension modules.
+
+- libsuinput is included as submodule in git repository
+
+- source distributions include suinput.c
+
+0.5
+===
+
+- Documented uinput-module.
+
+- A minimal joystick (abs-axis) example: examples/joystick.py.
+
+- Reasonable defaults for abs_parameters (0, 255, 0, 0).
+
+0.4
+===
+
+- Updated project details, such as homepage, download url, etc.
+
+0.3.3
+=====
+
+- Explicit dependence on libsuinput.
+
+0.3.2
+=====
+
+- Mention Ubuntu-package in README.
+
+0.3.1
+=====
+
+- New license: GPLv3+
