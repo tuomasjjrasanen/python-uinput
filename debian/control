@@ -1,0 +1,15 @@
+Source: python-uinput
+Section: python
+Priority: extra
+Maintainer: Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+Build-Depends: debhelper (>= 8.0.0), python-all-dev (>= 2.7.3), libudev-dev
+Standards-Version: 3.9.3
+Homepage: http://tjjr.fi/sw/python-uinput/
+
+Package: python-uinput
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}
+Description: Pythonic API to the Linux uinput kernel module
+ Python-uinput is Python interface to the Linux uinput kernel module
+ which allows attaching userspace device drivers into kernel.
+ .
