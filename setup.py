@@ -32,6 +32,7 @@ setup(name='python-uinput',
       packages=['uinput'],
       license='GPLv3+',
       platforms=['Linux'],
+      download_url='https://launchpad.net/python-uinput/trunk/0.7/+download/python-uinput-0.7.tar.gz',
       classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
