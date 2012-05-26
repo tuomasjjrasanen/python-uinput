@@ -23,8 +23,8 @@ class build_py(_build_py):
         _build_py.run(self)
 
 setup(name='python-uinput',
-      version='0.6.2',
-      description='Python bindings for Linux uinput system.',
+      version='0.7',
+      description='Pythonic API to the Linux uinput kernel module.',
       author='Tuomas Jorma Juhani Räsänen',
       author_email='tuomasjjrasanen@tjjr.fi',
       url='http://tjjr.fi/sw/python-uinput/',
@@ -40,11 +40,11 @@ setup(name='python-uinput',
         "Topic :: System :: Operating System Kernels :: Linux",
         "Programming Language :: Python :: 2.5",
         "Programming Language :: Python :: 2.6",
+        "Programming Language :: Python :: 2.7",
         ],
       long_description="""
-Uinput is a Linux kernel module which allows attaching user-space
-device drivers into the Linux kernel. Python-uinput provides a
-pythonic API to the Linux uinput system.
+Python-uinput is Python interface to the Linux uinput kernel module
+which allows attaching userspace device drivers into kernel.
 """,
       cmdclass={'build_py': build_py},
       ext_modules=[Extension('_libsuinput', ['libsuinput/src/suinput.c'],

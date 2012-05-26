@@ -1,6 +1,6 @@
-=====================
- Python-uinput 0.6.2
-=====================
+===============
+ Python-uinput
+===============
 
 Uinput is a Linux kernel module which allows attaching user-space
 device drivers into the Linux kernel. Python-uinput provides a
