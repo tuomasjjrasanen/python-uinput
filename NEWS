@@ -1,3 +1,11 @@
+0.8
+===
+
+- device id fields can be given in the constructor: bustype, vendor,
+  product and version
+
+- an example of udev rule
+
 0.7
 ===
 

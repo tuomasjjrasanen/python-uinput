@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # uinput - Python bindings for Linux uinput system
-# Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+# Copyright © 2012 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Python bindings for Linux uinput system.
+Python bindings to Linux uinput system.
 
 Usage:
 >>> events = (
@@ -78,17 +78,31 @@ _libsuinput.suinput_destroy.errcheck = _error_handler
 
 class Device(object):
 
-    """Create an uinput device.
+    """Device handle.
 
     `events`  - a sequence of event capability descriptors
-    `name`    - a string displayed in /proc/bus/input/devices
+
+    `name`    - name displayed in /proc/bus/input/devices
+
+    `bustype` - bus type identifier, see linux/input.h
+
+    `vendor`  - vendor identifier
+
+    `product` - product identifier
+
+    `version` - version identifier
     """
 
-    def __init__(self, events, name="python-uinput"):
+    def __init__(self, events, name="python-uinput",
+                 bustype=0, vendor=0, product=0, version=0):
         self.__events = events
         self.__name = name
 
         user_dev = _struct_uinput_user_dev(name)
+        user_dev.id.bustype = bustype
+        user_dev.id.vendor = vendor
+        user_dev.id.product = product
+        user_dev.id.version = version
         self.__uinput_fd = _libsuinput.suinput_open()
         for ev_spec in self.__events:
             ev_type, ev_code = ev_spec[:2]
@@ -106,16 +120,15 @@ class Device(object):
         """Fire all emitted events.
 
         All emitted events will be placed in a certain kind of event
-        queue. Queued events will be fired when this method is called. This
-        makes it possible to emit "atomic" events. For example sending REL_X
-        and REL_Y atomically requires to emit first event without syn and the
-        second with syn::
+        queue. Queued events will be fired when this method is
+        called. This makes it possible to emit "atomic" events. For
+        example sending REL_X and REL_Y atomically requires to emit
+        first event without syn and the second with syn::
 
           d.emit(uinput.EV_REL, uinput.REL_X, 1, syn=False)
           d.emit(uinput.EV_REL, uinput.REL_Y, 1)
 
         The call above appears as a single (+1, +1) event.
-        
         """
 
         _libsuinput.suinput_syn(self.__uinput_fd)
@@ -124,10 +137,12 @@ class Device(object):
         """Emit event.
 
         `event` - type-code -pair, for example (uinput.EV_REL, uinput.REL_X)
+
         `value` - value of the event type:
            EV_KEY/EV_BTN: 1 (key-press) or 0 (key-release)
            EV_REL       : integer value of the relative change
            EV_ABS       : integer value in the range of min and max values
+
         `syn` - If True, Device.syn(self) will be called before return.
         """
 
