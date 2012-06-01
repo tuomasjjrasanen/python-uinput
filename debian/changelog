@@ -1,3 +1,10 @@
+python-uinput (0.8-0~tjjr1~quantal1) quantal; urgency=low
+
+  * New upstream release
+  * Udev rules distributed
+
+ -- Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>  Sat, 02 Jun 2012 00:10:30 +0300
+
 python-uinput (0.7-0~tjjr1) quantal; urgency=low
 
   * Initial release
