@@ -34,9 +34,15 @@ Create an input device with key-capabilities and use it to type a greeting:
 How to install
 ==============
 
-Python-uinput uses libudev and therefore requires libudev development
-files, more specifically libudev.h, to get compiled. On Debian and its
-derivatives, the header file is packaged in libudev-dev.
+If your are using Ubuntu or Debian, the easiest way to install
+python-uinput is to install it as a pre-built binary package. Please
+refer to the homepage for the instructions.
+
+Otherwise, you are probably planning to build the source
+package. Python-uinput uses libudev and therefore requires libudev
+development files, more specifically libudev.h, to get compiled. On
+Debian and its derivatives, the header file is packaged in
+libudev-dev.
 
 After satisfying dependencies described above, the basic installation
 is easy. Just run the following command:
@@ -50,23 +56,22 @@ The bug database is hosted in Launchpad. If you have found a bug or
 have an improvement idea you want to share, please report it at
 <https://bugs.launchpad.net/python-uinput>. However, to avoid
 duplicate bug reports, before reporting, please check if similiar or
-identical bug has already been reported. If the description of the
-existing bug report If so, you can still subscribe to the existing bug
-to track its progress.
+identical bug has already been reported. If so, you can still
+subscribe to the existing bug to track its progress.
 
 If you are unsure whether the problem you have is due to a bug, you
-can ask questions at <https://answers.launchpad.net/python-uinput>.
+can always ask questions at
+<https://answers.launchpad.net/python-uinput>.
 
 How to contribute
 =================
 
 In addition to reporting bugs and improvement suggestions, you are
-encouraged to contribute bug-fixes or features. Source code is
-maintained in Git VCS. The main repository is hosted in GitHub,
-<https://github.com/tuomasjjrasanen/python-uinput/> and mirrored in
-Launchpad as a Bazaar repository. The preferred way to contibute code
-is to clone the main Git repository and send a pull-request. Good old
-patches via email are also accepted.
+encouraged to contribute bug-fixes or features. The source code is
+maintained in Git and the main repository is hosted at GitHub,
+<https://github.com/tuomasjjrasanen/python-uinput/>. The preferred way
+to contibute code is to clone the main Git repository and send a
+pull-request. Good old patches via email are also accepted.
 
 How to copy
 ===========
