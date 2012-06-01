@@ -82,13 +82,22 @@ class Device(object):
 
     `events`  - a sequence of event capability descriptors
     `name`    - a string displayed in /proc/bus/input/devices
+    `bustype` - bus type identifier, uint16_t, see linux/input.h
+    `vendor`  - vendor identifier, uint16_t
+    `product` - product identifier, uint16_t
+    `version` - version identifier, uint16_t
     """
 
-    def __init__(self, events, name="python-uinput"):
+    def __init__(self, events, name="python-uinput",
+                 bustype=0, vendor=0, product=0, version=0):
         self.__events = events
         self.__name = name
 
         user_dev = _struct_uinput_user_dev(name)
+        user_dev.id.bustype = bustype
+        user_dev.id.vendor = vendor
+        user_dev.id.product = product
+        user_dev.id.version = version
         self.__uinput_fd = _libsuinput.suinput_open()
         for ev_spec in self.__events:
             ev_type, ev_code = ev_spec[:2]
@@ -115,7 +124,7 @@ class Device(object):
           d.emit(uinput.EV_REL, uinput.REL_Y, 1)
 
         The call above appears as a single (+1, +1) event.
-        
+
         """
 
         _libsuinput.suinput_syn(self.__uinput_fd)
