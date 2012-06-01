@@ -2,3 +2,4 @@ include NEWS
 include COPYING
 include examples/*
 include libsuinput/src/suinput.h
+include udev-rules/*
