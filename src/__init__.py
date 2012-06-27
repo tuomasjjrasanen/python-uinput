@@ -35,6 +35,7 @@ from __future__ import absolute_import
 
 import ctypes
 import os
+import sysconfig
 
 from .ev import *
 
@@ -66,7 +67,7 @@ def _error_handler(result, fn, args):
         raise RuntimeError("unexpected return value: %s" % result)
     return result
 
-_libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput.so"))
+_libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput" + sysconfig.get_config_var("SO")))
 _libsuinput = ctypes.CDLL(_libsuinput_path, use_errno=True)
 _libsuinput.suinput_open.errcheck = _error_handler
 _libsuinput.suinput_enable_event.errcheck = _error_handler
