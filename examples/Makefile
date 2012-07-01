@@ -1,5 +1,5 @@
 CFLAGS=-Wall -Wextra -Werror -pedantic -std=c89
-LDFLAGS=
+LDFLAGS=-lsuinput
 PROGRAMS=keyboard mouse
 
 .PHONY: all clean
@@ -7,7 +7,7 @@ PROGRAMS=keyboard mouse
 all: $(PROGRAMS)
 
 %: %.c
-	gcc -o$@ $(CFLAGS) $(LDFLAGS) -lsuinput $^
+	gcc -o$@ $(CFLAGS) $^ $(LDFLAGS)
 
 clean:
 	rm -f $(PROGRAMS)
