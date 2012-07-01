@@ -1,6 +1,6 @@
 /*
-  libsuinput - A set of uinput helper functions
-  Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+  libsuinput - thin userspace library on top of Linux uinput kernel module
+  Copyright (C) 2012 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
