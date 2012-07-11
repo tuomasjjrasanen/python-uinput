@@ -97,9 +97,9 @@ class Device(object):
     def __init__(self, events, name="python-uinput",
                  bustype=0, vendor=0, product=0, version=0):
         self.__events = events
-        self.__name = name
+        self.__name = name.encode()
 
-        user_dev = _struct_uinput_user_dev(name)
+        user_dev = _struct_uinput_user_dev(self.__name)
         user_dev.id.bustype = bustype
         user_dev.id.vendor = vendor
         user_dev.id.product = product
