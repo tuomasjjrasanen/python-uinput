@@ -35,7 +35,7 @@ from __future__ import absolute_import
 
 import ctypes
 import os
-import sysconfig
+import distutils.sysconfig as sysconfig
 
 from .ev import *
 
