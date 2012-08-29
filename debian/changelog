@@ -1,3 +1,10 @@
+python-uinput (0.9-0~tjjr1~quantal1) quantal; urgency=low
+
+  * New upstream release
+  * Python2.6 compatibility
+
+ -- Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>  Wed, 29 Aug 2012 22:18:17 +0300
+
 python-uinput (0.8-0~tjjr1~quantal1) quantal; urgency=low
 
   * New upstream release
