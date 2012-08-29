@@ -24,7 +24,7 @@ class build_py(_build_py):
         _build_py.run(self)
 
 setup(name='python-uinput',
-      version='0.8',
+      version='0.9',
       description='Pythonic API to the Linux uinput kernel module.',
       author='Tuomas Jorma Juhani Räsänen',
       author_email='tuomasjjrasanen@tjjr.fi',
@@ -33,7 +33,7 @@ setup(name='python-uinput',
       packages=['uinput'],
       license='GPLv3+',
       platforms=['Linux'],
-      download_url='https://launchpad.net/python-uinput/trunk/0.8/+download/python-uinput-0.8.tar.gz',
+      download_url='https://launchpad.net/python-uinput/trunk/0.9/+download/python-uinput-0.9.tar.gz',
       classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
