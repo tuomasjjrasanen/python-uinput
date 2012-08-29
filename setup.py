@@ -35,7 +35,7 @@ setup(name='python-uinput',
       platforms=['Linux'],
       download_url='https://launchpad.net/python-uinput/trunk/0.8/+download/python-uinput-0.8.tar.gz',
       classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "Operating System :: POSIX :: Linux",
