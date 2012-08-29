@@ -35,6 +35,7 @@ from __future__ import absolute_import
 
 import ctypes
 import os
+import distutils.sysconfig as sysconfig
 
 from .ev import *
 
@@ -66,7 +67,7 @@ def _error_handler(result, fn, args):
         raise RuntimeError("unexpected return value: %s" % result)
     return result
 
-_libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput.so"))
+_libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput" + sysconfig.get_config_var("SO")))
 _libsuinput = ctypes.CDLL(_libsuinput_path, use_errno=True)
 _libsuinput.suinput_open.errcheck = _error_handler
 _libsuinput.suinput_enable_event.errcheck = _error_handler
@@ -96,9 +97,10 @@ class Device(object):
     def __init__(self, events, name="python-uinput",
                  bustype=0, vendor=0, product=0, version=0):
         self.__events = events
-        self.__name = name
+        self.__uinput_fd = -1
+        self.__name = name.encode()
 
-        user_dev = _struct_uinput_user_dev(name)
+        user_dev = _struct_uinput_user_dev(self.__name)
         user_dev.id.bustype = bustype
         user_dev.id.vendor = vendor
         user_dev.id.product = product
@@ -125,8 +127,8 @@ class Device(object):
         example sending REL_X and REL_Y atomically requires to emit
         first event without syn and the second with syn::
 
-          d.emit(uinput.EV_REL, uinput.REL_X, 1, syn=False)
-          d.emit(uinput.EV_REL, uinput.REL_Y, 1)
+          d.emit(uinput.REL_X, 1, syn=False)
+          d.emit(uinput.REL_Y, 1)
 
         The call above appears as a single (+1, +1) event.
         """
@@ -136,12 +138,12 @@ class Device(object):
     def emit(self, event, value, syn=True):
         """Emit event.
 
-        `event` - type-code -pair, for example (uinput.EV_REL, uinput.REL_X)
+        `event` - event identifier, for example uinput.REL_X
 
-        `value` - value of the event type:
-           EV_KEY/EV_BTN: 1 (key-press) or 0 (key-release)
-           EV_REL       : integer value of the relative change
-           EV_ABS       : integer value in the range of min and max values
+        `value` - value of the event
+           KEY/BTN      : 1 (key-press) or 0 (key-release)
+           REL          : integer value of the relative change
+           ABS          : integer value in the range of min and max values
 
         `syn` - If True, Device.syn(self) will be called before return.
         """
