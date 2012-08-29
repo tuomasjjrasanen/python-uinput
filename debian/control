@@ -2,7 +2,7 @@ Source: python-uinput
 Section: python
 Priority: extra
 Maintainer: Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
-Build-Depends: debhelper (>= 8.0.0), python-all-dev (>= 2.7.3), libudev-dev
+Build-Depends: debhelper (>= 8.0.0), python-all-dev (>= 2.6.6), libudev-dev
 Standards-Version: 3.9.3
 Homepage: http://tjjr.fi/sw/python-uinput/
 
