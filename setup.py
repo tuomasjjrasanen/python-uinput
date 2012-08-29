@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import with_statement
+from __future__ import print_function
 import re
 
 from distutils.command.build_py import build_py as _build_py
@@ -11,7 +12,7 @@ def append_ev(ev_type, ev_name):
             for line in f:
                 match = re.match(r"^#define (" + ev_name + "_.*)\t+((?:0x[0-9a-f]+)|(?:\d+))", line)
                 if match:
-                    print >>f2, "%s = (%s, %s)" % (match.group(1).strip(), ev_type, match.group(2).strip())
+                    print("%s = (%s, %s)" % (match.group(1).strip(), ev_type, match.group(2).strip()), file=f2)
 
 class build_py(_build_py):
 
@@ -23,7 +24,7 @@ class build_py(_build_py):
         _build_py.run(self)
 
 setup(name='python-uinput',
-      version='0.8',
+      version='0.9',
       description='Pythonic API to the Linux uinput kernel module.',
       author='Tuomas Jorma Juhani Räsänen',
       author_email='tuomasjjrasanen@tjjr.fi',
@@ -32,9 +33,9 @@ setup(name='python-uinput',
       packages=['uinput'],
       license='GPLv3+',
       platforms=['Linux'],
-      download_url='https://launchpad.net/python-uinput/trunk/0.8/+download/python-uinput-0.8.tar.gz',
+      download_url='https://launchpad.net/python-uinput/trunk/0.9/+download/python-uinput-0.9.tar.gz',
       classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "Operating System :: POSIX :: Linux",
@@ -42,6 +43,9 @@ setup(name='python-uinput',
         "Programming Language :: Python :: 2.5",
         "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.1",
+        "Programming Language :: Python :: 3.2",
         ],
       long_description="""
 Python-uinput is Python interface to the Linux uinput kernel module
