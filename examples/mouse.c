@@ -38,6 +38,8 @@ int main(void)
                 suinput_emit(uinput_fd, EV_REL, REL_X, 5);
                 suinput_emit(uinput_fd, EV_REL, REL_Y, 5);
                 suinput_syn(uinput_fd);
+
+                sleep(1);
         }
 
         suinput_emit(uinput_fd, EV_KEY, BTN_LEFT, 1); /* Press. */
