@@ -1,13 +1,24 @@
-CFLAGS=-Wall -Wextra -Werror -pedantic -std=c89
-LDFLAGS=-lsuinput
-PROGRAMS=keyboard mouse
+CFLAGS = -Wall -Wextra -Werror -pedantic -std=c89
+CFLAGS_ALL = $(CFLAGS)
+
+LDFLAGS =
+LDFLAGS_ALL = $(LDFLAGS) -lsuinput
+
+CPPFLAGS =
+CPPFLAGS_ALL = $(CPPFLAGS)
+
+PROGRAMS = keyboard mouse
 
 .PHONY: all clean
 
 all: $(PROGRAMS)
 
-%: %.c
-	gcc -o$@ $(CFLAGS) $^ $(LDFLAGS)
+%.o : %.c
+	$(CC) $(CPPFLAGS_ALL) $(CFLAGS_ALL) -c -o $@ $<
+
+$(PROGRAMS) : % : %.o
+	$(CC) $(LDFLAGS_ALL) $(CFLAGS_ALL) -o $@ $<
 
 clean:
 	rm -f $(PROGRAMS)
+	rm -f *.o
