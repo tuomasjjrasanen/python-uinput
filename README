@@ -12,7 +12,8 @@ Homepage: <http://tjjr.fi/sw/python-uinput/>
 How to use
 ==========
 
-Create an input device with key-capabilities and use it to type a greeting:
+Create an input device with mouse-capabilities and use it to move the
+cursor:
 
     import time
     import uinput
@@ -30,20 +31,13 @@ See examples/ for other kind of example devices (keyboard, joystick).
 How to install
 ==============
 
-If your are using Ubuntu or Debian, the easiest way to install
-python-uinput is to install it as a pre-built binary package. Please
-refer to the homepage for the instructions.
-
-Otherwise, you are probably planning to build the source
-package. Python-uinput uses libudev and therefore requires libudev
-development files, more specifically libudev.h, to get compiled. On
-Debian and its derivatives, the header file is packaged in
-libudev-dev.
+Python-uinput uses libudev and therefore requires libudev
+development files, more specifically libudev.h, to get compiled.
 
 After satisfying dependencies described above, the basic installation
 is easy. Just run the following command:
 
-  python setup.py install --prefix=/usr/local
+  python setup.py install
 
 How to report bugs
 ==================
