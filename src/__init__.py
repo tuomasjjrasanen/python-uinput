@@ -167,6 +167,24 @@ class Device(object):
         self.emit(event, 1, False)
         self.emit(event, 0, syn)
 
+    def emit_combo(self, events, syn=True):
+        """Emit key combination. Only KEY and BTN events are accepted,
+        otherwise ValueError is raised.
+
+        `events` - a sequence of event identifiers, for example
+        (uinput.KEY_LEFTCTRL, uinput.KEY_LEFTALT, uinput.KEY_DELETE).
+
+        `syn` if True, Device.syn(self) is called before returning.
+        """
+        if not all([ev_type == 0x01 for ev_type, _ in events]):
+            raise ValueError("all events must be of type KEY or BTN")
+        for event in events:
+            self.emit(event, 1, False)
+        for event in reversed(events):
+            self.emit(event, 0, False)
+        if syn:
+            self.syn()
+
     def __del__(self):
         if self.__uinput_fd >= 0:
             _libsuinput.suinput_destroy(self.__uinput_fd)
