@@ -153,6 +153,20 @@ class Device(object):
         if syn:
             self.syn()
 
+    def emit_click(self, event, syn=True):
+        """Emit click event. Only KEY and BTN events are accepted,
+        otherwise ValueError is raised.
+
+        `event` - event identifier, for example uinput.KEY_A
+
+        `syn` - if True, Device.syn(self) is called before returning.
+        """
+        ev_type, ev_code = event
+        if ev_type != 0x01:
+            raise ValueError("event must be of type KEY or BTN")
+        self.emit(event, 1, False)
+        self.emit(event, 0, syn)
+
     def __del__(self):
         if self.__uinput_fd >= 0:
             _libsuinput.suinput_destroy(self.__uinput_fd)
