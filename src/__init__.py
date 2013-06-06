@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # uinput - Python bindings for Linux uinput system
-# Copyright © 2012 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+# Copyright © 2012, 2013 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
