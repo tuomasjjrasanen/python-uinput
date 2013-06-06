@@ -26,7 +26,7 @@ class build_py(_build_py):
 setup(name='python-uinput',
       version='0.9',
       description='Pythonic API to the Linux uinput kernel module.',
-      author='Tuomas Jorma Juhani Räsänen',
+      author='Tuomas Räsänen',
       author_email='tuomasjjrasanen@tjjr.fi',
       url='http://tjjr.fi/sw/python-uinput/',
       package_dir={'uinput': 'src'},
