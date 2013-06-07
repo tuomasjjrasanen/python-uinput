@@ -76,7 +76,7 @@ _libsuinput.suinput_emit.errcheck = _error_handler
 _libsuinput.suinput_syn.errcheck = _error_handler
 _libsuinput.suinput_destroy.errcheck = _error_handler
 
-CHAR_MAP = {
+_CHAR_MAP = {
     "a":  KEY_A,
     "b":  KEY_B,
     "c":  KEY_C,
@@ -122,10 +122,10 @@ CHAR_MAP = {
     "\\": KEY_BACKSLASH,
     }
 
-def chars_to_events(chars):
+def _chars_to_events(chars):
     events = []
     for char in chars:
-        events.append(CHAR_MAP.get(char))
+        events.append(_CHAR_MAP.get(char))
     return events
 
 class Device(object):
