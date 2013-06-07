@@ -12,8 +12,7 @@ Homepage: <http://tjjr.fi/sw/python-uinput/>
 How to use
 ==========
 
-Create an input device with mouse-capabilities and use it to move the
-cursor:
+To move the mouse cursor:
 
     import time
     import uinput
