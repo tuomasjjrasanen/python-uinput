@@ -42,11 +42,7 @@ int main(void)
                 sleep(1);
         }
 
-        suinput_emit(uinput_fd, EV_KEY, BTN_LEFT, 1); /* Press. */
-        suinput_syn(uinput_fd); /* "Flushes" events written so far. */
-
-        suinput_emit(uinput_fd, EV_KEY, BTN_LEFT, 0); /* Release. */
-        suinput_syn(uinput_fd);
+        suinput_emit_click(uinput_fd, BTN_LEFT);
 
         suinput_destroy(uinput_fd);
 

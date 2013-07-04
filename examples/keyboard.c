@@ -28,36 +28,27 @@ int main(void)
 
         suinput_create(uinput_fd, &user_dev);
         sleep(1);
-        suinput_emit(uinput_fd, EV_KEY, KEY_H, 1); /* Press. */
-        suinput_syn(uinput_fd); /* "Flushes" events written so far. */
 
-        suinput_emit(uinput_fd, EV_KEY, KEY_H, 0); /* Release */
+        suinput_emit_click(uinput_fd, KEY_H);
         suinput_syn(uinput_fd);
         sleep(1);
-        suinput_emit(uinput_fd, EV_KEY, KEY_E, 1);
-        suinput_syn(uinput_fd);
 
-        suinput_emit(uinput_fd, EV_KEY, KEY_E, 0);
+        suinput_emit_click(uinput_fd, KEY_E);
         suinput_syn(uinput_fd);
         sleep(1);
-        suinput_emit(uinput_fd, EV_KEY, KEY_L, 1);
-        suinput_syn(uinput_fd);
 
-        suinput_emit(uinput_fd, EV_KEY, KEY_L, 0);
+        suinput_emit_click(uinput_fd, KEY_L);
         suinput_syn(uinput_fd);
         sleep(1);
-        suinput_emit(uinput_fd, EV_KEY, KEY_L, 1);
-        suinput_syn(uinput_fd);
 
-        suinput_emit(uinput_fd, EV_KEY, KEY_L, 0);
+        suinput_emit_click(uinput_fd, KEY_L);
         suinput_syn(uinput_fd);
         sleep(1);
-        suinput_emit(uinput_fd, EV_KEY, KEY_O, 1);
-        suinput_syn(uinput_fd);
 
-        suinput_emit(uinput_fd, EV_KEY, KEY_O, 0);
+        suinput_emit_click(uinput_fd, KEY_O);
         suinput_syn(uinput_fd);
         sleep(1);
+
         suinput_destroy(uinput_fd);
 
         return 0;
