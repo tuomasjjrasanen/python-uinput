@@ -9,7 +9,7 @@ provides a set of helper functions for making the usage of uinput
 easier. Libsuinput can be considered thin, because it operates on the
 same file descriptors as traditional ioctl commands.
 
-Author: Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+Author: Tuomas Räsänen <tuomasjjrasanen@tjjr.fi>
 Homepage: <http://tjjr.fi/sw/libsuinput/>
 
 How to install
