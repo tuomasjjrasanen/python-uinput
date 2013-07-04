@@ -1,6 +1,6 @@
-================
- Libsuinput 0.5
-================
+============
+ Libsuinput
+============
 
 Uinput is Linux kernel module which allows attaching userspace device
 drivers into the Linux kernel. However, its ioctl-interface is pretty
