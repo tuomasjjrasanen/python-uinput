@@ -73,6 +73,8 @@ _libsuinput.suinput_enable_event.errcheck = _error_handler
 _libsuinput.suinput_create.errcheck = _error_handler
 _libsuinput.suinput_write_event.errcheck = _error_handler
 _libsuinput.suinput_emit.errcheck = _error_handler
+_libsuinput.suinput_emit_click.errcheck = _error_handler
+_libsuinput.suinput_emit_combo.errcheck = _error_handler
 _libsuinput.suinput_syn.errcheck = _error_handler
 _libsuinput.suinput_destroy.errcheck = _error_handler
 
@@ -215,8 +217,9 @@ class Device(object):
         ev_type, ev_code = event
         if ev_type != 0x01:
             raise ValueError("event must be of type KEY or BTN")
-        self.emit(event, 1, False)
-        self.emit(event, 0, syn)
+        _libsuinput.suinput_emit_click(self.__uinput_fd, ev_code)
+        if syn:
+            self.syn()
 
     def emit_combo(self, events, syn=True):
         """Emit key combination. Only KEY and BTN events are accepted,
@@ -227,12 +230,12 @@ class Device(object):
 
         `syn` if True, Device.syn(self) is called before returning.
         """
-        if not all([ev_type == 0x01 for ev_type, _ in events]):
+        ev_types, ev_codes = zip(*events)
+        if not all([ev_type == 0x01 for ev_type in ev_types]):
             raise ValueError("all events must be of type KEY or BTN")
-        for event in events:
-            self.emit(event, 1, False)
-        for event in reversed(events):
-            self.emit(event, 0, False)
+
+        arrtype = ctypes.c_uint16 * len(events)
+        _libsuinput.suinput_emit_combo(self.__uinput_fd, arrtype(*ev_codes), len(events))
         if syn:
             self.syn()
 
