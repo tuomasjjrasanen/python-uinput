@@ -1,6 +1,6 @@
 /*
-  libsuinput - A set of uinput helper functions
-  Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+  libsuinput - thin userspace library on top of Linux uinput kernel module
+  Copyright (C) 2013 Tuomas Räsänen <tuomasjjrasanen@tjjr.fi>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -51,6 +51,42 @@ int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
         event.value = ev_value;
 
         return suinput_write_event(uinput_fd, &event);
+}
+
+int suinput_emit_click(const int uinput_fd, const uint16_t key_code)
+{
+        if (suinput_emit(uinput_fd, EV_KEY, key_code, 1) == -1)
+                return -1;
+        return suinput_emit(uinput_fd, EV_KEY, key_code, 0);
+}
+
+int suinput_emit_combo(const int uinput_fd, const uint16_t *const key_codes,
+                       const size_t len)
+{
+        int retval = 0;
+        size_t i;
+
+        for (i = 0; i < len; ++i) {
+                if (suinput_emit(uinput_fd, EV_KEY, key_codes[i], 1) == -1) {
+                        retval = -1;
+                        break; /* The combination or the device is
+                                  somehow broken: there's no sense to
+                                  press any of the rest of the
+                                  keys. It's like pressing physical keys
+                                  one by one and then discovering that
+                                  one of the keys required for this
+                                  combination is missing or broken. */
+                }
+        }
+
+        /* Try to release every pressed key, no matter what. */
+        while (i--) {
+                if (suinput_emit(uinput_fd, EV_KEY, key_codes[i], 0) == -1) {
+                        retval = -1;
+                }
+        }
+
+        return retval;
 }
 
 int suinput_syn(int uinput_fd)

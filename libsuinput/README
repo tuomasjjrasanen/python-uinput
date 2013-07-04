@@ -1,22 +1,23 @@
-================
- Libsuinput 0.5
-================
+============
+ Libsuinput
+============
 
-Uinput is a Linux kernel module which allows attaching user-space
-device drivers into the Linux kernel. However, its C interface is
-pretty low level from an application developer's perspective. This
-library provides a set of helper functions for making the usage of
-uinput easier.
+Uinput is Linux kernel module which allows attaching userspace device
+drivers into the Linux kernel. However, its ioctl-interface is pretty
+low level from an application developer's perspective. This library
+provides a set of helper functions for making the usage of uinput
+easier. Libsuinput can be considered thin, because it operates on the
+same file descriptors as traditional ioctl commands.
 
-Author: Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+Author: Tuomas Räsänen <tuomasjjrasanen@tjjr.fi>
 Homepage: <http://tjjr.fi/sw/libsuinput/>
 
 How to install
 ==============
 
 Libsuinput uses libudev and therefore requires libudev development
-files, more specifically libudev.h, to get compiled. On Debian and
-its derivatives, the header file is packaged in libudev-dev.
+files, more specifically libudev.h, to get compiled. On Debian and its
+derivatives, the header file is packaged in libudev-dev.
 
 After satisfying dependencies described above, the basic installation
 is easy. Just run the following command:
