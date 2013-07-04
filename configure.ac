@@ -5,6 +5,7 @@ AC_INIT([libsuinput],
         [http://tjjr.fi/sw/libsuinput/])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
+AM_PROG_AR
 AC_PROG_LIBTOOL
 AC_PROG_CC
 AC_CONFIG_MACRO_DIR([m4])
