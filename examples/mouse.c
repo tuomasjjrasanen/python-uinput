@@ -2,6 +2,7 @@
 #include <err.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 
 #include <suinput.h>
 
@@ -35,11 +36,12 @@ int main(void)
 
         /* Move pointer 20 * 5 units towards bottom-right. */
         for (i = 0; i < 20; ++i) {
+                struct timespec sleeptime = {0, 50000000};
                 suinput_emit(uinput_fd, EV_REL, REL_X, 5);
                 suinput_emit(uinput_fd, EV_REL, REL_Y, 5);
                 suinput_syn(uinput_fd);
 
-                sleep(1);
+                nanosleep(&sleeptime, NULL);
         }
 
         suinput_emit_click(uinput_fd, BTN_LEFT);

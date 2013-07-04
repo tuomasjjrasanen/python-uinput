@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror -pedantic -std=c89
+CFLAGS = -Wall -Wextra -Werror -pedantic
 CFLAGS_ALL = $(CFLAGS)
 
 LDFLAGS =
