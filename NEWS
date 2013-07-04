@@ -5,9 +5,6 @@ x.y
   - Device.emit_click()
   - Device.emit_combo()
 
-- New function:
-  - chars_to_events()
-
 - Keyboard example sleeps to give some time for X11 to assign a proper
   event handler
 
