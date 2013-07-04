@@ -34,6 +34,8 @@ int suinput_write_event(int uinput_fd, const struct input_event *event_p);
 int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
                  int32_t ev_value);
 
+int suinput_emit_click(int uinput_fd, uint16_t key_code);
+
 int suinput_syn(int uinput_fd);
 
 int suinput_destroy(int uinput_fd);

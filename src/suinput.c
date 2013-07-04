@@ -53,6 +53,13 @@ int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
         return suinput_write_event(uinput_fd, &event);
 }
 
+int suinput_emit_click(const int uinput_fd, const uint16_t key_code)
+{
+        if (suinput_emit(uinput_fd, EV_KEY, key_code, 1) == -1)
+                return -1;
+        return suinput_emit(uinput_fd, EV_KEY, key_code, 0);
+}
+
 int suinput_syn(int uinput_fd)
 {
         return suinput_emit(uinput_fd, EV_SYN, SYN_REPORT, 0);
