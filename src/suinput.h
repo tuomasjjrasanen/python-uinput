@@ -36,6 +36,8 @@ int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
 
 int suinput_emit_click(int uinput_fd, uint16_t key_code);
 
+int suinput_emit_combo(int uinput_fd, const uint16_t *key_codes, size_t len);
+
 int suinput_syn(int uinput_fd);
 
 int suinput_destroy(int uinput_fd);
