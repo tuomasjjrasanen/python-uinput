@@ -12,6 +12,8 @@ Release x.y
 
 - SO-version: 5.0.1
 
+- Re-distribute libudev.h
+
 Release 0.5
 ===========
 
