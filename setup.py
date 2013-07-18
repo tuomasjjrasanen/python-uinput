@@ -25,7 +25,7 @@ class build_py(_build_py):
 
 setup(name='python-uinput',
       version='0.9',
-      description='Pythonic API to the Linux uinput kernel module.',
+      description='Pythonic API to Linux uinput kernel module.',
       author='Tuomas Räsänen',
       author_email='tuomasjjrasanen@tjjr.fi',
       url='http://tjjr.fi/sw/python-uinput/',
@@ -48,8 +48,11 @@ setup(name='python-uinput',
         "Programming Language :: Python :: 3.2",
         ],
       long_description="""
-Python-uinput is Python interface to the Linux uinput kernel module
-which allows attaching userspace device drivers into kernel.
+Python-uinput is Python interface to Linux uinput kernel module which
+allows attaching userspace device drivers into kernel. In practice,
+Python-uinput makes it dead simple to create virtual joysticks,
+keyboards and mice for generating arbitrary input events
+programmatically.
 """,
       cmdclass={'build_py': build_py},
       ext_modules=[Extension('_libsuinput', ['libsuinput/src/suinput.c'],
