@@ -8,6 +8,9 @@ x.y
 - Keyboard example sleeps to give some time for X11 to assign a proper
   event handler
 
+- Does not depend on libudev-dev anymore, because of newer libsuinput which
+  re-distributes libudev.h.
+
 0.9
 ===
 
