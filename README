@@ -2,28 +2,47 @@
  Python-uinput
 ===============
 
-Uinput is a Linux kernel module which allows attaching user-space
-device drivers into the Linux kernel. Python-uinput provides a
-pythonic API to the Linux uinput-system.
+Python-uinput is Python interface to Linux uinput kernel module which
+allows attaching userspace device drivers into kernel. In practice,
+Python-uinput makes it dead simple to create virtual joysticks,
+keyboards and mice for generating arbitrary input events
+programmatically.
 
 Author: Tuomas Räsänen <tuomasjjrasanen@tjjr.fi>
 Homepage: <http://tjjr.fi/sw/python-uinput/>
 
-How to use
-==========
+Usage examples
+==============
 
-To move the mouse cursor:
+Generate keyboard clicks:
 
-    import time
-    import uinput
+  import uinput
+  
+  device = uinput.Device([uinput.KEY_E, uinput.KEY_H, uinput.KEY_L, uinput.KEY_O])
+  
+  device.emit_click(uinput.KEY_H)
+  device.emit_click(uinput.KEY_E)
+  device.emit_click(uinput.KEY_L)
+  device.emit_click(uinput.KEY_L)
+  device.emit_click(uinput.KEY_O)
 
-    events = (uinput.REL_X, uinput.REL_Y)
-    device = uinput.Device(events)
+Move mouse cursor:
 
-    for i in range(20):
-        device.emit(uinput.REL_X, 5, syn=False)
-        device.emit(uinput.REL_Y, 5) # Atomic (+5, +5) mouse event.
-        time.sleep(0.05) # To show the cursor motion.
+  import uinput
+  
+  device = uinput.Device([uinput.REL_X, uinput.REL_Y])
+  
+  for i in range(20):
+      device.emit(uinput.REL_X, 5)
+      device.emit(uinput.REL_Y, 5)
+
+Generate keyboard combinations:
+
+  import uinput
+  
+  device = uinput.Device([uinput.KEY_LEFTALT, uinput.KEY_TAB])
+  
+  device.emit_combo([uinput.KEY_LEFTALT, uinput.KEY_TAB])
 
 See examples/ for other kind of example devices (keyboard, joystick).
 
