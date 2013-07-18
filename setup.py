@@ -53,5 +53,5 @@ which allows attaching userspace device drivers into kernel.
 """,
       cmdclass={'build_py': build_py},
       ext_modules=[Extension('_libsuinput', ['libsuinput/src/suinput.c'],
-                             libraries=["udev"])]
+                             libraries=[":libudev.so.0"])]
       )

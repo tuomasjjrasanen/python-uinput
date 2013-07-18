@@ -30,12 +30,9 @@ See examples/ for other kind of example devices (keyboard, joystick).
 How to install
 ==============
 
-Python-uinput uses libudev and therefore requires libudev
-development files, more specifically libudev.h, to get compiled.
+Just run the following commands:
 
-After satisfying dependencies described above, the basic installation
-is easy. Just run the following command:
-
+  python setup.py build
   python setup.py install
 
 How to report bugs
