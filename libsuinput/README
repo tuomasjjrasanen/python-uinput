@@ -15,12 +15,7 @@ Homepage: <http://tjjr.fi/sw/libsuinput/>
 How to install
 ==============
 
-Libsuinput uses libudev and therefore requires libudev development
-files, more specifically libudev.h, to get compiled. On Debian and its
-derivatives, the header file is packaged in libudev-dev.
-
-After satisfying dependencies described above, the basic installation
-is easy. Just run the following command:
+Just run the following commands:
 
   ./configure && make && make install
 

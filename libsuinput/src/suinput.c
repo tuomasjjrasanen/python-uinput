@@ -24,7 +24,7 @@
 
 #include <linux/limits.h>
 
-#include <libudev.h>
+#include "libudev.h"
 
 #include "suinput.h"
 
