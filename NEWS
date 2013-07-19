@@ -1,3 +1,16 @@
+0.10.0
+======
+
+- New device methods:
+  - Device.emit_click()
+  - Device.emit_combo()
+
+- Keyboard example sleeps to give some time for X11 to assign a proper
+  event handler
+
+- Does not depend on libudev-dev anymore, because of newer libsuinput which
+  re-distributes libudev.h.
+
 0.9
 ===
 

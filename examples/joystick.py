@@ -14,8 +14,7 @@ def main():
         device.emit(uinput.ABS_X, 5, syn=False)
         device.emit(uinput.ABS_Y, 5)
 
-    device.emit(uinput.BTN_JOYSTICK, 1) # Press.
-    device.emit(uinput.BTN_JOYSTICK, 0) # Release.
+    device.emit_click(uinput.BTN_JOYSTICK)
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 /*
-  libsuinput - A set of uinput helper functions
-  Copyright © 2011 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+  libsuinput - thin userspace library on top of Linux uinput kernel module
+  Copyright (C) 2013 Tuomas Räsänen <tuomasjjrasanen@tjjr.fi>
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -33,6 +33,10 @@ int suinput_write_event(int uinput_fd, const struct input_event *event_p);
 
 int suinput_emit(int uinput_fd, uint16_t ev_type, uint16_t ev_code,
                  int32_t ev_value);
+
+int suinput_emit_click(int uinput_fd, uint16_t key_code);
+
+int suinput_emit_combo(int uinput_fd, const uint16_t *key_codes, size_t len);
 
 int suinput_syn(int uinput_fd);
 

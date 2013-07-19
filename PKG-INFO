@@ -1,15 +1,18 @@
 Metadata-Version: 1.1
 Name: python-uinput
-Version: 0.9
-Summary: Pythonic API to the Linux uinput kernel module.
+Version: 0.10.0
+Summary: Pythonic API to Linux uinput kernel module.
 Home-page: http://tjjr.fi/sw/python-uinput/
-Author: Tuomas Jorma Juhani Räsänen
+Author: Tuomas Räsänen
 Author-email: tuomasjjrasanen@tjjr.fi
 License: GPLv3+
-Download-URL: https://launchpad.net/python-uinput/trunk/0.9/+download/python-uinput-0.9.tar.gz
+Download-URL: https://launchpad.net/python-uinput/trunk/0.10.0/+download/python-uinput-0.10.0.tar.gz
 Description: 
-        Python-uinput is Python interface to the Linux uinput kernel module
-        which allows attaching userspace device drivers into kernel.
+        Python-uinput is Python interface to Linux uinput kernel module which
+        allows attaching userspace device drivers into kernel. In practice,
+        Python-uinput makes it dead simple to create virtual joysticks,
+        keyboards and mice for generating arbitrary input events
+        programmatically.
         
 Platform: Linux
 Classifier: Development Status :: 4 - Beta

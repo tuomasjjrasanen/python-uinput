@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # uinput - Python bindings for Linux uinput system
-# Copyright © 2012 Tuomas Jorma Juhani Räsänen <tuomasjjrasanen@tjjr.fi>
+# Copyright © 2012, 2013 Tuomas Räsänen <tuomasjjrasanen@tjjr.fi>
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,8 +27,7 @@ Usage:
 >>> device = uinput.Device(events)
 >>> device.emit(uinput.ABS_X, 5, syn=False)
 >>> device.emit(uinput.ABS_Y, 5)
->>> device.emit(uinput.BTN_JOYSTICK, 1) # Press.
->>> device.emit(uinput.BTN_JOYSTICK, 0) # Release.
+>>> device.emit_click(uinput.BTN_JOYSTICK)
 """
 
 from __future__ import absolute_import
@@ -67,15 +66,73 @@ def _error_handler(result, fn, args):
         raise RuntimeError("unexpected return value: %s" % result)
     return result
 
-_libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput" + sysconfig.get_config_var("SO")))
+_soabi = ""
+if sysconfig.get_config_var("SOABI"):
+    _soabi = ".%s" % sysconfig.get_config_var("SOABI")
+
+_libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput" + _soabi + sysconfig.get_config_var("SO")))
 _libsuinput = ctypes.CDLL(_libsuinput_path, use_errno=True)
 _libsuinput.suinput_open.errcheck = _error_handler
 _libsuinput.suinput_enable_event.errcheck = _error_handler
 _libsuinput.suinput_create.errcheck = _error_handler
 _libsuinput.suinput_write_event.errcheck = _error_handler
 _libsuinput.suinput_emit.errcheck = _error_handler
+_libsuinput.suinput_emit_click.errcheck = _error_handler
+_libsuinput.suinput_emit_combo.errcheck = _error_handler
 _libsuinput.suinput_syn.errcheck = _error_handler
 _libsuinput.suinput_destroy.errcheck = _error_handler
+
+_CHAR_MAP = {
+    "a":  KEY_A,
+    "b":  KEY_B,
+    "c":  KEY_C,
+    "d":  KEY_D,
+    "e":  KEY_E,
+    "f":  KEY_F,
+    "g":  KEY_G,
+    "h":  KEY_H,
+    "i":  KEY_I,
+    "j":  KEY_J,
+    "k":  KEY_K,
+    "l":  KEY_L,
+    "m":  KEY_M,
+    "n":  KEY_N,
+    "o":  KEY_O,
+    "p":  KEY_P,
+    "q":  KEY_Q,
+    "r":  KEY_R,
+    "s":  KEY_S,
+    "t":  KEY_T,
+    "u":  KEY_U,
+    "v":  KEY_V,
+    "w":  KEY_W,
+    "x":  KEY_X,
+    "y":  KEY_Y,
+    "z":  KEY_Z,
+    "1":  KEY_1,
+    "2":  KEY_2,
+    "3":  KEY_3,
+    "4":  KEY_4,
+    "5":  KEY_5,
+    "6":  KEY_6,
+    "7":  KEY_7,
+    "8":  KEY_8,
+    "9":  KEY_9,
+    "0":  KEY_0,
+    "\t": KEY_TAB,
+    "\n": KEY_ENTER,
+    " ":  KEY_SPACE,
+    ".":  KEY_DOT,
+    ",":  KEY_COMMA,
+    "/":  KEY_SLASH,
+    "\\": KEY_BACKSLASH,
+    }
+
+def _chars_to_events(chars):
+    events = []
+    for char in chars:
+        events.append(_CHAR_MAP.get(char))
+    return events
 
 class Device(object):
 
@@ -150,6 +207,39 @@ class Device(object):
 
         ev_type, ev_code = event
         _libsuinput.suinput_emit(self.__uinput_fd, ev_type, ev_code, value)
+        if syn:
+            self.syn()
+
+    def emit_click(self, event, syn=True):
+        """Emit click event. Only KEY and BTN events are accepted,
+        otherwise ValueError is raised.
+
+        `event` - event identifier, for example uinput.KEY_A
+
+        `syn` - if True, Device.syn(self) is called before returning.
+        """
+        ev_type, ev_code = event
+        if ev_type != 0x01:
+            raise ValueError("event must be of type KEY or BTN")
+        _libsuinput.suinput_emit_click(self.__uinput_fd, ev_code)
+        if syn:
+            self.syn()
+
+    def emit_combo(self, events, syn=True):
+        """Emit key combination. Only KEY and BTN events are accepted,
+        otherwise ValueError is raised.
+
+        `events` - a sequence of event identifiers, for example
+        (uinput.KEY_LEFTCTRL, uinput.KEY_LEFTALT, uinput.KEY_DELETE).
+
+        `syn` if True, Device.syn(self) is called before returning.
+        """
+        ev_types, ev_codes = zip(*events)
+        if not all([ev_type == 0x01 for ev_type in ev_types]):
+            raise ValueError("all events must be of type KEY or BTN")
+
+        arrtype = ctypes.c_uint16 * len(events)
+        _libsuinput.suinput_emit_combo(self.__uinput_fd, arrtype(*ev_codes), len(events))
         if syn:
             self.syn()
 
