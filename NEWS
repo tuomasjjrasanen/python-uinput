@@ -19,8 +19,8 @@ Release 0.5
 
 - Use GNU Autotools as a build system.
 
-- API change: `suinput_set_capapbilites()` is replaced by
-`suinput_enable_event()`.
+- API change: `suinput_set_capabilites()` is replaced by
+  `suinput_enable_event()`.
 
 - API change: `suinput_write()` renamed to `suinput_emit()`.
 
