@@ -2,6 +2,12 @@
  Libsuinput NEWS -- history of user-visible changes
 ====================================================
 
+Release 0.6.1
+=============
+
+- Compilation improvements (thanks to Eric Mikula and Vincent Bernat)
+- Give credit to all AUTHORS
+
 Release 0.6.0
 =============
 
