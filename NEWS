@@ -1,3 +1,9 @@
+0.10.2
+======
+
+- Fix libudev1-compatibility issue.
+- Fix mouse example.
+
 0.10.1
 ======
 
