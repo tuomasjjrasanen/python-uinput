@@ -56,5 +56,5 @@ programmatically.
 """,
       cmdclass={'build_py': build_py},
       ext_modules=[Extension('_libsuinput', ['libsuinput/src/suinput.c'],
-                             libraries=[":libudev.so.0"])]
+                             libraries=[":libudev.so"])]
       )
