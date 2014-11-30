@@ -47,6 +47,14 @@ Generate keyboard combinations:
 
 See examples/ for other kind of example devices (keyboard, joystick).
 
+Note that you must have the uinput kernel module loaded to use
+python-uinput. To load the module, run:
+
+  modprobe -i uinput
+
+If you would like to have uinput to be loaded on every sytem boot, add
+uinput to /etc/modules.
+
 How to install
 ==============
 
