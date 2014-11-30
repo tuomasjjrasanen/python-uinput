@@ -18,32 +18,30 @@ Generate keyboard clicks:
 
   import uinput
   
-  device = uinput.Device([uinput.KEY_E, uinput.KEY_H, uinput.KEY_L, uinput.KEY_O])
-  
-  device.emit_click(uinput.KEY_H)
-  device.emit_click(uinput.KEY_E)
-  device.emit_click(uinput.KEY_L)
-  device.emit_click(uinput.KEY_L)
-  device.emit_click(uinput.KEY_O)
+  with uinput.Device([uinput.KEY_E, uinput.KEY_H,
+                      uinput.KEY_L, uinput.KEY_O]) as device:
+      device.emit_click(uinput.KEY_H)
+      device.emit_click(uinput.KEY_E)
+      device.emit_click(uinput.KEY_L)
+      device.emit_click(uinput.KEY_L)
+      device.emit_click(uinput.KEY_O)
 
 Move mouse cursor:
 
   import uinput
   
-  device = uinput.Device([uinput.REL_X, uinput.REL_Y,
-                          uinput.BTN_LEFT, uinput.BTN_RIGHT])
-  
-  for i in range(20):
-      device.emit(uinput.REL_X, 5)
-      device.emit(uinput.REL_Y, 5)
+  with uinput.Device([uinput.REL_X, uinput.REL_Y,
+                      uinput.BTN_LEFT, uinput.BTN_RIGHT]) as device:
+      for i in range(20):
+          device.emit(uinput.REL_X, 5)
+          device.emit(uinput.REL_Y, 5)
 
 Generate keyboard combinations:
 
   import uinput
   
-  device = uinput.Device([uinput.KEY_LEFTALT, uinput.KEY_TAB])
-  
-  device.emit_combo([uinput.KEY_LEFTALT, uinput.KEY_TAB])
+  with uinput.Device([uinput.KEY_LEFTALT, uinput.KEY_TAB]) as device:
+      device.emit_combo([uinput.KEY_LEFTALT, uinput.KEY_TAB])
 
 See examples/ for other kind of example devices (keyboard, joystick).
 

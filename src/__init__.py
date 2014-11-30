@@ -24,10 +24,10 @@ Usage:
 >>>     uinput.ABS_X + (0, 255, 0, 0),
 >>>     uinput.ABS_Y + (0, 255, 0, 0),
 >>>     )
->>> device = uinput.Device(events)
->>> device.emit(uinput.ABS_X, 5, syn=False)
->>> device.emit(uinput.ABS_Y, 5)
->>> device.emit_click(uinput.BTN_JOYSTICK)
+>>> with uinput.Device(events) as device:
+>>>     device.emit(uinput.ABS_X, 5, syn=False)
+>>>     device.emit(uinput.ABS_Y, 5)
+>>>     device.emit_click(uinput.BTN_JOYSTICK)
 """
 
 from __future__ import absolute_import
