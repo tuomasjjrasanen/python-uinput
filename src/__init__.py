@@ -257,9 +257,27 @@ class Device(object):
         underlying file descriptor. This method must be called exactly once for
         each created device.
 
+        Alternatively, use ``with``-statement for example as follows:
+        >>> with uinput.Device([uinput.KEY_A]) as device:
+        >>>     device.emit_click(uinput.KEY_A)
+
+        This ensures ``Device.destroy()`` is called at the end of the block.
+
         """
-        _libsuinput.suinput_destroy(self.__uinput_fd)
-        self.__uinput_fd = -1
+        try:
+            _libsuinput.suinput_destroy(self.__uinput_fd)
+        finally:
+            ## There's probably nothing more we can do. If the suinput_destroy()
+            ## has failed once, it almost certainly will fail again. Let's just
+            ## reset the descriptor and give up.
+            self.__uinput_fd = -1
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self.destroy()
+        return False ## Not handling any exceptions.
 
     def __del__(self):
         if self.__uinput_fd >= 0:
