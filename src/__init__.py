@@ -33,6 +33,7 @@ Usage:
 from __future__ import absolute_import
 
 import ctypes
+import errno
 import os
 import distutils.sysconfig as sysconfig
 
@@ -58,6 +59,18 @@ class _struct_uinput_user_dev(ctypes.Structure):
                 ("absflat", ctypes.c_int * _ABS_CNT),
                 ]
 
+def _open_error_handler(result, fn, args):
+    if result == -1:
+        code = ctypes.get_errno()
+        msg = "Failed to open the uinput device: %s" % os.strerror(code)
+        if code == errno.ENOENT:
+            raise OSError(code, "%s. Perhaps load the uinput kernel module first?" % msg)
+        else:
+            raise OSError(code, msg)
+    elif result < -1:
+        raise RuntimeError("unexpected return value: %s" % result)
+    return result
+
 def _error_handler(result, fn, args):
     if result == -1:
         code = ctypes.get_errno()
@@ -68,7 +81,7 @@ def _error_handler(result, fn, args):
 
 _libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput" + sysconfig.get_config_var("SO")))
 _libsuinput = ctypes.CDLL(_libsuinput_path, use_errno=True)
-_libsuinput.suinput_open.errcheck = _error_handler
+_libsuinput.suinput_open.errcheck = _open_error_handler
 _libsuinput.suinput_enable_event.errcheck = _error_handler
 _libsuinput.suinput_create.errcheck = _error_handler
 _libsuinput.suinput_write_event.errcheck = _error_handler
