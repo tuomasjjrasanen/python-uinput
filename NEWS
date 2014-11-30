@@ -1,3 +1,17 @@
+x.y.z
+=====
+
+- New device method:
+  - Device.destroy()
+
+- Device() is now a context manager suitable to be used with
+  with-statement.
+
+- Improved device initialization error handling.
+
+- Updated README to include a recommendation to modprobe uinput kernel before
+  usage.
+
 0.10.2
 ======
 
