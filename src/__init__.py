@@ -252,6 +252,15 @@ class Device(object):
         if syn:
             self.syn()
 
+    def destroy(self):
+        """Destroy the device. This method destroys the device file and closes the
+        underlying file descriptor. This method must be called exactly once for
+        each created device.
+
+        """
+        _libsuinput.suinput_destroy(self.__uinput_fd)
+        self.__uinput_fd = -1
+
     def __del__(self):
         if self.__uinput_fd >= 0:
-            _libsuinput.suinput_destroy(self.__uinput_fd)
+            self.destroy()
