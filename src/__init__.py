@@ -19,15 +19,16 @@
 Python bindings to Linux uinput system.
 
 Usage:
+>>> import uinput
 >>> events = (
->>>     uinput.BTN_JOYSTICK,
->>>     uinput.ABS_X + (0, 255, 0, 0),
->>>     uinput.ABS_Y + (0, 255, 0, 0),
->>>     )
+...     uinput.BTN_JOYSTICK,
+...     uinput.ABS_X + (0, 255, 0, 0),
+...     uinput.ABS_Y + (0, 255, 0, 0),
+...     )
 >>> with uinput.Device(events) as device:
->>>     device.emit(uinput.ABS_X, 5, syn=False)
->>>     device.emit(uinput.ABS_Y, 5)
->>>     device.emit_click(uinput.BTN_JOYSTICK)
+...     device.emit(uinput.ABS_X, 5, syn=False)
+...     device.emit(uinput.ABS_Y, 5)
+...     device.emit_click(uinput.BTN_JOYSTICK)
 """
 
 from __future__ import absolute_import
@@ -258,8 +259,9 @@ class Device(object):
         each created device.
 
         Alternatively, use ``with``-statement for example as follows:
+        >>> import uinput
         >>> with uinput.Device([uinput.KEY_A]) as device:
-        >>>     device.emit_click(uinput.KEY_A)
+        ...     device.emit_click(uinput.KEY_A)
 
         This ensures ``Device.destroy()`` is called at the end of the block.
 
