@@ -64,32 +64,27 @@ Just run the following commands:
 How to report bugs
 ==================
 
-The bug database is hosted in Launchpad. If you have found a bug or
-have an improvement idea you want to share, please report it at
-<https://bugs.launchpad.net/python-uinput>. However, to avoid
-duplicate bug reports, before reporting, please check if similiar or
-identical bug has already been reported. If so, you can still
-subscribe to the existing bug to track its progress.
-
-If you are unsure whether the problem you have is due to a bug, you
-can always ask questions at
-<https://answers.launchpad.net/python-uinput>.
+The bug database is hosted in GitHub. If you have found a bug or have an
+improvement idea you want to share, please report it at
+<https://github.com/tuomasjjrasanen/python-uinput/issues>. However, to avoid
+duplicate bug reports, before reporting, please check if similiar or identical
+bug has already been reported. If so, you can still subscribe to the existing
+bug to track its progress.
 
 How to contribute
 =================
 
-In addition to reporting bugs and improvement suggestions, you are
-encouraged to contribute bug-fixes or features. The source code is
-maintained in Git and the main repository is hosted at GitHub,
-<https://github.com/tuomasjjrasanen/python-uinput/>. The preferred way
-to contibute code is to clone the main Git repository and send a
-pull-request. Good old patches via email are also accepted.
+In addition to reporting bugs and improvement suggestions, you are encouraged to
+contribute bug-fixes or features. The source code is maintained in Git and the
+main repository is hosted at GitHub,
+<https://github.com/tuomasjjrasanen/python-uinput/>. The preferred way to
+contibute code is to clone the main Git repository and send a pull-request. Good
+old patches via email are also accepted.
 
 How to copy
 ===========
 
-Python-uinput is free (libre) software and licensed under the terms of
-GNU Public License version 3 or later. In short, it means that you are
-free to copy, modify and redistribute this software as long as you
-place the derivative work under a compatible license. See COPYING for
-details.
+Python-uinput is free (libre) software and licensed under the terms of GNU
+Public License version 3 or later. In short, it means that you are free to copy,
+modify and redistribute this software as long as you place the derivative work
+under a compatible license. See COPYING for details.

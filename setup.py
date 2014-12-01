@@ -33,7 +33,7 @@ setup(name='python-uinput',
       packages=['uinput'],
       license='GPLv3+',
       platforms=['Linux'],
-      download_url='https://launchpad.net/python-uinput/trunk/0.10.2/+download/python-uinput-0.10.2.tar.gz',
+      download_url='http://tjjr.fi/sw/python-uinput/releases/python-uinput-0.10.2.tar.gz',
       classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
