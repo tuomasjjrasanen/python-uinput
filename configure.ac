@@ -1,6 +1,6 @@
 AC_INIT([libsuinput],
 	[0.6.1],
-        [https://bugs.launchpad.net/libsuinput/],
+        [https://github.com/tuomasjjrasanen/libsuinput/issues],
         [libsuinput],
         [http://tjjr.fi/sw/libsuinput/])
 AC_CONFIG_AUX_DIR([build-aux])

@@ -25,26 +25,21 @@ It installs the library to /usr/local/lib and header files to
 How to report bugs
 ==================
 
-The bug database is hosted in Launchpad. If you have found a bug or
-have an improvement idea you want to share, please report it at
-<https://bugs.launchpad.net/libsuinput>. However, to avoid duplicate
-bug reports, before reporting, please check if similiar or identical
-bug has already been reported. If the description of the existing bug
-report If so, you can still subscribe to the existing bug to track its
-progress.
-
-If you are unsure whether the problem you have is due to a bug, you
-can ask questions at <https://answers.launchpad.net/libsuinput>.
+The bug database is hosted in GitHub. If you have found a bug or have an
+improvement idea you want to share, please report it at
+<https://github.com/tuomasjjrasanen/libsuinput/issues>. However, to avoid
+duplicate bug reports, before reporting, please check if similiar or identical
+bug has already been reported.  If so, you can still subscribe to the existing
+bug to track its progress.
 
 How to contribute
 =================
 
-In addition to reporting bugs and improvement suggestions, you are
-encouraged to contribute bug-fixes or features. Source code is
-maintained in Git VCS. The main repository is hosted in GitHub,
-<https://github.com/tuomasjjrasanen/libsuinput/> and mirrored in
-Launchpad as a Bazaar repository. The preferred way to contibute code
-is to clone the main Git repository and send a pull-request. Good old
+In addition to reporting bugs and improvement suggestions, you are encouraged to
+contribute bug-fixes or features. Source code is maintained in Git and the main
+repository is hosted at GitHub,
+<https://github.com/tuomasjjrasanen/libsuinput/>. The preferred way to contibute
+code is to clone the main Git repository and send a pull-request. Good old
 patches via email are also accepted.
 
 How to copy
