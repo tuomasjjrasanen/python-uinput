@@ -12,6 +12,8 @@ x.y.z
 - Updated README to include a recommendation to modprobe uinput kernel before
   usage.
 
+- Launchpad is deprecated in favor of GitHub.
+
 0.10.2
 ======
 
