@@ -1,6 +1,6 @@
 AC_INIT([libsuinput],
-	[0.5],
-        [https://bugs.launchpad.net/libsuinput/],
+	[0.6.1],
+        [https://github.com/tuomasjjrasanen/libsuinput/issues],
         [libsuinput],
         [http://tjjr.fi/sw/libsuinput/])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -12,5 +12,6 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_FILES([
         Makefile
         src/Makefile
+        src/libsuinput.pc
 ])
 AC_OUTPUT
