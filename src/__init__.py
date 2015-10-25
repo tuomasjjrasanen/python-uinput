@@ -162,7 +162,7 @@ class Device(object):
     """
 
     def __init__(self, events, name="python-uinput",
-                 bustype=0, vendor=0, product=0, version=0):
+                 bustype=0, vendor=0, product=0, version=0, fd=None):
         self.__events = events
         self.__uinput_fd = -1
         self.__name = name.encode()
@@ -172,7 +172,7 @@ class Device(object):
         user_dev.id.vendor = vendor
         user_dev.id.product = product
         user_dev.id.version = version
-        self.__uinput_fd = _libsuinput.suinput_open()
+        self.__uinput_fd = fd or self.create_uinput_fd()
         for ev_spec in self.__events:
             ev_type, ev_code = ev_spec[:2]
             _libsuinput.suinput_enable_event(self.__uinput_fd, ev_type, ev_code)
@@ -184,6 +184,10 @@ class Device(object):
                 user_dev.absflat[ev_code] = absflat
 
         _libsuinput.suinput_create(self.__uinput_fd, ctypes.pointer(user_dev))
+
+    @staticmethod
+    def create_uinput_fd():
+        return _libsuinput.suinput_open()
 
     def syn(self):
         """Fire all emitted events.
