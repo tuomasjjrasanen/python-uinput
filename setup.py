@@ -2,12 +2,18 @@
 from __future__ import with_statement
 from __future__ import print_function
 import re
+import os.path
 
 from distutils.command.build_py import build_py as _build_py
 from distutils.core import setup, Extension
 
 def append_ev(ev_type, ev_name):
-    with open("/usr/include/linux/input.h") as f:
+    # Newer kernels define events in different file
+    if os.path.exists("/usr/include/linux/input-event-codes.h"):
+        fpath = "/usr/include/linux/input-event-codes.h"
+    else:
+        fpath = "/usr/include/linux/input.h"
+    with open(fpath) as f:
         with open("src/ev.py", "a") as f2:
             for line in f:
                 match = re.match(r"^#define (" + ev_name + "_.*)\t+((?:0x[0-9a-f]+)|(?:\d+))", line)
