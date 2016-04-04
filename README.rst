@@ -1,4 +1,5 @@
-Python-uinput
+===============
+ Python-uinput
 ===============
 
 Python-uinput is Python interface to Linux uinput kernel module which
@@ -7,13 +8,16 @@ Python-uinput makes it dead simple to create virtual joysticks,
 keyboards and mice for generating arbitrary input events
 programmatically.
 
-Author: Tuomas Räsänen <tuomasjjrasanen@tjjr.fi>
-Homepage: <http://tjjr.fi/sw/python-uinput/>
+:Homepage: http://tjjr.fi/sw/python-uinput/
+:License: GPLv3+
 
 Usage examples
 ==============
 
-**Generate keyboard clicks:**
+Generate keyboard clicks
+------------------------
+
+::
 
     import uinput
 
@@ -25,7 +29,10 @@ Usage examples
         device.emit_click(uinput.KEY_L)
         device.emit_click(uinput.KEY_O)
 
-**Move mouse cursor:**
+Move mouse cursor
+-----------------
+
+::
 
     import uinput
 
@@ -35,27 +42,30 @@ Usage examples
             device.emit(uinput.REL_X, 5)
             device.emit(uinput.REL_Y, 5)
 
-**Generate keyboard combinations:**
+Generate keyboard combinations
+------------------------------
+
+::
 
     import uinput
 
     with uinput.Device([uinput.KEY_LEFTALT, uinput.KEY_TAB]) as device:
         device.emit_combo([uinput.KEY_LEFTALT, uinput.KEY_TAB])
 
-See examples/ for other kind of example devices (keyboard, joystick).
+See ``examples/`` for other kind of example devices (keyboard, joystick).
 
 Note that you must have the uinput kernel module loaded to use
-python-uinput. To load the module, run:
+python-uinput. To load the module, run::
 
     modprobe -i uinput
 
 If you would like to have uinput to be loaded on every sytem boot, add
-uinput to /etc/modules.
+uinput to ``/etc/modules``.
 
 How to install
 ==============
 
-Just run the following commands:
+Just run the following commands::
 
     python setup.py build
     python setup.py install
@@ -86,4 +96,4 @@ How to copy
 Python-uinput is free (libre) software and licensed under the terms of GNU
 Public License version 3 or later. In short, it means that you are free to copy,
 modify and redistribute this software as long as you place the derivative work
-under a compatible license. See COPYING for details.
+under a compatible license. See ``COPYING`` for details.
