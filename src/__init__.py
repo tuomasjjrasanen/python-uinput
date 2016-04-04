@@ -80,6 +80,9 @@ def _error_handler(result, fn, args):
         raise RuntimeError("unexpected return value: %s" % result)
     return result
 
+def fdopen():
+    return _libsuinput.suinput_open()
+
 _libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput" + sysconfig.get_config_var("SO")))
 _libsuinput = ctypes.CDLL(_libsuinput_path, use_errno=True)
 _libsuinput.suinput_open.errcheck = _open_error_handler
@@ -162,7 +165,7 @@ class Device(object):
     """
 
     def __init__(self, events, name="python-uinput",
-                 bustype=0, vendor=0, product=0, version=0):
+                 bustype=0, vendor=0, product=0, version=0, fd=None):
         self.__events = events
         self.__uinput_fd = -1
         self.__name = name.encode()
@@ -172,7 +175,7 @@ class Device(object):
         user_dev.id.vendor = vendor
         user_dev.id.product = product
         user_dev.id.version = version
-        self.__uinput_fd = _libsuinput.suinput_open()
+        self.__uinput_fd = fd or fdopen()
         for ev_spec in self.__events:
             ev_type, ev_code = ev_spec[:2]
             _libsuinput.suinput_enable_event(self.__uinput_fd, ev_type, ev_code)
