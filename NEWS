@@ -1,11 +1,14 @@
+=======================================================
+ Python-uinput NEWS -- history of user-visible changes
+=======================================================
+
 x.y.z
 =====
 
-- New device method:
-  - Device.destroy()
+- New device method: ``Device.destroy()``
 
-- Device() is now a context manager suitable to be used with
-  with-statement.
+- ``Device()`` is now a context manager suitable to be used with
+  ``with``-statement.
 
 - Improved device initialization error handling.
 
@@ -28,15 +31,13 @@ x.y.z
 0.10.0
 ======
 
-- New device methods:
-  - Device.emit_click()
-  - Device.emit_combo()
+- New device methods: ``Device.emit_click()`` and ``Device.emit_combo()``
 
 - Keyboard example sleeps to give some time for X11 to assign a proper
   event handler
 
-- Does not depend on libudev-dev anymore, because of newer libsuinput which
-  re-distributes libudev.h.
+- Does not depend on libudev-dev anymore, because of newer libsuinput
+  which re-distributes ``libudev.h``.
 
 0.9
 ===
@@ -60,27 +61,27 @@ x.y.z
 0.6.1
 =====
 
-- README and setup.py updated
+- ``README`` and ``setup.py`` updated
 
 0.6
 ===
 
 - Simplified API.
 
-- Uses ctypes instead of extension modules.
+- Uses ``ctypes`` instead of extension modules.
 
 - libsuinput is included as submodule in git repository
 
-- source distributions include suinput.c
+- source distributions include ``suinput.c``
 
 0.5
 ===
 
 - Documented uinput-module.
 
-- A minimal joystick (abs-axis) example: examples/joystick.py.
+- A minimal joystick (abs-axis) example: ``examples/joystick.py``.
 
-- Reasonable defaults for abs_parameters (0, 255, 0, 0).
+- Reasonable defaults for ``abs_parameters`` (0, 255, 0, 0).
 
 0.4
 ===
@@ -95,7 +96,7 @@ x.y.z
 0.3.2
 =====
 
-- Mention Ubuntu-package in README.
+- Mention Ubuntu-package in ``README``.
 
 0.3.1
 =====
