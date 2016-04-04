@@ -1,33 +1,6 @@
 # -*- coding: utf-8 -*-
-from __future__ import with_statement
-from __future__ import print_function
-import re
-import os.path
 
-from distutils.command.build_py import build_py as _build_py
 from distutils.core import setup, Extension
-
-def append_ev(ev_type, ev_name):
-    # Newer kernels define events in different file
-    if os.path.exists("/usr/include/linux/input-event-codes.h"):
-        fpath = "/usr/include/linux/input-event-codes.h"
-    else:
-        fpath = "/usr/include/linux/input.h"
-    with open(fpath) as f:
-        with open("src/ev.py", "a") as f2:
-            for line in f:
-                match = re.match(r"^#define (" + ev_name + "_.*)\t+((?:0x[0-9a-f]+)|(?:\d+))", line)
-                if match:
-                    print("%s = (%s, %s)" % (match.group(1).strip(), ev_type, match.group(2).strip()), file=f2)
-
-class build_py(_build_py):
-
-    def run(self):
-        append_ev("0x01", "KEY")
-        append_ev("0x01", "BTN")
-        append_ev("0x02", "REL")
-        append_ev("0x03", "ABS")
-        _build_py.run(self)
 
 setup(name='python-uinput',
       version='0.10.2',
@@ -62,7 +35,6 @@ Python-uinput makes it dead simple to create virtual joysticks,
 keyboards and mice for generating arbitrary input events
 programmatically.
 """,
-      cmdclass={'build_py': build_py},
       ext_modules=[Extension('_libsuinput', ['libsuinput/src/suinput.c'],
                              libraries=[":libudev.so"])]
       )
