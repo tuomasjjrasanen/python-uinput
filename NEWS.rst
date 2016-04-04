@@ -5,7 +5,7 @@
 x.y.z
 =====
 
-- New device method: ``Device.destroy()``
+- New device method to close the device: ``Device.destroy()``
 
 - ``Device()`` is now a context manager suitable to be used with
   ``with``-statement.
@@ -16,6 +16,15 @@ x.y.z
   usage.
 
 - Launchpad is deprecated in favor of GitHub.
+
+- New module function to open a file descriptor to uinput device: ``uinput.fdopen()``
+
+- ``Device`` constructor accepts an open file descriptor to uinput
+  device as a keyword argument. If not given, uinput file descriptor
+  is opened via ``uinput.fdopen()``.
+
+- Both ``README`` and ``NEWS`` are renamed and converted to
+  reStructuredText markup.
 
 0.10.2
 ======
