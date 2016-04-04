@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+
+from __future__ import print_function
+from __future__ import with_statement
+
+import re
+import sys
+
+def parse_event_codes(filepath, ev_type, ev_name):
+    with open(filepath) as f:
+        for line in f:
+            match = re.match(r"^#define (" + ev_name + "_.*)\t+((?:0x[0-9a-f]+)|(?:\d+)|(?:[A-Z_]+))", line)
+            if match:
+                print("%s = (%s, %s)" % (match.group(1).strip(), ev_type, match.group(2).strip()))
+
+if __name__ == "__main__":
+    filepath = sys.argv[1]
+
+    parse_event_codes(filepath, "0x01", "KEY")
+    parse_event_codes(filepath, "0x01", "BTN")
+    parse_event_codes(filepath, "0x02", "REL")
+    parse_event_codes(filepath, "0x03", "ABS")
