@@ -16,7 +16,7 @@ def drop_privileges(uid_name='nobody', gid_name='nogroup'):
     os.setgroups([])
     os.setgid(running_gid)
     os.setuid(running_uid)
-    old_umask = os.umask(077)
+    old_umask = os.umask(0o77)
 
 def main():
     uinput_fd = uinput.fdopen()
