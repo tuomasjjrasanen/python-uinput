@@ -2,8 +2,8 @@
  Python-uinput NEWS -- history of user-visible changes
 =======================================================
 
-x.y.z
-=====
+0.11.0
+======
 
 - New device method to close the device: ``Device.destroy()``
 
