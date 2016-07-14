@@ -26,6 +26,11 @@ x.y.z
 - Both ``README`` and ``NEWS`` are renamed and converted to
   reStructuredText markup.
 
+- Input event codes included in ``uinput.ev`` module.
+
+- Add example of how to drop privileges after device initialization
+  (contributed by Goncalo Pinheira).
+
 0.10.2
 ======
 
