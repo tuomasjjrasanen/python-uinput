@@ -2,6 +2,11 @@
  Python-uinput NEWS -- history of user-visible changes
 =======================================================
 
+0.11.1
+======
+
+- Fix compilation to link against libudev.so.1 instead of libudev.so.
+
 0.11.0
 ======
 
