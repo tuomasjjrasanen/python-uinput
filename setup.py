@@ -36,5 +36,5 @@ keyboards and mice for generating arbitrary input events
 programmatically.
 """,
       ext_modules=[Extension('_libsuinput', ['libsuinput/src/suinput.c'],
-                             libraries=[":libudev.so"])]
+                             libraries=[":libudev.so.1"])]
       )
