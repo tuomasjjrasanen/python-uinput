@@ -6,7 +6,7 @@ September 2016
 '''
 
 import uinput, time
-import pygame, sys
+import pygame, sys, os
 from pygame.locals import *
 
 pygame.init()
@@ -23,7 +23,9 @@ background = background.convert()
 background.fill((250, 250, 250))
 
 # Load image
-img = pygame.image.load('media/sticks.png')
+dir = os.path.dirname(__file__)
+filename = os.path.join(dir, 'media/sticks.png')
+img = pygame.image.load(filename)
 
 windowSurface.blit(img,(0,0))
 pygame.display.flip()
@@ -93,11 +95,15 @@ class stick_state(object):
         self.display_width = offset_width
         self.display_hor = horizontal
         if horizontal:
-            self.display_bar_g = pygame.image.load('media/hg.png')
-            self.display_bar_b = pygame.image.load('media/hb.png')
+            filename = os.path.join(dir, 'media/hg.png')
+            self.display_bar_g = pygame.image.load(filename)
+            filename = os.path.join(dir, 'media/hb.png')
+            self.display_bar_b = pygame.image.load(filename)
         else:
-            self.display_bar_g = pygame.image.load('media/vg.png')
-            self.display_bar_b = pygame.image.load('media/vb.png')    
+            filename = os.path.join(dir, 'media/vg.png')
+            self.display_bar_g = pygame.image.load(filename)
+            filename = os.path.join(dir, 'media/vb.png')
+            self.display_bar_b = pygame.image.load(filename)    
         self.display_ready = True
 
     def display(self):
