@@ -1,11 +1,11 @@
 import uinput, time
-import pygame, sys, os
+import pygame, sys
 from pygame.locals import *
 
 pygame.init()
 BLACK = (0,0,0)
-WIDTH = 720
-HEIGHT = 480
+WIDTH = 335
+HEIGHT = 401
 windowSurface = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 windowSurface.fill(BLACK)
 pygame.display.set_caption('Virtual RC Joystick')
@@ -15,20 +15,11 @@ background = pygame.Surface(windowSurface.get_size())
 background = background.convert()
 background.fill((250, 250, 250))
 
-# Display some text
-font = pygame.font.Font(None, 36)
-text = font.render("Hello There", 1, (10, 10, 10))
-textpos = text.get_rect()
-textpos.centerx = background.get_rect().centerx
-background.blit(text, textpos)
+# Load image
+img = pygame.image.load('media/sticks.png')
 
-# Blit everything to the screen
-windowSurface.blit(background, (0, 0))
+windowSurface.blit(img,(0,0))
 pygame.display.flip()
-
-# Awsome sound effects
-# whiff_sound = pygame.mixer.Sound('speech.wav')
-# whiff_sound.play()
 
 class stick_state(object):
     def __init__(self, name, stick, key_up, key_down, spring_back=True, incr_val=0.2):
@@ -40,8 +31,6 @@ class stick_state(object):
         self.incr_val = incr_val                    # The increment on keypress
         self.min_val = 0.0                          # Minimum stick value
         self.max_val = 255.0                        # Maximum stick value
-        self.hold_time = 0                          # Last time(scaled) since the key is held
-        self.rel_time = 0                           # Last time since the key has been released
         self.active_up = False                      # True if up key is held pressed
         self.active_down = False                    # True if down key is held pressed
         if self.spring_back:
@@ -51,8 +40,11 @@ class stick_state(object):
         self.val = self.zero                        # Stick value at initialization at zero position
         self.emit_val = int(self.val)
         self.display_ready = False                  # Whether optional display params have been set
-        self.display_height = 0                         # Height on the display screen 
-        self.display_width = 0                          # Width on the display screen 
+        self.display_height = 0                     # Height on the display screen 
+        self.display_width = 0                      # Width on the display screen 
+        self.display_hor = True                     # Whether the display bar is horizontal, else vertical
+        self.display_bar_g = []
+        self.display_bar_b = []
 
     def keypress_up(self):
         self.active_up = True
@@ -69,12 +61,6 @@ class stick_state(object):
         else:
             # Saturated
             self.val = self.min_val
-
-    def incr_hold_time(self):
-        self.hold_time = self.hold_time + 1
-
-    def incr_rel_time(self):
-        self.rel_time = self.rel_time + 1
 
     def release_stick(self):
         if not self.spring_back:
@@ -95,36 +81,37 @@ class stick_state(object):
             if self.display_ready:
                 self.display()
 
-    def set_display(self, ratio_height, ratio_width):
-        self.display_height = ratio_height
-        self.display_width = ratio_width
+    def set_display(self, offset_height, offset_width, horizontal):
+        self.display_height = offset_height
+        self.display_width = offset_width
+        self.display_hor = horizontal
+        if horizontal:
+            self.display_bar_g = pygame.image.load('media/hg.png')
+            self.display_bar_b = pygame.image.load('media/hb.png')
+        else:
+            self.display_bar_g = pygame.image.load('media/vg.png')
+            self.display_bar_b = pygame.image.load('media/vb.png')    
         self.display_ready = True
 
     def display(self):
         if not self.display_ready:
             pass
         else:
-            # Clear background
-            # background.fill((250, 250, 250))
-            # windowSurface.blit(background, (0, 0))
-            # pygame.display.flip()
-            text = font.render(self.name + ' ' + str(self.emit_val), 1, (10, 10, 10))
-            text.fill((250, 250, 250))
-            textpos = text.get_rect(left=background.get_width()*self.display_width)
-            textpos.top = background.get_rect().height*self.display_height
-            background.blit(text, textpos)
-            windowSurface.blit(background, (0, 0))
-            pygame.display.flip()
-
-
-            # Update state on the screen
-            text = font.render(self.name + ' ' + str(self.emit_val), 1, (10, 10, 10))
-            textpos = text.get_rect(left=background.get_width()*self.display_width)
-            textpos.top = background.get_rect().height*self.display_height
-            background.blit(text, textpos)
-
+            # Fill the entire bar
+            for i in range(256):
+                if i <= self.emit_val:
+                    # Fill green
+                    if self.display_hor:
+                        windowSurface.blit(self.display_bar_g,(self.display_width + i, self.display_height))
+                    else:
+                        windowSurface.blit(self.display_bar_g,(self.display_width, self.display_height - i))
+                else:
+                    # Fill grey
+                    if self.display_hor:
+                        windowSurface.blit(self.display_bar_b,(self.display_width + i, self.display_height))
+                    else:
+                        windowSurface.blit(self.display_bar_b,(self.display_width, self.display_height - i))
             # Render it
-            windowSurface.blit(background, (0, 0))
             pygame.display.flip()
 
     def update_event(self, event):
@@ -165,16 +152,16 @@ def main():
 
     # create sticks
     roll_stick = stick_state('Roll', uinput.ABS_X, K_RIGHT, K_LEFT)
-    roll_stick.set_display(0.7, 6.0 / 8.0)
+    roll_stick.set_display(21, 39, True)
     sticks.append(roll_stick)
     pitch_stick = stick_state('Pitch', uinput.ABS_Y, K_UP, K_DOWN)
-    pitch_stick.set_display(0.8, 6.0 / 8.0)
+    pitch_stick.set_display(328, 198, False)
     sticks.append(pitch_stick)
     thr_stick = stick_state('Throttle', uinput.ABS_THROTTLE, K_w, K_s, False)
-    thr_stick.set_display(0.7, 1.0 / 8.0)
+    thr_stick.set_display(328, 95, False)
     sticks.append(thr_stick)
     rud_stick = stick_state('Yaw', uinput.ABS_RUDDER, K_d, K_a)
-    rud_stick.set_display(0.8, 1.0 / 8.0)
+    rud_stick.set_display(360, 39, True)
     sticks.append(rud_stick)
 
     with uinput.Device(events) as device:
