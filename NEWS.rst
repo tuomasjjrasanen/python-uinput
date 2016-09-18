@@ -2,6 +2,12 @@
  Python-uinput NEWS -- history of user-visible changes
 =======================================================
 
+0.11.2
+======
+
+- Fix accidentally dropped support for libudev.so.0 by using ldconfig
+  to find the available library version.
+
 0.11.1
 ======
 
