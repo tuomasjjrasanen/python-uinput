@@ -36,7 +36,7 @@ except:
     pass
 
 setup(name='python-uinput',
-      version='0.11.1',
+      version='0.11.2',
       description='Pythonic API to Linux uinput kernel module.',
       author='Tuomas Räsänen',
       author_email='tuomasjjrasanen@tjjr.fi',
@@ -45,7 +45,7 @@ setup(name='python-uinput',
       packages=['uinput'],
       license='GPLv3+',
       platforms=['Linux'],
-      download_url='http://tjjr.fi/sw/python-uinput/releases/python-uinput-0.11.1.tar.gz',
+      download_url='http://tjjr.fi/sw/python-uinput/releases/python-uinput-0.11.2.tar.gz',
       classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
