@@ -12,7 +12,7 @@ from pygame.locals import *
 pygame.init()
 BLACK = (0,0,0)
 WIDTH = 335
-HEIGHT = 401
+HEIGHT = 406
 windowSurface = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 windowSurface.fill(BLACK)
 pygame.display.set_caption('Virtual RC Joystick')
