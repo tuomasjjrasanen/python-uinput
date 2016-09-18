@@ -1,6 +1,39 @@
 # -*- coding: utf-8 -*-
 
+import errno
+import subprocess
+
 from distutils.core import setup, Extension
+
+libudev_so = "libudev.so.1"
+
+# Because libsuinput can be linked against both libudev.so.0 and
+# libudev.so.1, we try to use ldconfig to find out which one is
+# available. Preferably libudev.so.1.
+try:
+    ldconfig_output = subprocess.check_output(["ldconfig", "-p"])
+    for line in ldconfig_output.splitlines():
+
+        try:
+            lib = line.split()[0]
+        except IndexError:
+            # An unexpected line, but let's proceed.
+            continue
+
+        if lib == "libudev.so.0":
+            libudev_so = lib
+            # We are quite happy, but let's look if there's something
+            # better.
+
+        if lib == "libudev.so.1":
+            libudev_so = lib
+            break # We are really happy, no reason to look further.
+except:
+    # We don't care if something goes wrong while we scan through all
+    # the available libraries. The whole scan operation is just
+    # best-effort, we can always fall back to the default, hard-coded,
+    # library.
+    pass
 
 setup(name='python-uinput',
       version='0.11.1',
@@ -36,5 +69,5 @@ keyboards and mice for generating arbitrary input events
 programmatically.
 """,
       ext_modules=[Extension('_libsuinput', ['libsuinput/src/suinput.c'],
-                             libraries=[":libudev.so.1"])]
+                             libraries=[":%s" % libudev_so])]
       )
