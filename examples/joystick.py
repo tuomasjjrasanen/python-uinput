@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+'''
+Virtual Joystick from Keyboard
+Bharat Tak
+September 2016
+'''
+
 import uinput, time
 import pygame, sys
 from pygame.locals import *
