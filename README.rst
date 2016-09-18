@@ -21,7 +21,8 @@ Generate Joystick Input
 
     python examples/joystick.py
 
-Use Arrow keys along with W, A, S, D to generate virtual joystick inputs. 
+Use Arrow keys along with W, A, S, D to generate virtual joystick inputs.
+If not already installed, you will have to install pygame.
 
 Note that you must have the uinput kernel module loaded to use
 python-uinput. To load the module, run::
