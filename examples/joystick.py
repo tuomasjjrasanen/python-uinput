@@ -1,12 +1,11 @@
 import uinput, time
 import pygame, sys
 from pygame.locals import *
-#from math import round
 
 pygame.init()
 BLACK = (0,0,0)
-WIDTH = 1280
-HEIGHT = 1024
+WIDTH = 720
+HEIGHT = 480
 windowSurface = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 windowSurface.fill(BLACK)
 
