@@ -12,7 +12,7 @@ from pygame.locals import *
 pygame.init()
 BLACK = (0,0,0)
 WIDTH = 335
-HEIGHT = 406
+HEIGHT = 469
 windowSurface = pygame.display.set_mode((WIDTH, HEIGHT), 0, 32)
 windowSurface.fill(BLACK)
 pygame.display.set_caption('Virtual RC Joystick')
@@ -24,7 +24,7 @@ background.fill((250, 250, 250))
 
 # Load image
 dir = os.path.dirname(__file__)
-filename = os.path.join(dir, 'media/sticks.png')
+filename = os.path.join(dir, 'media/sticks_with_buttons.png')
 img = pygame.image.load(filename)
 
 windowSurface.blit(img,(0,0))
@@ -33,7 +33,7 @@ pygame.display.flip()
 class stick_state(object):
     def __init__(self, name, stick, key_up, key_down, spring_back=True, incr_val=0.2):
         self.name = name                            # The name of the stick
-        self.stick = stick                          # The stick on the joystick that this stick maps to 
+        self.stick = stick                          # The stick on the joystick that this stick maps to
         self.key_up = key_up                        # The key on the keyboard that maps to this stick increment
         self.key_down = key_down                    # The key on the keyboard that maps to this stick decrement
         self.spring_back = spring_back              # Does the stick spring back to center on release?
@@ -49,8 +49,8 @@ class stick_state(object):
         self.val = self.zero                        # Stick value at initialization at zero position
         self.emit_val = int(self.val)
         self.display_ready = False                  # Whether optional display params have been set
-        self.display_height = 0                     # Height on the display screen 
-        self.display_width = 0                      # Width on the display screen 
+        self.display_height = 0                     # Height on the display screen
+        self.display_width = 0                      # Width on the display screen
         self.display_hor = True                     # Whether the display bar is horizontal, else vertical
         self.display_bar_g = []
         self.display_bar_b = []
@@ -103,7 +103,7 @@ class stick_state(object):
             filename = os.path.join(dir, 'media/vg.png')
             self.display_bar_g = pygame.image.load(filename)
             filename = os.path.join(dir, 'media/vb.png')
-            self.display_bar_b = pygame.image.load(filename)    
+            self.display_bar_b = pygame.image.load(filename)
         self.display_ready = True
 
     def display(self):
@@ -163,9 +163,8 @@ class switch_state(object):
         self.display_ready = False                  # Whether optional display params have been set
         self.display_height = 0                     # Height on the display screen
         self.display_width = 0                      # Width on the display screen
-        self.display_hor = True                     # Whether the display bar is horizontal, else vertical
-        self.display_bar_g = []
-        self.display_bar_b = []
+        self.display_clicked = []
+        self.display_released = []
 
     def keypress(self):
         self.active_previous = self.active
@@ -189,40 +188,23 @@ class switch_state(object):
             if self.display_ready:
                 self.display()
 
-    def set_display(self, offset_height, offset_width, horizontal):
+    def set_display(self, offset_height, offset_width):
         self.display_height = offset_height
         self.display_width = offset_width
-        self.display_hor = horizontal
-        if horizontal:
-            filename = os.path.join(dir, 'media/hg.png')
-            self.display_bar_g = pygame.image.load(filename)
-            filename = os.path.join(dir, 'media/hb.png')
-            self.display_bar_b = pygame.image.load(filename)
-        else:
-            filename = os.path.join(dir, 'media/vg.png')
-            self.display_bar_g = pygame.image.load(filename)
-            filename = os.path.join(dir, 'media/vb.png')
-            self.display_bar_b = pygame.image.load(filename)
+        filename = os.path.join(dir, 'media/clicked.png')
+        self.display_clicked = pygame.image.load(filename)
+        filename = os.path.join(dir, 'media/released.png')
+        self.display_released = pygame.image.load(filename)
         self.display_ready = True
 
     def display(self):
         if not self.display_ready:
             pass
         else:
-            # Fill the entire bar
-            for i in range(256):
-                if i <= self.emit_val:
-                    # Fill green
-                    if self.display_hor:
-                        windowSurface.blit(self.display_bar_g,(self.display_width + i, self.display_height))
-                    else:
-                        windowSurface.blit(self.display_bar_g,(self.display_width, self.display_height - i))
-                else:
-                    # Fill grey
-                    if self.display_hor:
-                        windowSurface.blit(self.display_bar_b,(self.display_width + i, self.display_height))
-                    else:
-                        windowSurface.blit(self.display_bar_b,(self.display_width, self.display_height - i))
+            if self.active:
+                windowSurface.blit(self.display_clicked,(self.display_width, self.display_height))
+            else:
+                windowSurface.blit(self.display_released,(self.display_width, self.display_height))
             # Render it
             pygame.display.flip()
 
@@ -267,12 +249,16 @@ def main():
 
     # create switches
     switch_1 = switch_state('1', uinput.BTN_TRIGGER, K_q)
+    switch_1.set_display(419, 79)
     switches.append(switch_1)
     switch_2 = switch_state('2', uinput.BTN_A, K_1, False)
+    switch_2.set_display(419, 131)
     switches.append(switch_2)
     switch_3 = switch_state('3', uinput.BTN_B, K_2, False)
+    switch_3.set_display(419, 183)
     switches.append(switch_3)
     switch_4 = switch_state('4', uinput.BTN_C, K_3, False)
+    switch_4.set_display(419, 236)
     switches.append(switch_4)
 
     with uinput.Device(events) as device:
