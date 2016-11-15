@@ -14,45 +14,15 @@ programmatically.
 Usage examples
 ==============
 
-Generate keyboard clicks
+Generate Joystick Input
 ------------------------
 
 ::
 
-    import uinput
+    python examples/joystick.py
 
-    with uinput.Device([uinput.KEY_E, uinput.KEY_H,
-                        uinput.KEY_L, uinput.KEY_O]) as device:
-        device.emit_click(uinput.KEY_H)
-        device.emit_click(uinput.KEY_E)
-        device.emit_click(uinput.KEY_L)
-        device.emit_click(uinput.KEY_L)
-        device.emit_click(uinput.KEY_O)
-
-Move mouse cursor
------------------
-
-::
-
-    import uinput
-
-    with uinput.Device([uinput.REL_X, uinput.REL_Y,
-                        uinput.BTN_LEFT, uinput.BTN_RIGHT]) as device:
-        for i in range(20):
-            device.emit(uinput.REL_X, 5)
-            device.emit(uinput.REL_Y, 5)
-
-Generate keyboard combinations
-------------------------------
-
-::
-
-    import uinput
-
-    with uinput.Device([uinput.KEY_LEFTALT, uinput.KEY_TAB]) as device:
-        device.emit_combo([uinput.KEY_LEFTALT, uinput.KEY_TAB])
-
-See ``examples/`` for other kind of example devices (keyboard, joystick).
+Use Arrow keys along with W, A, S, D to generate virtual joystick inputs.
+If not already installed, you will have to install pygame.
 
 Note that you must have the uinput kernel module loaded to use
 python-uinput. To load the module, run::
