@@ -57,6 +57,7 @@ int suinput_emit_click(const int uinput_fd, const uint16_t key_code)
 {
         if (suinput_emit(uinput_fd, EV_KEY, key_code, 1) == -1)
                 return -1;
+        suinput_syn(uinput_fd); //Required for mouse click to register correctly
         return suinput_emit(uinput_fd, EV_KEY, key_code, 0);
 }
 
@@ -78,6 +79,7 @@ int suinput_emit_combo(const int uinput_fd, const uint16_t *const key_codes,
                                   combination is missing or broken. */
                 }
         }
+        suinput_syn(uinput_fd); //Required for mouse click to register correctly
 
         /* Try to release every pressed key, no matter what. */
         while (i--) {
