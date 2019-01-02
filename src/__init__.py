@@ -187,6 +187,7 @@ class Device(object):
                 user_dev.absflat[ev_code] = absflat
 
         _libsuinput.suinput_create(self.__uinput_fd, ctypes.pointer(user_dev))
+        self.__emit_stack = []
 
     def syn(self):
         """Fire all emitted events.
@@ -201,7 +202,21 @@ class Device(object):
           d.emit(uinput.REL_Y, 1)
 
         The call above appears as a single (+1, +1) event.
+
+        For some events (KEY_TYPE_BUTTON), the libinput driver
+        requires syn to be called between key-press and key-release
+        in order for the keypress to correctly register.
+        Consequently, syn is encoded into suinput_emit_click and
+        suinput_emit_combo, but this can cause events to fire early.
+        To minimize the consequences of this interaction, python-uinput
+        keeps its own stack of events which haven't been "fired"
+        and only fires them once self.syn() is called.
         """
+
+        while len(self.__emit_stack) > 0:
+            emit_fun, args = self.__emit_stack.pop(0)
+            emit_fun(*args)
+
 
         _libsuinput.suinput_syn(self.__uinput_fd)
 
@@ -219,7 +234,7 @@ class Device(object):
         """
 
         ev_type, ev_code = event
-        _libsuinput.suinput_emit(self.__uinput_fd, ev_type, ev_code, value)
+        self.__emit_stack.append((_libsuinput.suinput_emit, (self.__uinput_fd, ev_type, ev_code, value)))
         if syn:
             self.syn()
 
@@ -234,7 +249,7 @@ class Device(object):
         ev_type, ev_code = event
         if ev_type != 0x01:
             raise ValueError("event must be of type KEY or BTN")
-        _libsuinput.suinput_emit_click(self.__uinput_fd, ev_code)
+        self.__emit_stack.append((_libsuinput.suinput_emit_click, (self.__uinput_fd, ev_code)))
         if syn:
             self.syn()
 
@@ -252,7 +267,7 @@ class Device(object):
             raise ValueError("all events must be of type KEY or BTN")
 
         arrtype = ctypes.c_uint16 * len(events)
-        _libsuinput.suinput_emit_combo(self.__uinput_fd, arrtype(*ev_codes), len(events))
+        self.__emit_stack.append((_libsuinput.suinput_emit_combo, (self.__uinput_fd, arrtype(*ev_codes), len(events))))
         if syn:
             self.syn()
 
