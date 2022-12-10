@@ -79,7 +79,6 @@ def _error_handler(result, fn, args):
     elif result < -1:
         raise RuntimeError("unexpected return value: %s" % result)
     return result
-
 def fdopen():
     return _libsuinput.suinput_open()
 
