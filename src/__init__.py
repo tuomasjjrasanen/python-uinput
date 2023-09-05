@@ -83,7 +83,7 @@ def _error_handler(result, fn, args):
 def fdopen():
     return _libsuinput.suinput_open()
 
-config_var = sysconfig.get_config_var("EXT_SUFFIX")
+config_var = sysconfig.get_config_var("EXT_SUFFIX") or sysconfig.get_config_var("SO")
 if not config_var:
     raise  RuntimeError("Failed to get EXT_SUFFIX")
 _libsuinput_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "_libsuinput" + config_var))
