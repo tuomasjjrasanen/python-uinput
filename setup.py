@@ -3,7 +3,7 @@
 import errno
 import subprocess
 
-from distutils.core import setup, Extension
+from setuptools import setup, Extension
 
 libudev_so = "libudev.so.1"
 
@@ -53,11 +53,7 @@ setup(name='python-uinput',
         "Operating System :: POSIX :: Linux",
         "Topic :: System :: Operating System Kernels :: Linux",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.1",
         "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.4",
         ],
